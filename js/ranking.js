@@ -10,6 +10,50 @@
 
   var UI = window.USWAP_UI;
 
+  /* ---- recompensas visuales: insignia, brillo y arcoíris (P3) ------------ */
+  (function inyectarEstilosRecompensas() {
+    if (document.getElementById('usr-recompensas-css')) return;
+    var css = [
+      '.usr-avatar-wrap{position:relative;display:inline-flex;flex:0 0 auto;}',
+      '.usr-badge{position:absolute;right:-4px;bottom:-4px;z-index:2;display:grid;place-items:center;' +
+        'width:17px;height:17px;border-radius:999px;background:#fff;border:1px solid #e5e7eb;' +
+        'font-size:9px;line-height:1;box-shadow:0 2px 7px rgba(15,23,42,.2);}',
+      '.usr-badge--lg{right:-5px;bottom:-5px;width:23px;height:23px;font-size:13px;}',
+      '.usr-marco-brillo{animation:usr-pulso 2.8s ease-in-out infinite;}',
+      '@keyframes usr-pulso{0%,100%{filter:drop-shadow(0 0 2px var(--usr-color));}' +
+        '50%{filter:drop-shadow(0 0 12px var(--usr-color));}}',
+      '.usr-badge--glow{animation:usr-badge-pulso 2.8s ease-in-out infinite;}',
+      '@keyframes usr-badge-pulso{0%,100%{box-shadow:0 2px 7px rgba(15,23,42,.2);}' +
+        '50%{box-shadow:0 2px 7px rgba(15,23,42,.2),0 0 10px 2px var(--usr-color);}}',
+      '.usr-nombre-brillo{animation:usr-texto-pulso 2.8s ease-in-out infinite;}',
+      '@keyframes usr-texto-pulso{0%,100%{text-shadow:0 0 4px currentColor;}' +
+        '50%{text-shadow:0 0 12px currentColor,0 0 24px currentColor;}}',
+      '.usr-nombre-arcoiris{background:linear-gradient(90deg,#ff3b30,#ff9500,#ffcc00,#34c759,#00c7be,' +
+        '#0a84ff,#5e5ce6,#ff2d55,#ff3b30);background-size:300% 100%;-webkit-background-clip:text;' +
+        'background-clip:text;color:transparent;-webkit-text-fill-color:transparent;' +
+        'animation:usr-arcoiris 4.5s linear infinite;}',
+      '@keyframes usr-arcoiris{to{background-position:300% 50%;}}',
+      '@media (prefers-reduced-motion: reduce){.usr-marco-brillo,.usr-badge--glow,' +
+        '.usr-nombre-brillo,.usr-nombre-arcoiris{animation:none!important;}}'
+    ].join('');
+    var estilo = document.createElement('style');
+    estilo.id = 'usr-recompensas-css';
+    estilo.textContent = css;
+    document.head.appendChild(estilo);
+  })();
+
+  function esRangoAlto(nivel) {
+    return !!nivel && (nivel.id === 'diamante' || nivel.id === 'ascendente' ||
+      nivel.id === 'inmortal' || nivel.id === 'radiante');
+  }
+
+  function claseNombre(nivel) {
+    if (!nivel) return '';
+    if (nivel.id === 'radiante') return 'usr-nombre-arcoiris';
+    if (nivel.id === 'ascendente' || nivel.id === 'inmortal') return 'usr-nombre-brillo';
+    return '';
+  }
+
   /* ---- rangos: 10 puntos por estrella; umbrales acumulados ---------------- */
   var NIVELES = [
     { id: 'hierro', nombre: 'Hierro', min: 0, color: '#475569', marco: '#94a3b8', icono: '🩶', clase: 'tier-hierro',
@@ -79,12 +123,17 @@
     clasificacion: clasificacion
   };
 
-  /* Marco de avatar + color de nombre: la recompensa visible del rango. */
+  /* Marco de avatar + insignia de esquina + color de nombre. */
   function avatarConMarco(usuario, nivel) {
     var color = nivel.marco || '#94a3b8';
+    var alto = esRangoAlto(nivel);
     var sombra = '0 0 0 2px ' + color + (nivel.id === 'radiante' ? ', 0 0 12px ' + color : '');
-    return '<span style="display:inline-flex;flex:0 0 auto;border-radius:11px;box-shadow:' + sombra + '">' +
-      UI.avatar(usuario, 'pequeno') + '</span>';
+    return '<span class="usr-avatar-wrap' + (alto ? ' usr-marco-brillo' : '') + '"' +
+        ' style="border-radius:11px;box-shadow:' + sombra + ';--usr-color:' + color + '">' +
+      UI.avatar(usuario, 'pequeno') +
+      '<span class="usr-badge' + (alto ? ' usr-badge--glow' : '') + '" aria-hidden="true">' +
+        (nivel.icono || '') + '</span>' +
+    '</span>';
   }
 
   /* ------------------------------------------------------ solo en ranking.html */
@@ -183,7 +232,9 @@
         '<div class="rank-pos' + (i < 3 ? ' top' : '') + '">' + puesto + '</div>' +
         avatarConMarco(f.usuario, nivel) +
         '<div class="usuario-linea" style="flex:1">' +
-          '<span class="usuario-nombre" style="color:' + nivel.color + '">' + UI.esc(f.usuario.nombre) + '</span>' +
+          '<span class="usuario-nombre' + (claseNombre(nivel) ? ' ' + claseNombre(nivel) : '') + '"' +
+            (nivel.id === 'radiante' ? '' : ' style="color:' + nivel.color + '"') + '>' +
+            UI.esc(f.usuario.nombre) + '</span>' +
           '<span class="usuario-detalle">' + UI.esc(f.usuario.carrera) + ' · ' + UI.curso(f.usuario.curso) + ' · ' +
             UI.esc(f.usuario.rama) + '</span>' +
           '<span class="tier ' + nivel.clase + '" style="margin-top:2px">' + nivel.icono + ' ' + nivel.nombre +
@@ -214,8 +265,10 @@
         UI.esc(nivel.premio) +
         '<div style="display:flex;align-items:center;gap:8px;margin-top:8px">' +
           avatarConMarco(yo, nivel) +
-          '<span style="color:' + nivel.color + ';font-weight:700;font-size:12px">' + UI.esc(yo.nombre) + '</span>' +
-          '<span class="usuario-detalle">marco + color</span>' +
+          '<span class="' + claseNombre(nivel) + '" style="font-weight:700;font-size:12px;' +
+            (nivel.id === 'radiante' ? '' : 'color:' + nivel.color + ';') + '">' +
+            UI.esc(yo.nombre) + '</span>' +
+          '<span class="usuario-detalle">marco + nombre</span>' +
         '</div>' +
         '<div style="margin-top:4px">' + estado + '</div>' +
       '</div>' +

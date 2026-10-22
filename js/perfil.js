@@ -31,6 +31,10 @@
   });
 
   var nivel = window.USWAP_RANK ? window.USWAP_RANK.tier(puntos) : { nombre: '—', icono: '', clase: '' };
+  var nivelAlto = nivel.id === 'diamante' || nivel.id === 'ascendente' ||
+    nivel.id === 'inmortal' || nivel.id === 'radiante';
+  var nivelArcoiris = nivel.id === 'radiante';
+  var nivelBrilloNombre = nivel.id === 'ascendente' || nivel.id === 'inmortal';
   var prog = window.USWAP_RANK ? window.USWAP_RANK.progreso(puntos) : { pct: 0, siguiente: null, faltan: 0 };
   var clasificacion = window.USWAP_RANK ? window.USWAP_RANK.clasificacion() : [];
   var posicion = 0;
@@ -108,13 +112,22 @@
       '</div>' +
 
       '<div style="display:flex;align-items:center;gap:14px;margin-top:16px">' +
-        '<div style="flex:0 0 auto;padding:3px;border-radius:23px;border:2px solid ' +
+        '<div class="usr-avatar-wrap' + (nivelAlto ? ' usr-marco-brillo' : '') + '"' +
+          ' style="flex:0 0 auto;padding:3px;border-radius:23px;border:2px solid ' +
           (nivel.marco || 'rgba(255,255,255,.22)') + ';' +
-          (nivel.id === 'radiante' ? 'box-shadow:0 0 16px ' + nivel.marco + ';' : '') + '">' +
+          (nivel.id === 'radiante' ? 'box-shadow:0 0 18px ' + nivel.marco + ';' : '') +
+          '--usr-color:' + (nivel.marco || '#94a3b8') + '">' +
           avatarPerfil(u, 'grande') +
+          '<span class="usr-badge usr-badge--lg' + (nivelAlto ? ' usr-badge--glow' : '') +
+            '" aria-hidden="true">' + (nivel.icono || '') + '</span>' +
         '</div>' +
         '<div style="min-width:0">' +
-          '<h1 style="margin:0;font-size:24px;line-height:1.1;letter-spacing:-.9px;color:#fff">' + UI.esc(u.nombre) + '</h1>' +
+          (nivelArcoiris
+            ? '<h1 class="usr-nombre-arcoiris" style="margin:0;font-size:24px;line-height:1.1;letter-spacing:-.9px">'
+            : '<h1 class="' + (nivelBrilloNombre ? 'usr-nombre-brillo' : '') +
+              '" style="margin:0;font-size:24px;line-height:1.1;letter-spacing:-.9px;color:' +
+              (nivelBrilloNombre ? (nivel.marco || '#fff') : '#fff') + '">') +
+            UI.esc(u.nombre) + '</h1>' +
           '<div style="margin-top:5px;font-size:12px;line-height:1.35;color:rgba(255,255,255,.72)">' +
             UI.esc(u.carrera) + '</div>' +
           '<div style="margin-top:2px;font-size:11px;color:rgba(255,255,255,.48)">' +
