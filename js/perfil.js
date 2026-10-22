@@ -101,13 +101,16 @@
               '</div>'
             : '<div style="margin-top:6px;font-size:10.5px;color:rgba(255,255,255,.5)">Sin valoraciones todavía</div>') +
         '</div>' +
-        '<div style="text-align:right;flex:0 0 auto">' +
-          '<div style="font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.48)">' +
-            UI.esc(nivel.nombre) + '</div>' +
-          '<div style="margin-top:3px;font-size:16px;font-weight:750;letter-spacing:-.3px">' + puntos +
-            '<span style="font-size:10px;font-weight:600;color:rgba(255,255,255,.55)">' +
-              (Math.abs(puntos) === 1 ? ' pt' : ' pts') + '</span></div>' +
-        '</div>' +
+        '<button type="button" id="btn-rango" aria-expanded="false" aria-controls="rango-panel" ' +
+          'style="text-align:right;flex:0 0 auto;background:none;border:0;padding:0;color:inherit;' +
+          'font-family:inherit;cursor:pointer">' +
+          '<span style="display:block;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;' +
+            'color:rgba(255,255,255,.48)">' + UI.esc(nivel.nombre) + '</span>' +
+          '<span style="display:block;margin-top:3px;font-size:16px;font-weight:750;letter-spacing:-.3px">' + puntos +
+            '<span style="font-size:10px;font-weight:600;letter-spacing:0;color:rgba(255,255,255,.55)">' +
+              (Math.abs(puntos) === 1 ? ' pt' : ' pts') + '</span>' +
+            '<span style="margin-left:5px;font-size:11px;letter-spacing:0;color:rgba(255,255,255,.45)">›</span></span>' +
+        '</button>' +
       '</div>' +
 
       (prog.siguiente
@@ -217,4 +220,98 @@
         '</div>';
       }).join('')
     : UI.vacio('Sin valoraciones', 'Cierra tratos y pide que te valoren para subir en el ranking.');
+
+  /* ------------------------------------------------------ escalera de rangos */
+  var rangos = (window.USWAP_RANK && window.USWAP_RANK.NIVELES)
+    ? window.USWAP_RANK.NIVELES.slice().sort(function (a, b) { return a.min - b.min; })
+    : [];
+
+  var filasRango = rangos.map(function (n, i) {
+    var actual = n.nombre === nivel.nombre;
+    return '<div style="display:flex;align-items:center;gap:11px;' +
+        (actual ? 'padding:12px;background:var(--primario-suave);border-radius:12px;' : 'padding:11px 0;') +
+        (i < rangos.length - 1 && !actual ? 'border-bottom:1px solid #eef1f7;' : '') + '">' +
+        '<span style="flex:0 0 auto;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;' +
+          'font-size:10px;font-weight:800;background:' + (actual ? '#fff' : '#f1f4fa') + ';' +
+          'color:' + (actual ? 'var(--primario-oscuro)' : '#8592a6') + '">' + (i + 1) + '</span>' +
+        '<span style="flex:1;min-width:0">' +
+          '<span style="display:block;font-size:13px;font-weight:700;letter-spacing:-.1px">' + UI.esc(n.nombre) + '</span>' +
+          '<span style="display:block;margin-top:1px;font-size:10.5px;color:var(--muted)">' +
+            (n.min <= 0 ? 'Desde el inicio' : 'Desde ' + n.min + (n.min === 1 ? ' punto' : ' puntos')) + '</span>' +
+        '</span>' +
+        (actual ? '<span class="badge badge-azul">estás aquí</span>' : '') +
+      '</div>';
+  }).join('');
+
+  var fondo = document.createElement('div');
+  fondo.id = 'rango-fondo';
+  fondo.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:80;display:none';
+
+  var panel = document.createElement('div');
+  panel.id = 'rango-panel';
+  panel.setAttribute('role', 'dialog');
+  panel.setAttribute('aria-modal', 'true');
+  panel.setAttribute('aria-label', 'Escalera de rangos');
+  panel.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);width:100%;max-width:430px;' +
+    'bottom:0;z-index:81;display:none;background:#fff;border-radius:22px 22px 0 0;' +
+    'padding:18px 18px 26px;max-height:78vh;overflow:auto;' +
+    'box-shadow:0 -24px 60px -30px rgba(15,23,42,.55)';
+  panel.innerHTML =
+    '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">' +
+      '<div>' +
+        '<div style="font-size:9px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)">' +
+          'Escalera de rangos</div>' +
+        '<h2 style="margin:8px 0 3px;font-size:20px;letter-spacing:-.6px">' + UI.esc(nivel.nombre) + '</h2>' +
+        '<div class="usuario-detalle">' + UI.esc(u.nombre) + ' · ' + puntos +
+          (Math.abs(puntos) === 1 ? ' punto' : ' puntos') + '</div>' +
+      '</div>' +
+      '<button type="button" id="cerrar-rango" aria-label="Cerrar" ' +
+        'style="flex:0 0 auto;width:32px;height:32px;border-radius:50%;border:1px solid var(--borde);' +
+        'background:#fff;color:var(--muted);font-size:15px;line-height:1;cursor:pointer">✕</button>' +
+    '</div>' +
+
+    (prog.siguiente
+      ? '<div style="margin-top:14px">' +
+          '<div class="barra-progreso"><div style="width:' + prog.pct + '%"></div></div>' +
+          '<div class="usuario-detalle" style="margin-top:7px">Te faltan ' + prog.faltan +
+            (prog.faltan === 1 ? ' punto' : ' puntos') + ' para ' + UI.esc(prog.siguiente.nombre) + '</div>' +
+        '</div>'
+      : '<div class="usuario-detalle" style="margin-top:12px">Has llegado al rango más alto.</div>') +
+
+    '<div style="margin-top:16px">' + filasRango + '</div>' +
+
+    '<div style="margin-top:14px;padding-top:12px;border-top:1px solid #eef1f7;font-size:11px;line-height:1.55;color:var(--muted)">' +
+      'Cada valoración de ★4 o ★5 suma 1 punto, ★3 no puntúa y ★1 o ★2 resta 1 punto.' +
+    '</div>';
+
+  document.body.appendChild(fondo);
+  document.body.appendChild(panel);
+
+  var btnRango = document.getElementById('btn-rango');
+  var btnCerrar = document.getElementById('cerrar-rango');
+
+  function abrirRango() {
+    var ancho = window.innerWidth >= 720;
+    panel.style.bottom = ancho ? '20px' : '0';
+    panel.style.borderRadius = ancho ? '22px' : '22px 22px 0 0';
+    panel.style.maxHeight = ancho ? '70vh' : '78vh';
+    fondo.style.display = 'block';
+    panel.style.display = 'block';
+    btnRango.setAttribute('aria-expanded', 'true');
+    btnCerrar.focus();
+  }
+
+  function cerrarRango() {
+    fondo.style.display = 'none';
+    panel.style.display = 'none';
+    btnRango.setAttribute('aria-expanded', 'false');
+    btnRango.focus();
+  }
+
+  btnRango.addEventListener('click', abrirRango);
+  btnCerrar.addEventListener('click', cerrarRango);
+  fondo.addEventListener('click', cerrarRango);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && panel.style.display === 'block') cerrarRango();
+  });
 })();

@@ -12,16 +12,24 @@
 
   /* ---- niveles: se aplica el de mayor "min" que no supere los puntos ----- */
   var NIVELES = [
-    { id: 'observacion', nombre: 'En observación', min: -9999, icono: '⚠️', clase: 'tier-observacion',
+    { id: 'hierro', nombre: 'Hierro', min: -9999, icono: '🩶', clase: 'tier-hierro',
       premio: 'Sin recompensas hasta recuperar puntos positivos. Dos valoraciones negativas seguidas y la cuenta revisa sus ofertas.' },
     { id: 'bronce', nombre: 'Bronce', min: 0, icono: '🥉', clase: 'tier-bronce',
       premio: 'Insignia de bienvenida en el perfil y acceso al tablón completo.' },
-    { id: 'plata', nombre: 'Plata', min: 3, icono: '🥈', clase: 'tier-plata',
+    { id: 'plata', nombre: 'Plata', min: 2, icono: '🥈', clase: 'tier-plata',
       premio: 'Tu oferta aparece destacada en el tablón durante 24 h.' },
-    { id: 'oro', nombre: 'Oro', min: 6, icono: '🥇', clase: 'tier-oro',
-      premio: 'Sello verificado, prioridad en el tablón y 1 destacado al mes.' },
-    { id: 'elite', nombre: 'Élite', min: 10, icono: '💎', clase: 'tier-elite',
-      premio: '2 destacados al mes, insignia Élite y acceso anticipado a las ofertas nuevas.' }
+    { id: 'oro', nombre: 'Oro', min: 4, icono: '🥇', clase: 'tier-oro',
+      premio: 'Sello verificado y prioridad en el tablón.' },
+    { id: 'platino', nombre: 'Platino', min: 6, icono: '🛡️', clase: 'tier-platino',
+      premio: '1 destacado al mes y acceso anticipado a las ofertas nuevas.' },
+    { id: 'diamante', nombre: 'Diamante', min: 9, icono: '💎', clase: 'tier-diamante',
+      premio: '2 destacados al mes e insignia Diamante.' },
+    { id: 'ascendente', nombre: 'Ascendente', min: 12, icono: '🔺', clase: 'tier-ascendente',
+      premio: 'Perfil en la portada del tablón durante una semana.' },
+    { id: 'inmortal', nombre: 'Inmortal', min: 16, icono: '👑', clase: 'tier-inmortal',
+      premio: 'Destacados ilimitados y sello Inmortal.' },
+    { id: 'radiante', nombre: 'Radiante', min: 20, icono: '🌟', clase: 'tier-radiante',
+      premio: 'Máximo rango: tu perfil se muestra como referencia de la comunidad.' }
   ];
 
   function tier(puntos) {
