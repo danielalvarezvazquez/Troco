@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>USwap · Ranking y recompensas</title>
+  <title>USwap · Ranking · USC</title>
   <link rel="icon" href="img/logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -11,18 +11,23 @@
   <!-- =====================================================================
        PANTALLA: RANKING + RECOMPENSAS         Propietario: P3 (tome123456)
        Solo se editan este archivo y js/ranking.js.
-       Regla de puntos: ★4-5 = +1 · ★3 = 0 · ★1-2 = -1
+       Regla de puntos: 10 por estrella (★1 = 10 … ★5 = 50)
        ===================================================================== -->
   <div class="app">
     <header id="topbar"></header>
 
     <main class="contenido">
       <section class="hero">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#8592a6;margin-bottom:7px">
+          USC · Santiago de Compostela
+        </div>
         <h1>Ranking y recompensas</h1>
-        <p>Cada trato bien valorado suma. Los malos tratos restan.</p>
+        <p>Cada estrella suma 10 puntos. Tu rango desbloquea marco y color de nombre.</p>
       </section>
 
       <div id="mi-posicion"></div>
+
+      <div class="chips" id="filtro-rama" role="group" aria-label="Filtrar el ranking por rama" style="margin-top:12px"></div>
 
       <div class="seccion-titulo"><h2>Clasificación</h2><span class="usuario-detalle" id="total-gente"></span></div>
       <div id="ranking" class="lista"></div>

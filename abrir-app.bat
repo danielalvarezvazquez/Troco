@@ -6,7 +6,7 @@ REM ==========================================================================
 cd /d "%~dp0"
 
 echo Arrancando USwap en http://localhost:8000 ...
-start "USwap - servidor local" /min cmd /c "py -m http.server 8000"
+start "USwap - servidor local" /min cmd /c "py serve.py 8000"
 timeout /t 2 >nul
 start "" http://localhost:8000
 

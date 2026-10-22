@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>USwap · Publicar</title>
+  <title>USwap · Publicar · USC</title>
   <link rel="icon" href="img/logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -17,25 +17,34 @@
 
     <main class="contenido">
       <section class="hero">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#8592a6;margin-bottom:7px">
+          USC · Santiago de Compostela
+        </div>
         <h1>Publica lo que necesitas</h1>
-        <p>Cuenta qué necesitas. Cuanto más concreto, más fácil es que alguien te ayude.</p>
+        <p>Cuenta qué necesitas y cuándo. Cuanto más concreto, mejor: facultad, campus y horario ayudan.</p>
       </section>
 
       <form id="form-oferta" class="bloque" novalidate>
         <label class="label" for="titulo">Título</label>
         <input class="input" id="titulo" maxlength="70" required
-               placeholder="Ej. Clases de Estadística para el parcial">
+               placeholder="Ej. Necesito clases de Estadística para el parcial">
+        <div class="usuario-detalle" id="contador-titulo" style="text-align:right;margin-top:5px">0/70</div>
 
         <label class="label" for="descripcion">Descripción</label>
         <textarea class="textarea" id="descripcion" maxlength="280"
-                  placeholder="Qué necesitas exactamente, para qué asignatura y cuándo lo necesitas…"></textarea>
+                  placeholder="Qué incluye, en qué estado está, cuándo puedes entregarlo…"></textarea>
+
+        <label class="label" for="area">Área de la petición</label>
+        <select class="select" id="area"></select>
+        <div class="usuario-detalle" style="margin-top:5px">De qué va lo que pides: Matemáticas, Salud, Lenguaje…</div>
 
         <div class="fila" style="margin-top:16px">
           <div style="flex:1">
             <label class="label" for="tipo">Tipo</label>
             <select class="select" id="tipo">
-              <option value="favor">Un favor o servicio</option>
-              <option value="objeto">Un objeto</option>
+              <option value="favor">Favor / servicio</option>
+              <option value="objeto">Objeto</option>
+              <option value="clase">Clase particular</option>
             </select>
           </div>
           <div style="flex:1">
@@ -44,9 +53,12 @@
           </div>
         </div>
 
-        <button class="btn btn-primario btn-bloque" type="submit">Publicar en el tablón</button>
+        <button class="btn btn-primario btn-bloque" id="btn-publicar" type="submit" disabled>Publicar en el tablón</button>
         <a class="btn btn-secundario" style="margin-top:8px" href="index.html">Cancelar</a>
       </form>
+
+      <div class="seccion-titulo"><h2>Vista previa</h2><span class="usuario-detalle">Así se verá en el tablón</span></div>
+      <div id="preview"></div>
 
       <p class="usuario-detalle" style="text-align:center;margin-top:14px;line-height:1.5">
         Al publicar aparecerás con tu carrera y curso para que te encuentren.</p>

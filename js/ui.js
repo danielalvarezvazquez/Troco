@@ -43,6 +43,14 @@
     return d === 1 ? 'ayer' : 'hace ' + d + ' días';
   }
 
+  /* Curso: acepta 3, '3º', 'Máster' o 'Doctorado' y devuelve texto seguro */
+  function curso(valor) {
+    if (valor === undefined || valor === null || valor === '') return '';
+    var v = String(valor);
+    if (v.indexOf('º') !== -1 || v === 'Máster' || v === 'Doctorado') return v;
+    return v + 'º';
+  }
+
   function param(nombre) {
     var m = new RegExp('[?&]' + nombre + '=([^&#]*)').exec(window.location.search);
     return m ? decodeURIComponent(m[1].replace(/\+/g, ' ')) : '';
@@ -90,6 +98,7 @@
         '<div class="topbar-derecha">' +
           '<select class="selector-yo" id="selector-yo" title="Cambiar de usuario (modo demo)">' + opciones + '</select>' +
           '<button class="chip chip-mini" id="btn-reset" title="Reiniciar los datos de la demo">↺</button>' +
+          '<button class="chip chip-mini" id="btn-salir" title="Cerrar sesión">⏏</button>' +
         '</div>';
 
       document.getElementById('selector-yo').addEventListener('change', function (e) {
@@ -101,6 +110,10 @@
           USWAP.reset();
           window.location.href = 'index.html';
         }
+      });
+      document.getElementById('btn-salir').addEventListener('click', function () {
+        USWAP.salir();
+        window.location.href = 'login.html';
       });
     }
 
@@ -122,9 +135,47 @@
     avatar: avatar,
     estrellas: estrellas,
     tiempo: tiempo,
+    curso: curso,
     param: param,
     toast: toast,
     vacio: vacio,
     montarNav: montarNav
   };
+
+  /* --------------------------------------------------------------------------
+     Red de seguridad: si un script falla, NUNCA dejar la página en blanco.
+     Muestra un aviso con la causa y la solución (recargar sin caché).
+     -------------------------------------------------------------------------- */
+  function mostrarError(mensaje) {
+    var caja = document.getElementById('error-js');
+    if (!caja) {
+      caja = document.createElement('div');
+      caja.id = 'error-js';
+      caja.className = 'error-js';
+      caja.setAttribute('role', 'alert');
+      document.body.appendChild(caja);
+    }
+    caja.innerHTML = '<b>Algo ha fallado al cargar esta pantalla.</b>' +
+      '<span>Pulsa <b>Ctrl + F5</b> para recargar sin caché. Si sigue igual, avisa a P1.</span>' +
+      '<code>' + esc(mensaje) + '</code>';
+    caja.style.display = 'block';
+  }
+
+  window.addEventListener('error', function (e) {
+    mostrarError((e && e.message) || 'Error desconocido');
+  });
+  window.addEventListener('unhandledrejection', function (e) {
+    mostrarError((e && e.reason && (e.reason.message || e.reason)) || 'Promesa rechazada');
+  });
+
+  /* --------------------------------------------------------------------------
+     Control de sesión: sin sesión no se ve nada salvo login y registro.
+     Se comprueba la versión de data.js para no romper con cachés antiguas.
+     -------------------------------------------------------------------------- */
+  (function proteger() {
+    var archivo = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
+    if (archivo === 'login.html' || archivo === 'registro.html') return;
+    if (!window.USWAP || typeof USWAP.sesion !== 'function') return;
+    if (!USWAP.sesion()) window.location.replace('login.html');
+  })();
 })();

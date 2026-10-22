@@ -3,14 +3,22 @@
    --------------------------------------------------------------------------
    Solo se editan este archivo y index.html. No toques data.js, ui.js ni CSS.
    Pide a P1 cualquier campo o estilo que necesites.
+
+   Filtros: modo (trueque / clases), área de la petición, rama y curso del
+   autor, más el buscador de texto. Además: orden, reputación del autor,
+   botón de limpiar, estado vacío con sugerencias y atajos de teclado.
    ========================================================================== */
 (function () {
   'use strict';
 
   var UI = window.USWAP_UI;
 
-  /* ---- estado de los filtros (vacío = sin filtrar) ---------------------- */
-  var filtro = { texto: '', area: '', carrera: '', curso: '' };
+  /* ---- estado de los filtros (vacío = sin filtrar) ----------------------
+     área  → de qué va la petición (campo `area` de la oferta)
+     rama  → gran bloque de estudios del autor (campo `rama` del usuario)
+     curso → 1º..6º, Máster, Doctorado (campo `curso` del usuario)
+  ---------------------------------------------------------------------- */
+  var filtro = { texto: '', modo: '', area: '', rama: '', curso: '' };
 
   var elBuscador = document.getElementById('buscador');
   var elLista = document.getElementById('lista');
@@ -20,27 +28,19 @@
 
   /* ---- ¿hay algún filtro puesto? ---------------------------------------- */
   function hayFiltros() {
-    return !!(filtro.texto.trim() || filtro.area || filtro.carrera || filtro.curso);
+    return !!(filtro.texto.trim() || filtro.modo || filtro.area || filtro.rama || filtro.curso);
   }
 
   /* ---- dejar el tablón como al entrar ----------------------------------- */
   function limpiarFiltros() {
     filtro.texto = '';
+    filtro.modo = '';
     filtro.area = '';
-    filtro.carrera = '';
+    filtro.rama = '';
     filtro.curso = '';
     elBuscador.value = '';
     pintarFiltros();
     pintarLista();
-  }
-
-  /* ---- carreras disponibles, sacadas de los usuarios -------------------- */
-  function carreras() {
-    var vistas = [], out = [];
-    USWAP.usuarios().forEach(function (u) {
-      if (u.carrera && vistas.indexOf(u.carrera) === -1) { vistas.push(u.carrera); out.push(u.carrera); }
-    });
-    return out;
   }
 
   /* ---- pintar una fila de chips ---------------------------------------- */
@@ -64,22 +64,28 @@
   }
 
   function pintarFiltros() {
+    var modos = [
+      { valor: '', texto: 'Todo' },
+      { valor: 'trueque', texto: 'Trueque de favores y objetos' },
+      { valor: 'clases', texto: 'Clases particulares' }
+    ];
     var areas = [{ valor: '', texto: 'Todas las áreas' }].concat(
       USWAP.AREAS.map(function (a) { return { valor: a, texto: a }; })
     );
-    var carrerasOp = [{ valor: '', texto: 'Todas las carreras' }].concat(
-      carreras().map(function (c) { return { valor: c, texto: c }; })
+    var ramas = [{ valor: '', texto: 'Todas las ramas' }].concat(
+      USWAP.RAMAS.map(function (r) { return { valor: r, texto: r }; })
     );
     var cursos = [{ valor: '', texto: 'Todos los cursos' }].concat(
-      USWAP.CURSOS.map(function (c) { return { valor: String(c), texto: c + 'º curso' }; })
+      USWAP.CURSOS.map(function (c) { return { valor: c, texto: c }; })
     );
 
+    pintarChips(document.getElementById('filtro-modo'), modos, 'modo');
     pintarChips(document.getElementById('filtro-areas'), areas, 'area');
-    pintarChips(document.getElementById('filtro-carreras'), carrerasOp, 'carrera');
+    pintarChips(document.getElementById('filtro-ramas'), ramas, 'rama');
     pintarChips(document.getElementById('filtro-cursos'), cursos, 'curso');
   }
 
-  /* ---- filtrar --------------------------------------------------------- */
+  /* ---- filtrar y ordenar ------------------------------------------------ */
   function filtrar() {
     var texto = filtro.texto.trim().toLowerCase();
     var orden = elOrden ? elOrden.value : 'destacada';
@@ -87,14 +93,19 @@
     return USWAP.ofertas().filter(function (o) {
       var autor = USWAP.usuario(o.autorId) || {};
       var coincideTexto = !texto ||
-        (o.titulo + ' ' + o.descripcion + ' ' + o.categoria + ' ' + (autor.nombre || '') + ' ' +
-         (autor.carrera || '')).toLowerCase().indexOf(texto) !== -1;
+        (o.titulo + ' ' + o.descripcion + ' ' + o.categoria + ' ' + (o.area || '') + ' ' +
+         (autor.nombre || '') + ' ' + (autor.carrera || '') + ' ' + (autor.rama || ''))
+          .toLowerCase().indexOf(texto) !== -1;
 
-      var coincideArea = !filtro.area || autor.area === filtro.area;
-      var coincideCarrera = !filtro.carrera || autor.carrera === filtro.carrera;
-      var coincideCurso = !filtro.curso || String(autor.curso) === String(filtro.curso);
+      var coincideArea = !filtro.area || o.area === filtro.area;
+      var coincideRama = !filtro.rama || autor.rama === filtro.rama;
+      var coincideCurso = !filtro.curso || String(autor.curso) === filtro.curso;
 
-      return coincideTexto && coincideArea && coincideCarrera && coincideCurso;
+      var esClase = o.categoria === 'Clases';
+      var coincideModo = !filtro.modo ||
+        (filtro.modo === 'clases' ? esClase : !esClase);
+
+      return coincideTexto && coincideArea && coincideRama && coincideCurso && coincideModo;
     }).sort(function (a, b) {
       if (orden === 'valoracion') {
         var diferencia = USWAP.mediaDe(b.autorId) - USWAP.mediaDe(a.autorId);
@@ -128,14 +139,14 @@
           '<div class="usuario-linea">' +
             '<span class="usuario-nombre">' + UI.esc(autor.nombre) + '</span>' +
             reputacion(autor) +
-            '<span class="usuario-detalle">' + UI.esc(autor.carrera) + ' · ' + UI.esc(autor.curso) + 'º</span>' +
+            '<span class="usuario-detalle">' + UI.esc(autor.carrera) + ' · ' + UI.curso(autor.curso) + '</span>' +
           '</div>' +
-          '<span class="badge badge-azul" style="margin-left:auto">' + UI.esc(o.categoria) + '</span>' +
+          '<span class="badge badge-azul" style="margin-left:auto">' + UI.esc(o.area) + '</span>' +
         '</div>' +
         '<h3 class="card-titulo">' + UI.esc(o.titulo) + '</h3>' +
         '<p class="card-texto">' + UI.esc(o.descripcion) + '</p>' +
         '<div class="card-pie">' +
-          '<span>' + (o.tipo === 'objeto' ? '📦 Busco un objeto' : '🤝 Busco un favor') + ' · ' + UI.tiempo(o.creadaEn) + '</span>' +
+          '<span>' + (o.tipo === 'objeto' ? '📦 Objeto' : '🤝 Favor') + ' · ' + UI.esc(o.categoria) + ' · ' + UI.tiempo(o.creadaEn) + '</span>' +
           '<span>' + (o.destacada ? '<span class="badge badge-ambar">★ Destacada</span>' : '') + '</span>' +
         '</div>' +
       '</a>';
@@ -190,7 +201,8 @@
 
     elLista.innerHTML = resultados.map(tarjeta).join('');
     elInfo.textContent = resultados.length + (resultados.length === 1 ? ' petición' : ' peticiones') +
-      (filtro.area || filtro.carrera || filtro.curso ? ' · filtros activos' : '');
+      (filtro.modo === 'clases' ? ' · clases particulares' : (filtro.modo === 'trueque' ? ' · trueques' : '')) +
+      (filtro.area || filtro.rama || filtro.curso ? ' · filtros activos' : '');
   }
 
   /* ---- arranque --------------------------------------------------------- */

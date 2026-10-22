@@ -6,6 +6,20 @@
   <title>USwap · Editar perfil</title>
   <link rel="icon" href="img/logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* P4 · tipografía del formulario: sin micro-mayúsculas ni tracking */
+    #form-perfil .label {
+      text-transform: none;
+      letter-spacing: 0;
+      font-size: 12px;
+      font-weight: 650;
+      margin: 15px 0 6px;
+      color: #64748b;
+    }
+    #form-perfil .input,
+    #form-perfil .select,
+    #form-perfil .textarea { border-radius: 13px; font-size: 14.5px; }
+  </style>
 </head>
 <body>
   <!-- =====================================================================
@@ -16,42 +30,130 @@
     <header id="topbar"></header>
 
     <main class="contenido">
-      <section class="hero">
-        <h1>Tu perfil</h1>
-        <p>Cuanto mejor te describas, más fácil será que te encuentren.</p>
+      <section style="position:relative;border-radius:22px;padding:18px;color:#fff;margin-bottom:14px;
+                      background:radial-gradient(120% 115% at 88% -18%, rgba(91,91,246,.62) 0%, rgba(91,91,246,0) 58%),
+                                 linear-gradient(158deg,#16203a 0%,#0d1424 100%)">
+        <div style="font-size:11.5px;color:rgba(255,255,255,.55)">
+          Tu ficha USwap
+        </div>
+        <h1 style="margin:9px 0 5px;font-size:23px;letter-spacing:-.8px;line-height:1.15">Tu perfil</h1>
+        <p style="margin:0;font-size:12.5px;line-height:1.5;color:rgba(255,255,255,.68)">
+          Tu ficha en la USC. Así te verán los demás estudiantes de Compostela.
+        </p>
       </section>
 
-      <form id="form-perfil" class="bloque" novalidate>
-        <label class="label" for="nombre">Nombre</label>
-        <input class="input" id="nombre" required maxlength="40">
+      <form id="form-perfil" novalidate>
+        <div class="bloque" style="padding:16px">
 
-        <label class="label" for="carrera">Carrera</label>
-        <input class="input" id="carrera" maxlength="60" placeholder="Ej. Ingeniería Informática">
+          <!-- pestañas -->
+          <div style="display:flex;gap:5px;background:#eef1f8;padding:4px;border-radius:12px;margin-bottom:16px">
+            <button type="button" data-tab="perfil" aria-pressed="true"
+              style="flex:1;border:0;padding:9px 6px;border-radius:9px;font-family:inherit;font-size:12px;font-weight:700;
+                     cursor:pointer;background:#fff;color:#0f172a;box-shadow:0 1px 2px rgba(15,23,42,.10)">Perfil</button>
+            <button type="button" data-tab="estudios" aria-pressed="false"
+              style="flex:1;border:0;padding:9px 6px;border-radius:9px;font-family:inherit;font-size:12px;font-weight:700;
+                     cursor:pointer;background:transparent;color:#8592a6">Estudios</button>
+            <button type="button" data-tab="contacto" aria-pressed="false"
+              style="flex:1;border:0;padding:9px 6px;border-radius:9px;font-family:inherit;font-size:12px;font-weight:700;
+                     cursor:pointer;background:transparent;color:#8592a6">Contacto</button>
+          </div>
 
-        <div class="fila" style="margin-top:16px">
-          <div style="flex:1">
-            <label class="label" for="curso">Curso</label>
-            <select class="select" id="curso"></select>
+          <!-- pestaña: perfil -->
+          <div data-panel="perfil">
+            <div style="display:flex;align-items:center;gap:14px">
+              <div id="foto-preview" aria-hidden="true"
+                style="flex:0 0 auto;width:74px;height:74px;border-radius:22px;overflow:hidden;background:#6366f1;
+                       display:grid;place-items:center;color:#fff;font-weight:800;font-size:22px;letter-spacing:-.5px"></div>
+              <div style="min-width:0">
+                <label class="btn btn-secundario btn-sm" style="cursor:pointer;display:inline-flex">
+                  Cambiar foto
+                  <input type="file" id="foto-input" accept="image/*" style="display:none">
+                </label>
+                <button type="button" id="foto-quitar" class="btn btn-secundario btn-sm" style="margin-left:6px">Quitar</button>
+                <div class="usuario-detalle" style="margin-top:7px">JPG o PNG. Se recorta al centro.</div>
+              </div>
+            </div>
+
+            <label class="label" for="nombre">Nombre de usuario</label>
+            <input class="input" id="nombre" required maxlength="40">
+
+            <label class="label" for="bio">Descripción</label>
+            <textarea class="textarea" id="bio" maxlength="180" placeholder="Qué estudias en la USC, qué se te da bien, qué ofreces…"></textarea>
+            <div class="usuario-detalle" id="contador-bio" style="margin-top:6px;text-align:right;font-variant-numeric:tabular-nums">0 / 180</div>
+
+            <label class="label" for="habilidades">Habilidades</label>
+            <div id="habilidades-chips" style="max-height:210px;overflow:auto;padding:2px 2px 2px 0"></div>
+            <div style="display:flex;gap:6px;margin-top:10px">
+              <input class="input" id="habilidades" maxlength="24" placeholder="Añadir otra habilidad">
+              <button type="button" id="btn-add-habilidad" class="btn btn-secundario btn-sm" style="flex:0 0 auto">Añadir</button>
+            </div>
+            <div class="usuario-detalle" style="margin-top:6px">Toca las que domines. Máximo 10.</div>
           </div>
-          <div style="flex:1">
-            <label class="label" for="area">Área</label>
-            <select class="select" id="area"></select>
+
+          <!-- pestaña: estudios -->
+          <div data-panel="estudios" hidden>
+            <label class="label" style="margin-top:0" for="carrera">Carrera en la USC</label>
+            <input class="input" id="carrera" maxlength="60" list="grados-usc" placeholder="Ej. Grao en Enxeñaría Informática">
+            <datalist id="grados-usc">
+              <option value="Grao en Enxeñaría Informática"></option>
+              <option value="Grao en Enxeñaría Química"></option>
+              <option value="Grao en Matemáticas"></option>
+              <option value="Grao en Física"></option>
+              <option value="Grao en Química"></option>
+              <option value="Grao en Bioloxía"></option>
+              <option value="Grao en Biotecnoloxía"></option>
+              <option value="Grao en Ciencia e Tecnoloxía dos Alimentos"></option>
+              <option value="Grao en Enoloxía"></option>
+              <option value="Grao en Medicina"></option>
+              <option value="Grao en Enfermaría"></option>
+              <option value="Grao en Farmacia"></option>
+              <option value="Grao en Odontoloxía"></option>
+              <option value="Grao en Veterinaria"></option>
+              <option value="Grao en Psicoloxía"></option>
+              <option value="Grao en Fisioterapia"></option>
+              <option value="Grao en Dereito"></option>
+              <option value="Grao en ADE"></option>
+              <option value="Grao en Economía"></option>
+              <option value="Grao en Belas Artes"></option>
+              <option value="Grao en Arquitectura"></option>
+              <option value="Grao en Filoloxía Galega"></option>
+              <option value="Grao en Filoloxía Inglesa"></option>
+              <option value="Grao en Historia"></option>
+              <option value="Grao en Xornalismo"></option>
+              <option value="Grao en Comunicación Audiovisual"></option>
+              <option value="Grao en Maxisterio"></option>
+              <option value="Grao en Turismo"></option>
+              <option value="Grao en Traballo Social"></option>
+              <option value="Máster en Enxeñaría Informática"></option>
+            </datalist>
+            <div class="usuario-detalle" style="margin-top:5px">Grados oficiales de la USC · Santiago de Compostela</div>
+
+            <div class="fila" style="margin-top:16px">
+              <div style="flex:1">
+                <label class="label" style="margin-top:0" for="curso">Curso</label>
+                <select class="select" id="curso"></select>
+              </div>
+              <div style="flex:1">
+                <label class="label" style="margin-top:0" for="rama">Rama</label>
+                <select class="select" id="rama"></select>
+              </div>
+            </div>
           </div>
+
+          <!-- pestaña: contacto -->
+          <div data-panel="contacto" hidden>
+            <label class="label" style="margin-top:0" for="instagram">Instagram</label>
+            <input class="input" id="instagram" placeholder="sergio.leon">
+            <div class="usuario-detalle" style="margin-top:5px">Solo el nombre de usuario, sin la arroba.</div>
+
+            <label class="label" for="whatsapp">WhatsApp</label>
+            <input class="input" id="whatsapp" placeholder="34600111222">
+            <div class="usuario-detalle" style="margin-top:5px">Con prefijo del país y sin el signo +.</div>
+          </div>
+
         </div>
 
-        <label class="label" for="habilidades">Habilidades (separadas por comas)</label>
-        <input class="input" id="habilidades" placeholder="Python, Diseño UI, Inglés">
-
-        <label class="label" for="bio">Sobre ti</label>
-        <textarea class="textarea" id="bio" maxlength="180" placeholder="Qué estudias, qué se te da bien, qué ofreces…"></textarea>
-
-        <label class="label" for="instagram">Instagram (sin @)</label>
-        <input class="input" id="instagram" placeholder="tu.usuario">
-
-        <label class="label" for="whatsapp">WhatsApp (con prefijo, sin +)</label>
-        <input class="input" id="whatsapp" placeholder="34600111222">
-
-        <button class="btn btn-primario btn-bloque" type="submit">Guardar cambios</button>
+        <button class="btn btn-primario" style="margin-top:14px" type="submit">Guardar cambios</button>
         <a class="btn btn-secundario" style="margin-top:8px" href="perfil.html">Cancelar</a>
       </form>
     </main>

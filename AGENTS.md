@@ -9,13 +9,15 @@ Actualízala solo cuando cambie una decisión (stack, archivos, reglas), no por 
 
 App **móvil** (prototipo web) de intercambio de **favores y objetos** entre estudiantes de carreras y áreas distintas.
 
-- **Tablón** con filtros por área, carrera y curso, y buscador.
-- **Perfil**: carrera, curso, área, habilidades, reputación y puntos.
-- **Publicar**: el estudiante dice qué ofrece y qué pide a cambio.
+- **Tablón** con buscador y filtros por **área de la petición**, **rama** y **curso**.
+- **Acceso**: registro con correo (obligatorio y único), contraseña (mín. 8), fecha de nacimiento (**+16 años**) y **al menos un contacto verificado** (teléfono o Instagram). Hay sesión persistente y cierre de sesión.
+- **Perfil**: carrera escrita libremente, rama, curso, habilidades, reputación y puntos.
+- **Publicar**: el estudiante dice qué necesita; quien le responde propone qué quiere a cambio.
 - **Contacto**: el chat es **externo** (WhatsApp/Instagram). La app solo genera enlaces `wa.me` e `instagram.com`.
-- **Cierre**: al terminar el trato se marca como cerrado.
-- **Valoración**: ★1-5 con comentario.
-- **Ranking + recompensas**: ★4-5 suma 1 punto, ★3 no puntúa, ★1-2 resta 1 punto. Niveles: En observación → Bronce → Plata → Oro → Élite, cada uno con su recompensa.
+- **Cierre**: el trato se cierra a dos bandas. Una parte pulsa "Hemos llegado a un acuerdo" y la otra lo confirma; hasta entonces queda "acuerdo pendiente".
+- **Valoración**: solo cuando el trato está cerrado, cada parte valora a la otra **una vez**: ★1-5 + comentario opcional.
+- **Perfil**: muestra las valoraciones recibidas con su comentario y la puntuación.
+- **Ranking + recompensas**: cada estrella suma **10 puntos** (★1 = 10 … ★5 = 50); sin reseñas, 0 puntos. 9 rangos: Hierro → Bronce → Plata → Oro → Platino → Diamante → Ascendente → Inmortal → Radiante.
 
 Proyecto de hackathon de la ETSE. Quedan ~3 h 30 min y hay que **exponer una demo de 5 minutos**.
 
@@ -41,14 +43,16 @@ Restricciones que esto impone — **los agentes las incumplen por defecto**, as�
 
 ```powershell
 # En la raíz del repo
-py -m http.server 8000     # luego abrir http://localhost:8000
+py serve.py 8000           # luego abrir http://localhost:8000
 # o doble clic en abrir-app.bat
 ```
 
+- **La app arranca en `login.html`**: sin sesión no se ve ninguna pantalla. Cuentas de demo: `ana.ferrer@usc.es` o `marc.puig@usc.es`, contraseña `demo1234` (los botones de la pantalla de login entran directos).
 - No hay tests ni linter. **La verificación es abrir la app y usarla.**
 - Un error de JavaScript deja la página **en blanco o a medias**: la única pista está en la consola del navegador (F12 → Console). Mírala siempre antes de inventar una causa.
 - Cada página se prueba con doble clic en el flujo real: tablón → oferta → valorar → ranking.
 - Botón **↺** de la cabecera = `USWAP.reset()`: borra lo añadido y vuelve a los datos semilla.
+- **Página en blanco o a medias**: casi siempre es caché del navegador mezclando un `.js` viejo con uno nuevo. Pulsa **Ctrl + F5**. Si el fallo es de JavaScript, ahora aparece un aviso rojo arriba con la causa (antes la página se quedaba muda). Arranca siempre con `py serve.py` (manda `no-store`), no con `python -m http.server`.
 - **Primera vez en un portátil** (clonar, GitHub Desktop, abrir OpenCode): `TAREAS/INSTALACION.md`.
 
 ---
@@ -59,7 +63,7 @@ py -m http.server 8000     # luego abrir http://localhost:8000
 
 | Persona | Usuario GitHub | Pantallas | Archivos que puede editar |
 |---|---|---|---|
-| **P1 · Daniel** (integrador) | `danielalvarezvazquez` | Detalle + valorar | `css/styles.css`, `js/data.js`, `js/ui.js`, `oferta.html`, `js/oferta.js`, `valorar.html`, `js/valorar.js`, `AGENTS.md`, `README.md` |
+| **P1 · Daniel** (integrador) | `danielalvarezvazquez` | Login, registro, detalle, valorar | `css/styles.css`, `js/data.js`, `js/ui.js`, `login.html`, `js/login.js`, `registro.html`, `js/registro.js`, `oferta.html`, `js/oferta.js`, `valorar.html`, `js/valorar.js`, `AGENTS.md`, `README.md` |
 | **P2 · Javier** | `Javierbarcala` | Tablón | `index.html`, `js/board.js` |
 | **P3 · Tomé** | `tome123456` | Ranking + publicar | `ranking.html`, `js/ranking.js`, `publicar.html`, `js/publicar.js` |
 | **P4 · Sergio** | `sergiooleeonn` | Perfil | `perfil.html`, `editar-perfil.html`, `js/perfil.js`, `js/editar-perfil.js` |
@@ -74,12 +78,31 @@ Si alguien necesita un campo nuevo en los datos, un componente nuevo o un estilo
 Definido en `js/data.js` (P1). Campos exactos, en español:
 
 ```js
-usuario  { id, nombre, carrera, curso, area, bio, habilidades[], color, instagram, whatsapp }
-oferta   { id, titulo, descripcion, tipo:'favor'|'objeto', categoria, autorId, estado:'abierta'|'cerrada', creadaEn, destacada }
+usuario  { id, nombre, carrera (texto libre), rama, curso, bio, habilidades[], color,
+           instagram, whatsapp, email, passwordHash, nacimiento, telVerificado, igVerificado }
+oferta   { id, titulo, descripcion, tipo:'favor'|'objeto', categoria, area, autorId,
+           estado:'abierta'|'acordada'|'cerrada', creadaEn, destacada,
+           acuerdo:{ proponente, confirmadoPor:[uids], fecha } }
 valoración { id, ofertaId, deUsuarioId, aUsuarioId, estrellas:1..5, comentario, creadaEn }
+estado global { version, yo, sesion (uid|null), usuarios[], ofertas[], valoraciones[] }
 ```
 
-API disponible (`window.USWAP`): `yo()`, `setYo(id)`, `usuarios()`, `usuario(id)`, `ofertas()`, `oferta(id)`, `ofertasDe(uid)`, `valoracionesDe(uid)`, `addOferta(datos)`, `addValoracion(datos)`, `cerrarTrato(id)`, `actualizarPerfil(datos)`, `puntosDe(uid)`, `mediaDe(uid)`, `reset()`.
+**Vocabulario (no inventar valores; están en `js/data.js`):**
+- `area` vive en la **oferta** y describe **de qué va la petición**: Tecnología, Matemáticas, Ciencias, Salud, Ciencias jurídicas, Lenguaje, Habilidades, Ciencias sociales, Otros (`USWAP.AREAS`).
+- `rama` vive en el **usuario**: Artes y Humanidades, Ciencias, Ciencias de la Salud, Ciencias Sociales y Jurídicas, Ingeniería y Arquitectura (`USWAP.RAMAS`).
+- `curso` es **texto**: `1º` … `6º`, `Máster`, `Doctorado` (`USWAP.CURSOS`). Para pintarlo usa `USWAP_UI.curso(valor)`; nunca concatenes `'º'`.
+- `carrera` es **texto libre** que escribe cada persona (ej. "Ingeniería Informática"). **No es filtro ni categoría**: no la uses como `area`.
+
+**Flujo del trato (no cambiarlo sin hablar con P1):**
+`abierta` → alguien pulsa "Hemos llegado a un acuerdo" → `acordada` con esa persona en `confirmadoPor` →
+la otra parte confirma → `cerrada` cuando `confirmadoPor` incluye al autor y hay 2 personas distintas.
+Solo en `cerrada` se puede valorar, y **una sola vez por persona y trato**.
+
+API disponible (`window.USWAP`): `yo()`, `setYo(id)`, `sesion()`, `sesionUsuario()`, `entrar(email, password)`, `salir()`, `registrar(datos)`, `emailOcupado(email)`, `edad(fechaISO)`, `usuarios()`, `usuario(id)`, `ofertas()`, `oferta(id)`, `ofertasDe(uid)`, `valoracionesDe(uid)`, `addOferta(datos)`, `addValoracion(datos)`, `proponerAcuerdo(oid)`, `confirmarAcuerdo(oid)`, `participantes(oid)`, `otraParteDe(oid)`, `yaValoro(oid, uid)`, `actualizarPerfil(datos)`, `puntosDe(uid)`, `mediaDe(uid)`, `reset()`.
+
+**Autenticación = demo, no seguridad real.** Todo vive en `localStorage`: el hash djb2 solo evita contraseñas en claro y el código de verificación se muestra en pantalla porque no hay backend. No la presentes como seguridad de producción.
+
+**Qué implica en las pantallas nuevas:** cualquier página (salvo `login.html` y `registro.html`) redirige sola si no hay `sesion`. No dupliques esa comprobación; está centralizada en `js/ui.js`.
 
 Componentes (`window.USWAP_UI`): `montarNav('inicio'|'publicar'|'ranking'|'perfil')`, `avatar(usuario, clase)`, `estrellas(media)`, `tiempo(fechaIso)`, `param('id')`, `toast(texto)`, `vacio(titulo, texto)`, `esc(texto)`.
 
@@ -140,6 +163,6 @@ $env:PATH = "C:\Program Files\Git\cmd;C:\Program Files\GitHub CLI;" + $env:PATH
 
 ## 10. Demo (5 min)
 
-`Problema (P2)` → `tablón con filtros (P2)` → `abrir oferta + contacto (P3)` → `cerrar trato y valorar (P1)` → `ranking y recompensas (P3)` → `perfil (P4)` → `cómo se hizo con IA (P1)` → `roadmap`.
+`Problema (P2)` → `tablón con filtros (P2)` → `oferta, acuerdo a dos bandas y valoración (P1)` → `ranking y recompensas (P3)` → `perfil con las valoraciones (P4)` → `cómo se hizo con IA (P1)` → `roadmap`.
 
 Reglas de demo: usuario cambiado desde la cabecera para enseñar los dos lados, datos semilla ya cargados, **nunca** crear contenido en vivo, y **↺** antes de empezar.
