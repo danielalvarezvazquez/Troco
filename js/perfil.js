@@ -65,9 +65,19 @@
       encodeURIComponent(u.whatsapp) + '">WhatsApp ↗</a>';
   }
 
+  /* --- avatar con foto opcional (campo "foto", data URL) --- */
+  function avatarPerfil(usuario, clase) {
+    if (!usuario) return '';
+    var foto = usuario.foto && /^data:image\//.test(usuario.foto) ? usuario.foto : '';
+    if (!foto) return UI.avatar(usuario, clase);
+    return '<div class="avatar ' + (clase || '') + '" style="background:' + UI.esc(usuario.color || '#6366f1') +
+      ';padding:0;overflow:hidden">' +
+      '<img src="' + foto + '" alt="" style="width:100%;height:100%;object-fit:cover;display:block">' +
+    '</div>';
+  }
+
   /* --- celda de la ficha inferior --- */
-  function celda(valor, etiqueta, primera) {
-    return '<div class="stat" style="background:transparent;border:0;border-radius:0;text-align:left;' +
+  function celda(valor, etiqueta, primera) {    return '<div class="stat" style="background:transparent;border:0;border-radius:0;text-align:left;' +
         'padding:0 0 0 13px' + (primera ? '' : ';border-left:1px solid #eef1f7') + '">' +
         '<b style="font-size:16.5px;letter-spacing:-.5px;font-variant-numeric:tabular-nums">' + valor + '</b>' +
         '<span style="font-size:9.5px;text-transform:none;letter-spacing:.01em;font-weight:600">' + etiqueta + '</span>' +
@@ -88,7 +98,7 @@
 
       '<div style="display:flex;align-items:center;gap:14px;margin-top:16px">' +
         '<div style="flex:0 0 auto;padding:3px;border-radius:23px;border:1px solid rgba(255,255,255,.22)">' +
-          UI.avatar(u, 'grande') +
+          avatarPerfil(u, 'grande') +
         '</div>' +
         '<div style="min-width:0">' +
           '<h1 style="margin:0;font-size:24px;line-height:1.1;letter-spacing:-.9px;color:#fff">' + UI.esc(u.nombre) + '</h1>' +
@@ -185,13 +195,22 @@
       : '') +
 
     '<div class="seccion-titulo"><h2>Habilidades</h2>' +
-      (u.habilidades && u.habilidades.length ? '<span class="usuario-detalle">' + u.habilidades.length + '</span>' : '') +
+      (u.habilidades && u.habilidades.length
+        ? '<span class="usuario-detalle">' + u.habilidades.length + ' destacadas</span>'
+        : '') +
     '</div>' +
     ((u.habilidades && u.habilidades.length)
-      ? '<div class="chips" style="flex-wrap:wrap;overflow:visible">' +
-        u.habilidades.map(function (h) {
-          return '<span class="chip chip-mini" style="cursor:default">' + UI.esc(h) + '</span>';
-        }).join('') + '</div>'
+      ? '<div class="bloque" style="padding:15px 16px">' +
+          '<div style="display:flex;flex-wrap:wrap;gap:7px">' +
+            u.habilidades.map(function (h) {
+              return '<span style="display:inline-flex;align-items:center;gap:7px;padding:9px 14px;' +
+                'border-radius:999px;background:#f3f4ff;color:#4343d6;font-size:13px;font-weight:650;' +
+                'letter-spacing:-.1px">' +
+                '<span style="width:6px;height:6px;border-radius:99px;background:#5b5bf6"></span>' +
+                UI.esc(h) + '</span>';
+            }).join('') +
+          '</div>' +
+        '</div>'
       : UI.vacio('Sin habilidades', soyYo
           ? 'Añádelas en Editar perfil para que te encuentren.'
           : 'Todavía no ha añadido habilidades.'));
@@ -242,8 +261,13 @@
     '</div>';
   }).join('');
 
-  document.getElementById('valoraciones').innerHTML = total
-    ? '<div class="bloque" style="padding:15px 16px">' +
+  var contenedorVal = document.getElementById('valoraciones');
+
+  if (!total) {
+    contenedorVal.innerHTML = UI.vacio('Sin reseñas', 'Cierra tratos y pide que te valoren para subir en el ranking.');
+  } else {
+    contenedorVal.innerHTML =
+      '<div class="bloque" style="padding:15px 16px">' +
         '<div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px">' +
           '<span style="font-size:9px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)">' +
             'Reputación</span>' +
@@ -252,10 +276,35 @@
         '</div>' +
         '<div style="margin-top:10px">' + filasDist + '</div>' +
       '</div>' +
-      valoraciones.map(function (v, i) {
+
+      '<div style="display:flex;gap:7px;padding:2px 1px 0;overflow-x:auto">' +
+        '<button type="button" class="chip chip-mini activo" data-filtro="recientes">Recientes</button>' +
+        '<button type="button" class="chip chip-mini" data-filtro="positivas">Más positivas</button>' +
+        '<button type="button" class="chip chip-mini" data-filtro="negativas">Más negativas</button>' +
+      '</div>' +
+
+      '<div id="lista-resenas"></div>';
+
+    var listaResenas = document.getElementById('lista-resenas');
+
+    function pintarResenas(filtro) {
+      var lista = valoraciones.slice();
+      if (filtro === 'positivas') {
+        lista.sort(function (a, b) {
+          return (b.estrellas - a.estrellas) || (new Date(b.creadaEn) - new Date(a.creadaEn));
+        });
+      } else if (filtro === 'negativas') {
+        lista.sort(function (a, b) {
+          return (a.estrellas - b.estrellas) || (new Date(b.creadaEn) - new Date(a.creadaEn));
+        });
+      } else {
+        lista.sort(function (a, b) { return new Date(b.creadaEn) - new Date(a.creadaEn); });
+      }
+
+      listaResenas.innerHTML = lista.map(function (v, i) {
         var de = USWAP.usuario(v.deUsuarioId) || { nombre: 'Alguien', color: '#94a3b8' };
         return '<div style="padding:15px 2px' +
-            (i < total - 1 ? ';border-bottom:1px solid #eef1f7' : '') + '">' +
+            (i < lista.length - 1 ? ';border-bottom:1px solid #eef1f7' : '') + '">' +
           '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px">' +
             UI.estrellas(v.estrellas) +
             '<span class="usuario-detalle">' + UI.tiempo(v.creadaEn) + '</span>' +
@@ -265,12 +314,25 @@
                 UI.esc(v.comentario) + '”</p>'
             : '') +
           '<div style="display:flex;align-items:center;gap:7px;margin-top:10px">' +
-            UI.avatar(de, 'pequeno') +
+            avatarPerfil(de, 'pequeno') +
             '<span style="font-size:11.5px;font-weight:650">' + UI.esc(de.nombre) + '</span>' +
           '</div>' +
         '</div>';
-      }).join('')
-    : UI.vacio('Sin valoraciones', 'Cierra tratos y pide que te valoren para subir en el ranking.');
+      }).join('');
+    }
+
+    pintarResenas('recientes');
+
+    Array.prototype.forEach.call(contenedorVal.querySelectorAll('[data-filtro]'), function (boton) {
+      boton.addEventListener('click', function () {
+        Array.prototype.forEach.call(contenedorVal.querySelectorAll('[data-filtro]'), function (b) {
+          b.classList.remove('activo');
+        });
+        boton.classList.add('activo');
+        pintarResenas(boton.getAttribute('data-filtro'));
+      });
+    });
+  }
 
   /* ------------------------------------------------------ escalera de rangos */
   var filasRango = rangos.map(function (n, i) {

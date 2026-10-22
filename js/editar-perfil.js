@@ -2,6 +2,9 @@
    EDITAR PERFIL                       Propietario: P4 (sergiooleeonn)
    --------------------------------------------------------------------------
    Solo se editan este archivo, editar-perfil.html y perfil.html / perfil.js.
+   Pestañas: perfil (foto, nombre, descripción, habilidades), estudios, contacto.
+   La foto se guarda como campo opcional "foto" (data URL) usando la API
+   pública USWAP.estado() + USWAP.guardar(); no requiere cambios en data.js.
    ========================================================================== */
 (function () {
   'use strict';
@@ -24,7 +27,30 @@
     whatsapp: document.getElementById('whatsapp')
   };
 
-  /* --- rellenar selects --- */
+  /* ------------------------------------------------------------- pestañas */
+  var botonesTab = document.querySelectorAll('[data-tab]');
+  var paneles = document.querySelectorAll('[data-panel]');
+  var BASE_TAB = 'flex:1;border:0;padding:9px 6px;border-radius:9px;font-family:inherit;' +
+    'font-size:12px;font-weight:700;cursor:pointer';
+  var TAB_ON = ';background:#fff;color:#0f172a;box-shadow:0 1px 2px rgba(15,23,42,.10)';
+  var TAB_OFF = ';background:transparent;color:#8592a6';
+
+  function activarTab(nombre) {
+    Array.prototype.forEach.call(botonesTab, function (b) {
+      var on = b.getAttribute('data-tab') === nombre;
+      b.style.cssText = BASE_TAB + (on ? TAB_ON : TAB_OFF);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    Array.prototype.forEach.call(paneles, function (p) {
+      p.hidden = p.getAttribute('data-panel') !== nombre;
+    });
+  }
+
+  Array.prototype.forEach.call(botonesTab, function (b) {
+    b.addEventListener('click', function () { activarTab(b.getAttribute('data-tab')); });
+  });
+
+  /* --------------------------------------------------------------- selects */
   campos.curso.innerHTML = USWAP.CURSOS.map(function (c) {
     return '<option value="' + c + '">' + c + 'º</option>';
   }).join('');
@@ -32,17 +58,16 @@
     return '<option value="' + UI.esc(a) + '">' + UI.esc(a) + '</option>';
   }).join('');
 
-  /* --- precargar datos actuales --- */
+  /* ------------------------------------------------------------- precarga */
   campos.nombre.value = yo.nombre || '';
   campos.carrera.value = yo.carrera || '';
   campos.curso.value = String(yo.curso || 1);
   campos.area.value = yo.area || USWAP.AREAS[0];
-  campos.habilidades.value = (yo.habilidades || []).join(', ');
   campos.bio.value = yo.bio || '';
   campos.instagram.value = yo.instagram || '';
   campos.whatsapp.value = yo.whatsapp || '';
 
-  /* --- contador de caracteres de "Sobre ti" (máx. 180) --- */
+  /* ------------------------------------------------- contador de "Sobre ti" */
   var contadorBio = document.getElementById('contador-bio');
   function pintarContador() {
     if (!contadorBio) return;
@@ -53,15 +78,159 @@
   pintarContador();
   campos.bio.addEventListener('input', pintarContador);
 
-  /* --- guardar --- */
+  /* ------------------------------------------------------------------ foto */
+  var fotoActual = (yo.foto && /^data:image\//.test(yo.foto)) ? yo.foto : '';
+  var fotoPreview = document.getElementById('foto-preview');
+  var fotoInput = document.getElementById('foto-input');
+
+  function pintarFoto() {
+    if (fotoActual) {
+      fotoPreview.innerHTML = '<img src="' + fotoActual + '" alt="" ' +
+        'style="width:100%;height:100%;object-fit:cover;display:block">';
+    } else {
+      fotoPreview.innerHTML = '';
+      fotoPreview.textContent = UI.iniciales(campos.nombre.value || yo.nombre);
+      fotoPreview.style.background = yo.color || '#6366f1';
+    }
+  }
+
+  fotoInput.addEventListener('change', function () {
+    var f = fotoInput.files && fotoInput.files[0];
+    if (!f) return;
+    if (!/^image\//.test(f.type)) { UI.toast('Elige una imagen JPG o PNG'); return; }
+    if (f.size > 5 * 1024 * 1024) { UI.toast('La imagen no puede pasar de 5 MB'); return; }
+
+    var lector = new FileReader();
+    lector.onload = function () {
+      var img = new Image();
+      img.onload = function () {
+        var lado = 220;
+        var lienzo = document.createElement('canvas');
+        lienzo.width = lado;
+        lienzo.height = lado;
+        var ctx = lienzo.getContext('2d');
+        var escala = Math.max(lado / img.width, lado / img.height);
+        var w = img.width * escala;
+        var h = img.height * escala;
+        ctx.drawImage(img, (lado - w) / 2, (lado - h) / 2, w, h);
+        fotoActual = lienzo.toDataURL('image/jpeg', 0.82);
+        pintarFoto();
+        UI.toast('Foto lista. Pulsa Guardar cambios');
+      };
+      img.onerror = function () { UI.toast('No se pudo leer la imagen'); };
+      img.src = lector.result;
+    };
+    lector.onerror = function () { UI.toast('No se pudo leer el archivo'); };
+    lector.readAsDataURL(f);
+  });
+
+  document.getElementById('foto-quitar').addEventListener('click', function () {
+    fotoActual = '';
+    fotoInput.value = '';
+    pintarFoto();
+  });
+
+  campos.nombre.addEventListener('input', function () { if (!fotoActual) pintarFoto(); });
+
+  /* ------------------------------------------------------------ habilidades */
+  var CATALOGO = [
+    { titulo: 'Tecnología', items: ['Python', 'Java', 'Excel', 'Diseño UI', 'Photoshop', 'AutoCAD', 'Git', 'Ofimática'] },
+    { titulo: 'Ciencias y salud', items: ['Cálculo', 'Estadística', 'LaTeX', 'Laboratorio', 'Anatomía', 'Primeros auxilios'] },
+    { titulo: 'Diseño y creatividad', items: ['Ilustración', 'Dibujo', 'Serigrafía', 'Fotografía', 'Maquetas', 'Carteles'] },
+    { titulo: 'Idiomas y letras', items: ['Inglés', 'Francés', 'Redacción', 'Debate', 'Corrección de textos'] },
+    { titulo: 'Economía', items: ['Contabilidad', 'Finanzas', 'Marketing'] },
+    { titulo: 'Vida y oficios', items: ['Apuntes', 'Clases particulares', 'Transporte', 'Cocina', 'Repostería', 'Guitarra'] }
+  ];
+
+  var TODAS = [];
+  CATALOGO.forEach(function (g) {
+    g.items.forEach(function (h) { TODAS.push(h); });
+  });
+
+  var seleccion = (yo.habilidades || []).slice();
+  var contChips = document.getElementById('habilidades-chips');
+
+  function chip(h) {
+    var on = seleccion.indexOf(h) !== -1;
+    return '<button type="button" data-hab="' + UI.esc(h) + '" ' +
+      'style="display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;' +
+      'font-family:inherit;font-size:12px;font-weight:650;cursor:pointer;' +
+      'border:1px solid ' + (on ? '#5b5bf6' : '#e6eaf2') + ';' +
+      'background:' + (on ? '#5b5bf6' : '#fff') + ';' +
+      'color:' + (on ? '#fff' : '#475569') + '">' +
+      (on ? '<span style="font-size:10px">✓</span>' : '') + UI.esc(h) + '</button>';
+  }
+
+  function pintarHabilidades() {
+    var html = '';
+
+    var extras = seleccion.filter(function (h) { return TODAS.indexOf(h) === -1; });
+    if (extras.length) {
+      html += '<div style="font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;' +
+        'color:#8592a6;margin:2px 0 6px">Tuyas</div>' +
+        '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">' +
+          extras.map(chip).join('') +
+        '</div>';
+    }
+
+    CATALOGO.forEach(function (g) {
+      html += '<div style="font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;' +
+          'color:#8592a6;margin:12px 0 6px">' + UI.esc(g.titulo) + '</div>' +
+        '<div style="display:flex;flex-wrap:wrap;gap:6px">' + g.items.map(chip).join('') + '</div>';
+    });
+
+    contChips.innerHTML = html;
+
+    Array.prototype.forEach.call(contChips.querySelectorAll('[data-hab]'), function (b) {
+      b.addEventListener('click', function () { alternar(b.getAttribute('data-hab')); });
+    });
+  }
+
+  function alternar(h) {
+    var i = seleccion.indexOf(h);
+    if (i === -1) {
+      if (seleccion.length >= 10) { UI.toast('Máximo 10 habilidades'); return; }
+      seleccion.push(h);
+    } else {
+      seleccion.splice(i, 1);
+    }
+    pintarHabilidades();
+  }
+
+  function anadirHabilidad() {
+    var v = campos.habilidades.value.trim();
+    if (!v) return;
+    var repetida = seleccion.some(function (h) { return h.toLowerCase() === v.toLowerCase(); });
+    if (repetida) { UI.toast('Ya tienes esa habilidad'); campos.habilidades.value = ''; return; }
+    if (seleccion.length >= 10) { UI.toast('Máximo 10 habilidades'); return; }
+    seleccion.push(v);
+    campos.habilidades.value = '';
+    pintarHabilidades();
+  }
+
+  document.getElementById('btn-add-habilidad').addEventListener('click', anadirHabilidad);
+  campos.habilidades.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); anadirHabilidad(); }
+  });
+
+  pintarHabilidades();
+  pintarFoto();
+
+  /* ---------------------------------------------------------------- guardar */
   document.getElementById('form-perfil').addEventListener('submit', function (e) {
     e.preventDefault();
 
     var nombre = campos.nombre.value.trim();
-    if (!nombre) { UI.toast('El nombre no puede estar vacío'); campos.nombre.focus(); return; }
+    if (!nombre) {
+      activarTab('perfil');
+      UI.toast('El nombre no puede estar vacío');
+      campos.nombre.focus();
+      return;
+    }
 
     var whatsapp = campos.whatsapp.value.replace(/[^\d]/g, '');
     if (whatsapp && (whatsapp.length < 9 || whatsapp.length > 15)) {
+      activarTab('contacto');
       UI.toast('El WhatsApp debe tener entre 9 y 15 dígitos');
       campos.whatsapp.focus();
       return;
@@ -69,6 +238,7 @@
 
     var instagram = campos.instagram.value.trim();
     if (instagram.indexOf('@') !== -1) {
+      activarTab('contacto');
       UI.toast('El Instagram va sin @, por ejemplo: sergio.leon');
       campos.instagram.focus();
       return;
@@ -79,13 +249,18 @@
       carrera: campos.carrera.value.trim(),
       curso: Number(campos.curso.value),
       area: campos.area.value,
-      habilidades: campos.habilidades.value.split(',')
-        .map(function (h) { return h.trim(); })
-        .filter(function (h) { return h.length > 0; }),
+      habilidades: seleccion,
       bio: campos.bio.value.trim(),
       instagram: instagram,
       whatsapp: whatsapp
     });
+
+    var actualizado = USWAP.usuario(USWAP.yo());
+    if (actualizado) {
+      if (fotoActual) actualizado.foto = fotoActual;
+      else delete actualizado.foto;
+      USWAP.guardar();
+    }
 
     UI.toast('Perfil guardado');
     setTimeout(function () { window.location.href = 'perfil.html'; }, 700);
