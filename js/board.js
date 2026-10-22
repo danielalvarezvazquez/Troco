@@ -142,6 +142,18 @@
       '</a>';
   }
 
+  /* ---- categorías más frecuentes del tablón ----------------------------- */
+  function categoriasFrecuentes() {
+    var cuenta = {};
+    USWAP.ofertas().forEach(function (o) {
+      if (USWAP.CATEGORIAS.indexOf(o.categoria) === -1) return;
+      cuenta[o.categoria] = (cuenta[o.categoria] || 0) + 1;
+    });
+    return USWAP.CATEGORIAS.filter(function (c) { return cuenta[c]; })
+      .sort(function (a, b) { return cuenta[b] - cuenta[a]; })
+      .slice(0, 3);
+  }
+
   /* ---- pintar la lista -------------------------------------------------- */
   function pintarLista() {
     var resultados = filtrar();
@@ -149,7 +161,30 @@
     if (elLimpiar) elLimpiar.classList.toggle('oculto', !hayFiltros());
 
     if (!resultados.length) {
-      elLista.innerHTML = UI.vacio('Nada por aquí', 'Prueba a quitar algún filtro o busca otra cosa.');
+      var sugerencias = categoriasFrecuentes().map(function (c) {
+        return '<button class="chip" type="button" data-categoria="' + UI.esc(c) + '">' +
+          UI.esc(c) + '</button>';
+      }).join('');
+
+      elLista.innerHTML =
+        '<div class="vacio">' +
+          '<strong>Nada por aquí</strong>' +
+          'Prueba a quitar algún filtro o busca otra cosa.' +
+          '<div class="chips" style="justify-content:center;flex-wrap:wrap;margin:14px 0 6px">' +
+            sugerencias +
+          '</div>' +
+          '<button class="chip chip-mini" type="button" id="btn-ver-todo">Ver todo</button>' +
+        '</div>';
+
+      elLista.querySelectorAll('[data-categoria]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          filtro.texto = btn.getAttribute('data-categoria');
+          elBuscador.value = filtro.texto;
+          pintarLista();
+        });
+      });
+      document.getElementById('btn-ver-todo').addEventListener('click', limpiarFiltros);
+
       elInfo.textContent = '0 ofertas';
       return;
     }
