@@ -58,17 +58,17 @@
 
   /* --- descuentos en comercios de Compostela (se desbloquean con puntos) --- */
   var TIENDAS = [
-    { nombre: 'CopyCampus', detalle: '10% en fotocopias y encuadernación', desde: 0 },
-    { nombre: 'Take', detalle: 'Menú + bebida por 6,50 €', desde: 100 },
-    { nombre: 'Papelería Campus', detalle: '15% en material de oficina', desde: 150 },
-    { nombre: 'Cafetería ETSE', detalle: 'Café gratis por la mañana', desde: 200 },
-    { nombre: 'Librería Universitaria', detalle: '10% en manuales y lectura', desde: 250 },
-    { nombre: 'Gimnasio Compostela', detalle: 'Matrícula gratis este curso', desde: 300 }
+    { nombre: 'CopyCampus', titulo: '10%', detalle: 'Fotocopias y encuadernación', desde: 0 },
+    { nombre: 'Take', titulo: '6,50 €', detalle: 'Menú + bebida', desde: 100 },
+    { nombre: 'Papelería Campus', titulo: '15%', detalle: 'Material de oficina', desde: 150 },
+    { nombre: 'Cafetería ETSE', titulo: 'Gratis', detalle: 'Café por la mañana', desde: 200 },
+    { nombre: 'Librería Universitaria', titulo: '10%', detalle: 'Manuales y lectura', desde: 250 },
+    { nombre: 'Gimnasio Compostela', titulo: 'Gratis', detalle: 'Matrícula del curso', desde: 300 }
   ];
   var desbloqueados = TIENDAS.filter(function (t) { return puntos >= t.desde; }).length;
 
   /* --- contacto: enlaces discretos sobre la credencial --- */
-  var estiloEnlace = 'color:rgba(255,255,255,.62);text-decoration:none;font-weight:600;font-size:11.5px;' +
+  var estiloEnlace = 'color:rgba(255,255,255,.66);text-decoration:none;font-weight:600;font-size:12px;' +
     'border-bottom:1px solid rgba(255,255,255,.22);padding-bottom:1px';
   var micro = '';
   if (u.instagram) {
@@ -92,10 +92,11 @@
   }
 
   /* --- celda de la ficha inferior --- */
-  function celda(valor, etiqueta, primera) {    return '<div class="stat" style="background:transparent;border:0;border-radius:0;text-align:left;' +
-        'padding:0 0 0 13px' + (primera ? '' : ';border-left:1px solid #eef1f7') + '">' +
-        '<b style="font-size:16.5px;letter-spacing:-.5px;font-variant-numeric:tabular-nums">' + valor + '</b>' +
-        '<span style="font-size:9.5px;text-transform:none;letter-spacing:.01em;font-weight:600">' + etiqueta + '</span>' +
+  function celda(valor, etiqueta, primera) {
+    return '<div class="stat" style="background:transparent;border:0;border-radius:0;text-align:left;' +
+        'padding:0 0 0 14px' + (primera ? '' : ';border-left:1px solid #eef1f7') + '">' +
+        '<b style="font-size:17px;letter-spacing:-.5px;font-variant-numeric:tabular-nums">' + valor + '</b>' +
+        '<span style="font-size:10.5px;text-transform:none;letter-spacing:0;font-weight:600">' + etiqueta + '</span>' +
       '</div>';
   }
 
@@ -114,25 +115,30 @@
   if (corRango === corMarco) corRango = aclarar(corRango, 0.38);
 
   var intensidade = 0.18 + ratio * 0.34;
+  var senMovemento = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
   document.getElementById('perfil').innerHTML = '' +
     '<div style="position:relative">' +
-      '<div id="marco-glow" style="position:absolute;inset:-3px;border-radius:26px;pointer-events:none;' +
+      '<div id="marco-glow" style="position:absolute;inset:-3px;border-radius:28px;pointer-events:none;' +
         'background:linear-gradient(140deg,' + corMarco + ',' + corRango + ',' + corMarco + ');' +
-        'filter:blur(16px);opacity:' + intensidade.toFixed(2) + '"></div>' +
-      '<div style="position:relative;border-radius:23px;padding:2px;' +
+        'filter:blur(18px);opacity:' + intensidade.toFixed(2) + '"></div>' +
+
+      '<div style="position:relative;border-radius:25px;padding:2px;' +
         'background:linear-gradient(140deg,' + corMarco + ',' + corRango + ' 45%,' + corMarco + ')">' +
-        '<div style="border-radius:21px;padding:18px 18px 42px;color:#fff;' +
-          'background:radial-gradient(120% 115% at 88% -18%, rgba(91,91,246,.42) 0%, rgba(91,91,246,0) 58%),' +
-          'linear-gradient(158deg,#16203a 0%,#0d1424 100%)">' +
+        '<div style="border-radius:23px;padding:18px 18px 22px;color:#fff;' +
+          'background:radial-gradient(120% 115% at 88% -18%, rgba(91,91,246,.45) 0%, rgba(91,91,246,0) 58%),' +
+          'linear-gradient(158deg,#17213b 0%,#0c1220 100%)">' +
 
       '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;' +
-        'font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.48)">' +
-        '<span>Credencial USwap</span>' +
-        (posicion ? '<span>Puesto ' + posicion + '</span>' : '') +
+        'font-size:11.5px;color:rgba(255,255,255,.55)">' +
+        '<span>Perfil USwap</span>' +
+        (posicion
+          ? '<span style="background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.14);' +
+              'padding:3px 9px;border-radius:999px;font-size:11px">Nº ' + posicion + ' del ranking</span>'
+          : '') +
       '</div>' +
 
-      '<div style="display:flex;align-items:center;gap:14px;margin-top:16px">' +
+      '<div style="display:flex;align-items:center;gap:14px;margin-top:15px">' +
         '<div class="usr-avatar-wrap' + (nivelAlto ? ' usr-marco-brillo' : '') + '"' +
           ' style="flex:0 0 auto;padding:3px;border-radius:23px;border:2px solid ' +
           (nivel.marco || 'rgba(255,255,255,.22)') + ';' +
@@ -144,121 +150,131 @@
         '</div>' +
         '<div style="min-width:0">' +
           (nivelArcoiris
-            ? '<h1 class="usr-nombre-arcoiris" style="margin:0;font-size:24px;line-height:1.1;letter-spacing:-.9px">'
+            ? '<h1 class="usr-nombre-arcoiris" style="margin:0;font-size:25px;line-height:1.08;letter-spacing:-.8px">'
             : '<h1 class="' + (nivelBrilloNombre ? 'usr-nombre-brillo' : '') +
-              '" style="margin:0;font-size:24px;line-height:1.1;letter-spacing:-.9px;color:' +
+              '" style="margin:0;font-size:25px;line-height:1.08;letter-spacing:-.8px;color:' +
               (nivelBrilloNombre ? (nivel.marco || '#fff') : '#fff') + '">') +
             UI.esc(u.nombre) + '</h1>' +
-          '<div style="margin-top:5px;font-size:12px;line-height:1.35;color:rgba(255,255,255,.72)">' +
+          '<div style="margin-top:5px;font-size:13px;line-height:1.35;color:rgba(255,255,255,.78)">' +
             UI.esc(u.carrera) + '</div>' +
-          '<div style="margin-top:2px;font-size:11px;color:rgba(255,255,255,.48)">' +
+          '<div style="margin-top:2px;font-size:11.5px;color:rgba(255,255,255,.5)">' +
             UI.curso(u.curso) + ' · ' + UI.esc(u.rama) + '</div>' +
-          '<div style="margin-top:7px;font-size:8.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;' +
-            'color:rgba(255,255,255,.34)">USC · Santiago de Compostela</div>' +
-          '<div style="margin-top:7px;width:38px;height:3px;border-radius:99px;background:' + corMarco + '"></div>' +
+          '<div style="margin-top:6px;font-size:11px;color:rgba(255,255,255,.4)">' +
+            'USC · Santiago de Compostela</div>' +
         '</div>' +
       '</div>' +
 
-      '<div style="display:flex;align-items:center;justify-content:space-between;gap:14px;' +
-        'margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.12)">' +
-
+      /* --- reputación + rango --- */
+      '<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-top:20px">' +
         '<div style="min-width:0">' +
-          '<div style="display:flex;align-items:baseline;gap:7px">' +
-            '<span style="font-size:42px;font-weight:800;letter-spacing:-2.2px;line-height:.95">' + mediaTxt + '</span>' +
-            '<span style="font-size:11px;font-weight:600;color:rgba(255,255,255,.4)">/ 5</span>' +
+          '<div style="display:flex;align-items:baseline;gap:6px">' +
+            '<span style="font-size:47px;font-weight:800;letter-spacing:-2.6px;line-height:.9;' +
+              'background:linear-gradient(180deg,#ffffff 20%,#c7d2fe 100%);-webkit-background-clip:text;' +
+              'background-clip:text;color:transparent">' + mediaTxt + '</span>' +
+            '<span style="font-size:12px;color:rgba(255,255,255,.4)">/ 5</span>' +
           '</div>' +
-          '<div style="display:flex;align-items:center;gap:8px;margin-top:8px">' +
+          '<div style="display:flex;align-items:center;gap:8px;margin-top:7px">' +
             (total
-              ? UI.estrellas(media, 'grande') +
-                '<span style="font-size:10.5px;color:rgba(255,255,255,.55)">' + total +
-                  (total === 1 ? ' reseña' : ' reseñas') + '</span>'
-              : '<span style="font-size:11px;color:rgba(255,255,255,.5)">Sin reseñas todavía</span>') +
+              ? UI.estrellas(media, 'grande')
+              : '<span style="font-size:11.5px;color:rgba(255,255,255,.5)">Sin reseñas todavía</span>') +
           '</div>' +
         '</div>' +
 
         '<button type="button" id="btn-rango" aria-expanded="false" aria-controls="rango-panel" ' +
-          'style="flex:0 0 auto;background:none;border:0;padding:0;font-family:inherit;cursor:pointer;text-align:center">' +
-          '<span style="display:block;font-size:8.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;' +
-            'color:rgba(255,255,255,.42)">Rango</span>' +
-          '<span class="tier ' + nivel.clase + '" style="display:inline-flex;margin-top:6px;background:#fff;' +
-            'padding:7px 14px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:0">' +
-            UI.esc(nivel.nombre) + '</span>' +
-          '<span style="display:block;margin-top:7px;font-size:10px;font-weight:650;color:rgba(255,255,255,.58)">' +
+          'style="flex:0 0 auto;text-align:right;background:none;border:0;padding:0;color:#fff;' +
+          'font-family:inherit;cursor:pointer">' +
+          '<span style="display:block;font-size:11px;color:rgba(255,255,255,.45)">Rango</span>' +
+          '<span class="tier ' + nivel.clase + '" style="display:block;margin-top:3px;font-size:16px;' +
+            'font-weight:800;letter-spacing:-.2px">' + UI.esc(nivel.nombre) + '</span>' +
+          '<span style="display:block;margin-top:4px;font-size:11.5px;color:rgba(255,255,255,.6)">' +
             puntos + (Math.abs(puntos) === 1 ? ' pt' : ' pts') + ' ›</span>' +
         '</button>' +
       '</div>' +
 
-      '<div style="margin-top:14px;padding:11px 13px;border-radius:12px;' +
-        'background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10)">' +
-        '<div style="display:flex;align-items:center;gap:9px">' +
-          '<span style="flex:0 0 auto;width:7px;height:7px;border-radius:99px;background:' + corLema + '"></span>' +
-          '<span style="font-size:12.5px;font-weight:700;letter-spacing:-.2px">' + UI.esc(lema) + '</span>' +
-        '</div>' +
-        (total
-          ? '<div style="margin-top:4px;padding-left:16px;font-size:10px;font-weight:600;color:rgba(255,255,255,.5)">' +
-              positivas + (positivas === 1 ? ' positiva' : ' positivas') + ' · ' +
-              neutras + (neutras === 1 ? ' neutra' : ' neutras') + ' · ' +
-              negativas + (negativas === 1 ? ' negativa' : ' negativas') + '</div>'
+      '<div style="display:flex;align-items:center;gap:8px;margin-top:10px">' +
+        '<span style="font-size:11.5px;color:rgba(255,255,255,.5)">' + total +
+          (total === 1 ? ' reseña' : ' reseñas') + '</span>' +
+        '<span style="width:3px;height:3px;border-radius:99px;background:rgba(255,255,255,.3)"></span>' +
+        '<span style="font-size:11.5px;color:rgba(255,255,255,.5)">' +
+          positivas + (positivas === 1 ? ' positiva' : ' positivas') + '</span>' +
+        (negativas
+          ? '<span style="width:3px;height:3px;border-radius:99px;background:rgba(255,255,255,.3)"></span>' +
+            '<span style="font-size:11.5px;color:#fca5a5">' + negativas +
+              (negativas === 1 ? ' negativa' : ' negativas') + '</span>'
           : '') +
       '</div>' +
 
       (prog.siguiente
-        ? '<div class="barra-progreso" style="margin-top:16px;background:rgba(255,255,255,.14)">' +
-            '<div style="width:' + prog.pct + '%;background:#fff"></div>' +
-          '</div>' +
-          '<div style="margin-top:7px;font-size:10.5px;color:rgba(255,255,255,.5)">' +
-            'Te faltan ' + prog.faltan + ' puntos para ' + UI.esc(prog.siguiente.nombre) + '</div>'
-        : '') +
+        ? '<div style="margin-top:12px">' +
+            '<div style="height:7px;border-radius:99px;background:rgba(255,255,255,.13);overflow:hidden">' +
+              '<div style="height:100%;width:' + prog.pct + '%;border-radius:99px;' +
+                'background:linear-gradient(90deg,' + corMarco + ',' + corRango + ')"></div>' +
+            '</div>' +
+            '<div style="display:flex;justify-content:space-between;gap:8px;margin-top:7px;' +
+              'font-size:11px;color:rgba(255,255,255,.5)">' +
+              '<span>' + prog.pct + '% hacia ' + UI.esc(prog.siguiente.nombre) + '</span>' +
+              '<span>faltan ' + prog.faltan + (prog.faltan === 1 ? ' punto' : ' puntos') + '</span>' +
+            '</div>' +
+          '</div>'
+        : '<div style="margin-top:12px;font-size:11px;color:rgba(255,255,255,.5)">Nivel máximo alcanzado</div>') +
+
+      '<div style="display:flex;align-items:center;gap:9px;margin-top:14px;padding:10px 12px;' +
+        'border-radius:12px;background:linear-gradient(90deg,rgba(255,255,255,.10),rgba(255,255,255,.03));' +
+        'border:1px solid rgba(255,255,255,.09)">' +
+        '<span style="flex:0 0 auto;width:7px;height:7px;border-radius:99px;background:' + corLema + ';' +
+          'box-shadow:0 0 8px ' + corLema + '"></span>' +
+        '<span style="font-size:13px;font-weight:650;letter-spacing:-.15px">' + UI.esc(lema) + '</span>' +
+      '</div>' +
 
       (soyYo
-        ? '<a class="btn" style="margin-top:18px;background:#fff;color:#0f172a;box-shadow:none" href="editar-perfil.html">Editar perfil</a>'
-        : '<div class="fila" style="margin-top:18px">' +
+        ? '<a class="btn" style="margin-top:16px;background:#fff;color:#0f172a;box-shadow:none" href="editar-perfil.html">Editar perfil</a>'
+        : '<div class="fila" style="margin-top:16px">' +
             (u.whatsapp
               ? '<a class="btn btn-whatsapp" target="_blank" rel="noopener" href="https://wa.me/' + encodeURIComponent(u.whatsapp) + '">WhatsApp</a>'
               : '') +
             '<a class="btn" style="background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.22);color:#fff" href="index.html">Ver ofertas</a>' +
           '</div>' +
-          '<div style="margin-top:9px;text-align:center;font-size:10.5px;color:rgba(255,255,255,.5)">' +
+          '<div style="margin-top:9px;text-align:center;font-size:11px;color:rgba(255,255,255,.5)">' +
             'Contacta para negociar el intercambio</div>') +
 
       (micro
         ? '<div style="display:flex;justify-content:center;gap:18px;margin-top:15px;padding-top:13px;' +
-            'border-top:1px solid rgba(255,255,255,.12)">' + micro + '</div>'
+            'border-top:1px solid rgba(255,255,255,.10)">' + micro + '</div>'
         : '') +
         '</div>' +
       '</div>' +
     '</div>' +
 
     /* --- ficha de cifras, montada sobre la credencial --- */
-    '<div class="stats" style="margin:-28px 12px 0;position:relative;grid-template-columns:repeat(4,1fr);gap:0;' +
-      'background:#fff;border:1px solid var(--borde);border-radius:14px;padding:13px 2px;' +
-      'box-shadow:0 18px 32px -26px rgba(15,23,42,.7)">' +
-      celda(total, total === 1 ? 'valoración' : 'valoraciones', true) +
+    '<div class="stats" style="margin:-26px 12px 0;position:relative;grid-template-columns:repeat(4,1fr);gap:0;' +
+      'background:#fff;border:1px solid var(--borde);border-radius:16px;padding:14px 2px;' +
+      'box-shadow:0 20px 34px -26px rgba(15,23,42,.7)">' +
+      celda(total, total === 1 ? 'reseña' : 'reseñas', true) +
       celda(ofertas.length, ofertas.length === 1 ? 'oferta' : 'ofertas') +
-      celda(cerradas, cerradas === 1 ? 'cerrada' : 'cerradas') +
+      celda(cerradas, cerradas === 1 ? 'trato cerrado' : 'tratos cerrados') +
       celda(puntos, Math.abs(puntos) === 1 ? 'punto' : 'puntos') +
     '</div>' +
 
     (u.bio
-      ? '<div class="bloque" style="margin-top:14px;padding:15px 16px;border-left:3px solid var(--primario);' +
-          'border-radius:4px 14px 14px 4px">' +
-          '<p class="detalle-texto" style="margin:0;font-size:13px;line-height:1.6">' + UI.esc(u.bio) + '</p>' +
+      ? '<div class="bloque" style="margin-top:14px;padding:16px 18px;border-radius:16px;' +
+          'border-left:3px solid var(--primario)">' +
+          '<p class="detalle-texto" style="margin:0;font-size:13.5px;line-height:1.65">' + UI.esc(u.bio) + '</p>' +
         '</div>'
       : '') +
 
-    '<div class="seccion-titulo"><h2>Habilidades</h2>' +
+    '<div class="seccion-titulo"><h2 style="font-size:15px;letter-spacing:-.2px">Habilidades</h2>' +
       (u.habilidades && u.habilidades.length
-        ? '<span class="usuario-detalle">' + u.habilidades.length + ' destacadas</span>'
+        ? '<span class="usuario-detalle">' + u.habilidades.length + '</span>'
         : '') +
     '</div>' +
     ((u.habilidades && u.habilidades.length)
-      ? '<div class="bloque" style="padding:15px 16px">' +
+      ? '<div class="bloque" style="padding:15px 16px;border-radius:16px">' +
           '<div style="display:flex;flex-wrap:wrap;gap:7px">' +
             u.habilidades.map(function (h) {
-              return '<span style="display:inline-flex;align-items:center;gap:7px;padding:9px 14px;' +
-                'border-radius:999px;background:#f3f4ff;color:#4343d6;font-size:13px;font-weight:650;' +
+              return '<span style="display:inline-flex;align-items:center;gap:7px;padding:8px 13px;' +
+                'border-radius:12px;background:#f3f4ff;color:#4343d6;font-size:12.5px;font-weight:600;' +
                 'letter-spacing:-.1px">' +
-                '<span style="width:6px;height:6px;border-radius:99px;background:#5b5bf6"></span>' +
+                '<span style="width:5px;height:5px;border-radius:99px;background:#5b5bf6"></span>' +
                 UI.esc(h) + '</span>';
             }).join('') +
           '</div>' +
@@ -267,45 +283,70 @@
           ? 'Añádelas en Editar perfil para que te encuentren.'
           : 'Todavía no ha añadido habilidades.')) +
 
-    '<div class="seccion-titulo"><h2>' + (soyYo ? 'Tus descuentos' : 'Descuentos desbloqueados') + '</h2>' +
+    '<div class="seccion-titulo"><h2 style="font-size:15px;letter-spacing:-.2px">' +
+      (soyYo ? 'Tus descuentos' : 'Descuentos desbloqueados') + '</h2>' +
       '<span class="usuario-detalle">' + desbloqueados + ' de ' + TIENDAS.length + '</span></div>' +
-    '<div class="bloque" style="padding:4px 16px">' +
-      TIENDAS.map(function (t, i) {
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">' +
+      TIENDAS.map(function (t) {
         var ok = puntos >= t.desde;
         var faltan = Math.max(0, t.desde - puntos);
         var ini = t.nombre.split(' ').map(function (w) { return w.charAt(0); }).slice(0, 2).join('');
-        return '<div style="display:flex;align-items:center;gap:12px;padding:13px 0;' +
-            (i < TIENDAS.length - 1 ? 'border-bottom:1px solid #eef1f7;' : '') +
-            (ok ? '' : 'opacity:.72') + '">' +
-          '<span style="flex:0 0 auto;width:34px;height:34px;border-radius:11px;display:grid;place-items:center;' +
-            'font-size:11px;font-weight:800;background:' + (ok ? '#e7f8ee' : '#f1f4fa') + ';' +
-            'color:' + (ok ? '#16a34a' : '#8592a6') + '">' + UI.esc(ini) + '</span>' +
-          '<span style="flex:1;min-width:0">' +
-            '<span style="display:block;font-size:13px;font-weight:700;letter-spacing:-.1px">' +
-              UI.esc(t.nombre) + '</span>' +
-            '<span style="display:block;margin-top:2px;font-size:11px;color:var(--muted)">' +
-              UI.esc(t.detalle) + '</span>' +
-          '</span>' +
-          (ok
-            ? '<span class="badge badge-verde">Disponible</span>'
-            : '<span style="flex:0 0 auto;text-align:right;font-size:10px;font-weight:650;color:var(--muted)">' +
-                'Faltan<br>' + faltan + (faltan === 1 ? ' punto' : ' puntos') + '</span>') +
+        return '<div class="tienda-card" style="background:#fff;border:1px solid ' + (ok ? '#dcf3e6' : '#e9edf5') + ';' +
+            'border-radius:16px;padding:12px 13px;' + (ok ? '' : 'opacity:.68;') + '">' +
+          '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px">' +
+            '<span style="width:27px;height:27px;border-radius:9px;display:grid;place-items:center;' +
+              'font-size:10px;font-weight:800;background:' + (ok ? '#e7f8ee' : '#f1f4fa') + ';' +
+              'color:' + (ok ? '#16a34a' : '#8592a6') + '">' + UI.esc(ini) + '</span>' +
+            '<span style="width:6px;height:6px;border-radius:99px;background:' +
+              (ok ? '#16a34a' : '#cbd5e1') + '"></span>' +
+          '</div>' +
+          '<div style="margin-top:10px;font-size:20px;font-weight:800;letter-spacing:-.8px;line-height:1;' +
+            'color:' + (ok ? '#0f172a' : '#94a3b8') + '">' + UI.esc(t.titulo) + '</div>' +
+          '<div style="margin-top:4px;font-size:12px;font-weight:650;letter-spacing:-.1px">' + UI.esc(t.nombre) + '</div>' +
+          '<div style="margin-top:2px;font-size:11px;color:var(--muted);line-height:1.45">' + UI.esc(t.detalle) + '</div>' +
+          '<div style="margin-top:8px;font-size:10.5px;font-weight:650;color:' + (ok ? '#16a34a' : '#8592a6') + '">' +
+            (ok ? 'Disponible' : 'Faltan ' + faltan + (faltan === 1 ? ' punto' : ' puntos')) + '</div>' +
         '</div>';
       }).join('') +
     '</div>' +
-    '<div class="usuario-detalle" style="margin:8px 4px 0;line-height:1.5">' +
+    '<div class="usuario-detalle" style="margin:9px 4px 0;line-height:1.5">' +
       'Se canjean enseñando tu credencial USwap en el comercio.' +
     '</div>';
 
-  /* --- brillo animado del marco según el rango --- */
+  /* --- brillo del marco + entrada animada --- */
   var marcoGlow = document.getElementById('marco-glow');
-  var senMovemento = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   if (marcoGlow && marcoGlow.animate && !senMovemento) {
     marcoGlow.animate([
       { opacity: intensidade, transform: 'scale(.995)' },
       { opacity: Math.min(intensidade + 0.28, 0.95), transform: 'scale(1.012)' }
     ], { duration: 2400, iterations: Infinity, direction: 'alternate', easing: 'ease-in-out' });
   }
+
+  if (!senMovemento) {
+    Array.prototype.forEach.call(document.querySelectorAll('#perfil > *'), function (el, i) {
+      if (!el.animate) return;
+      el.animate(
+        [{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'none' }],
+        { duration: 420, delay: i * 55, easing: 'cubic-bezier(.2,.7,.3,1)', fill: 'backwards' }
+      );
+    });
+  }
+
+  function dinamizar(selector) {
+    Array.prototype.forEach.call(document.querySelectorAll(selector), function (el) {
+      el.style.transition = 'transform .18s ease, box-shadow .18s ease';
+      el.addEventListener('mouseenter', function () {
+        el.style.transform = 'translateY(-2px)';
+        el.style.boxShadow = '0 16px 30px -24px rgba(15,23,42,.55)';
+      });
+      el.addEventListener('mouseleave', function () {
+        el.style.transform = '';
+        el.style.boxShadow = '';
+      });
+    });
+  }
+
+  dinamizar('.tienda-card');
 
   /* --------------------------------------------------- títulos que dependen de quién es */
   var tituloOfertas = document.getElementById('titulo-ofertas');
@@ -317,17 +358,17 @@
 
   /* ------------------------------------------------------------- ofertas */
   document.getElementById('ofertas').innerHTML = ofertas.length
-    ? '<div class="bloque" style="padding:2px 15px">' +
+    ? '<div class="bloque" style="padding:4px 16px;border-radius:16px">' +
         ofertas.map(function (o, i) {
           return '<a href="oferta.html?id=' + encodeURIComponent(o.id) + '" style="display:flex;align-items:center;' +
-              'gap:11px;padding:13px 0;text-decoration:none;color:inherit' +
+              'gap:11px;padding:14px 0;text-decoration:none;color:inherit' +
               (i < ofertas.length - 1 ? ';border-bottom:1px solid #eef1f7' : '') + '">' +
             '<span style="flex:0 0 auto;width:6px;height:6px;border-radius:99px;background:' +
               (o.estado === 'cerrada' ? '#cbd5e1' : (o.estado === 'acordada' ? '#d97706' : '#16a34a')) + '"></span>' +
             '<span style="flex:1;min-width:0">' +
-              '<span style="display:block;font-size:13.5px;font-weight:650;line-height:1.35;letter-spacing:-.1px">' +
+              '<span style="display:block;font-size:13.5px;font-weight:650;line-height:1.4;letter-spacing:-.1px">' +
                 UI.esc(o.titulo) + '</span>' +
-              '<span style="display:block;margin-top:3px;font-size:11px;color:var(--muted)">' +
+              '<span style="display:block;margin-top:3px;font-size:11.5px;color:var(--muted)">' +
                 UI.esc(o.categoria) + ' · ' + UI.tiempo(o.creadaEn) +
                 (o.estado === 'cerrada' ? ' · Cerrada' : (o.estado === 'acordada' ? ' · Acuerdo pendiente' : '')) + '</span>' +
             '</span>' +
@@ -338,18 +379,19 @@
     : UI.vacio(soyYo ? 'Todavía no has publicado nada' : 'Todavía no ha publicado nada',
         soyYo ? 'Pulsa en Publicar para crear tu primera oferta.' : '');
 
-  /* -------------------------------------------------------- valoraciones */
+  /* -------------------------------------------------------- reseñas */
   document.getElementById('num-val').textContent = '';
 
   var filasDist = [5, 4, 3, 2, 1].map(function (n) {
     var c = valoraciones.filter(function (v) { return v.estrellas === n; }).length;
     var pct = total ? Math.round((c / total) * 100) : 0;
-    return '<div style="display:flex;align-items:center;gap:8px;margin-top:6px">' +
-      '<span style="width:9px;text-align:right;font-size:10.5px;font-weight:700;color:var(--muted)">' + n + '</span>' +
-      '<div style="flex:1;height:6px;border-radius:99px;background:#eef1f8;overflow:hidden">' +
-        '<div style="height:100%;width:' + pct + '%;border-radius:99px;background:#f59e0b"></div>' +
+    return '<div style="display:flex;align-items:center;gap:9px;margin-top:7px">' +
+      '<span style="width:9px;text-align:right;font-size:11px;font-weight:700;color:var(--muted)">' + n + '</span>' +
+      '<div style="flex:1;height:7px;border-radius:99px;background:#eef1f8;overflow:hidden">' +
+        '<div style="height:100%;width:' + pct + '%;border-radius:99px;' +
+          'background:linear-gradient(90deg,#fbbf24,#f59e0b)"></div>' +
       '</div>' +
-      '<span style="width:16px;text-align:right;font-size:10.5px;color:var(--muted)">' + c + '</span>' +
+      '<span style="width:16px;text-align:right;font-size:11px;color:var(--muted)">' + c + '</span>' +
     '</div>';
   }).join('');
 
@@ -359,14 +401,13 @@
     contenedorVal.innerHTML = UI.vacio('Sin reseñas', 'Cierra tratos y pide que te valoren para subir en el ranking.');
   } else {
     contenedorVal.innerHTML =
-      '<div class="bloque" style="padding:15px 16px">' +
+      '<div class="bloque" style="padding:16px 17px;border-radius:16px">' +
         '<div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px">' +
-          '<span style="font-size:9px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)">' +
-            'Reputación</span>' +
-          '<span style="font-size:11px;font-weight:600;color:var(--muted)">' + total +
+          '<span style="font-size:13px;font-weight:700;letter-spacing:-.2px">Reputación</span>' +
+          '<span style="font-size:11.5px;font-weight:600;color:var(--muted)">' + total +
             (total === 1 ? ' reseña' : ' reseñas') + '</span>' +
         '</div>' +
-        '<div style="margin-top:10px">' + filasDist + '</div>' +
+        '<div style="margin-top:9px">' + filasDist + '</div>' +
       '</div>' +
 
       '<div style="display:flex;gap:7px;padding:2px 1px 0;overflow-x:auto">' +
@@ -393,24 +434,26 @@
         lista.sort(function (a, b) { return new Date(b.creadaEn) - new Date(a.creadaEn); });
       }
 
-      listaResenas.innerHTML = lista.map(function (v, i) {
+      listaResenas.innerHTML = lista.map(function (v) {
         var de = USWAP.usuario(v.deUsuarioId) || { nombre: 'Alguien', color: '#94a3b8' };
-        return '<div style="padding:15px 2px' +
-            (i < lista.length - 1 ? ';border-bottom:1px solid #eef1f7' : '') + '">' +
+        return '<div class="resena-card" style="background:#fff;border:1px solid #e9edf5;border-radius:16px;' +
+            'padding:14px 15px;margin-bottom:9px">' +
           '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px">' +
             UI.estrellas(v.estrellas) +
             '<span class="usuario-detalle">' + UI.tiempo(v.creadaEn) + '</span>' +
           '</div>' +
           (v.comentario
-            ? '<p style="margin:8px 0 0;font-size:13px;line-height:1.6;color:var(--tinta-suave)">“' +
+            ? '<p style="margin:9px 0 0;font-size:13.5px;line-height:1.65;color:var(--tinta-suave)">“' +
                 UI.esc(v.comentario) + '”</p>'
             : '') +
-          '<div style="display:flex;align-items:center;gap:7px;margin-top:10px">' +
+          '<div style="display:flex;align-items:center;gap:8px;margin-top:11px">' +
             avatarPerfil(de, 'pequeno') +
-            '<span style="font-size:11.5px;font-weight:650">' + UI.esc(de.nombre) + '</span>' +
+            '<span style="font-size:12px;font-weight:650">' + UI.esc(de.nombre) + '</span>' +
           '</div>' +
         '</div>';
       }).join('');
+
+      dinamizar('.resena-card');
     }
 
     pintarResenas('recientes');
@@ -438,7 +481,7 @@
         '<span style="flex:1;min-width:0">' +
           '<span style="display:block;font-size:13px;font-weight:700;letter-spacing:-.1px;color:' +
             (n.color || '#0f172a') + '">' + UI.esc(n.nombre) + '</span>' +
-          '<span style="display:block;margin-top:1px;font-size:10.5px;color:var(--muted)">' +
+          '<span style="display:block;margin-top:1px;font-size:11px;color:var(--muted)">' +
             (n.min <= 0 ? 'Desde el inicio' : 'Desde ' + n.min + (n.min === 1 ? ' punto' : ' puntos')) + '</span>' +
         '</span>' +
         (actual ? '<span class="badge badge-azul">estás aquí</span>' : '') +
@@ -461,9 +504,9 @@
   panel.innerHTML =
     '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">' +
       '<div>' +
-        '<div style="font-size:9px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)">' +
-          'Escalera de rangos</div>' +
-        '<h2 style="margin:8px 0 3px;font-size:20px;letter-spacing:-.6px;color:' + corRango + '">' + UI.esc(nivel.nombre) + '</h2>' +
+        '<div style="font-size:12px;color:var(--muted)">Escalera de rangos</div>' +
+        '<h2 style="margin:6px 0 3px;font-size:21px;letter-spacing:-.6px;color:' + corRango + '">' +
+          UI.esc(nivel.nombre) + '</h2>' +
         '<div class="usuario-detalle">' + UI.esc(u.nombre) + ' · ' + puntos +
           (Math.abs(puntos) === 1 ? ' punto' : ' puntos') + '</div>' +
       '</div>' +
@@ -482,8 +525,9 @@
 
     '<div style="margin-top:16px">' + filasRango + '</div>' +
 
-    '<div style="margin-top:14px;padding-top:12px;border-top:1px solid #eef1f7;font-size:11px;line-height:1.55;color:var(--muted)">' +
-      'Cada reseña suma 10 puntos por estrella: ★1 = 10, ★3 = 30 y ★5 = 50. Los puntos de todas las reseñas se acumulan.' +
+    '<div style="margin-top:14px;padding-top:12px;border-top:1px solid #eef1f7;font-size:11.5px;' +
+      'line-height:1.55;color:var(--muted)">' +
+      'Cada estrella suma 10 puntos. Las reseñas de 1 estrella también cuentan.' +
     '</div>';
 
   document.body.appendChild(fondo);
