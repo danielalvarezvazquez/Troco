@@ -37,7 +37,7 @@
       (oferta ? '<div class="bloque" style="display:flex;gap:11px;align-items:center;margin-bottom:14px">' +
         UI.avatar(USWAP.usuario(oferta.autorId) || valorado, 'pequeno') +
         '<div class="usuario-linea"><span class="usuario-nombre">' + UI.esc(oferta.titulo) + '</span>' +
-        '<span class="usuario-detalle">' + UI.esc(oferta.categoria) + ' · ' + UI.esc(oferta.ofreceACambio) + '</span></div></div>' : '') +
+        '<span class="usuario-detalle">' + UI.esc(oferta.categoria) + '</span></div></div>' : '') +
 
       '<div class="bloque">' +
         '<div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:6px 0 14px">' +

@@ -42,9 +42,6 @@
       '</div>' +
       '<h1 class="detalle-titulo">' + UI.esc(oferta.titulo) + '</h1>' +
       '<p class="detalle-texto">' + UI.esc(oferta.descripcion) + '</p>' +
-      '<div class="cambio" style="margin-top:14px">' +
-        '<span>⇄</span><span><b>A cambio ofrezco:</b> ' + UI.esc(oferta.ofreceACambio) + '</span>' +
-      '</div>' +
       '<div class="card-pie"><span>Publicada ' + UI.tiempo(oferta.creadaEn) + '</span>' +
         (oferta.destacada ? '<span class="badge badge-ambar">★ Destacada</span>' : '') + '</div>' +
     '</div>' +

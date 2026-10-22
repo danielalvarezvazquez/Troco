@@ -23,7 +23,6 @@
 
     var titulo = document.getElementById('titulo').value.trim();
     var descripcion = document.getElementById('descripcion').value.trim();
-    var ofreceACambio = document.getElementById('ofreceACambio').value.trim();
 
     if (titulo.length < 4) {
       UI.toast('Pon un título de al menos 4 caracteres');
@@ -35,8 +34,7 @@
       titulo: titulo,
       descripcion: descripcion,
       tipo: document.getElementById('tipo').value,
-      categoria: categoria.value,
-      ofreceACambio: ofreceACambio
+      categoria: categoria.value
     });
 
     UI.toast('Petición publicada');
