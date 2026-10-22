@@ -12,7 +12,7 @@
 (function () {
   'use strict';
 
-  var VERSION = 6;                 // subir si cambia la forma de los datos
+  var VERSION = 7;                 // subir si cambia la forma de los datos
   var KEY = 'uswap.v1';            // clave de localStorage
 
   var AREAS = ['Tecnología', 'Ciencias', 'Salud', 'Diseño', 'Humanidades', 'Economía'];
@@ -70,56 +70,59 @@
   /* ----------------------------------------------------------------- ofertas
      id, titulo, descripcion, tipo ('objeto'|'favor'), categoria, autorId,
      pideACambio, estado ('abierta'|'cerrada'), creadaEn (ISO), destacada
+
+     Modelo: cada publicación es una PETICIÓN. titulo y descripcion dicen lo que
+     el autor NECESITA; pideACambio dice lo que OFRECE a quien le eche una mano.
   */
   function haceHoras(h) { return new Date(Date.now() - h * 3600 * 1000).toISOString(); }
 
   function ofertasBase() {
     return [
-      { id: 'o1', titulo: 'Apuntes completos de Estadística II', tipo: 'objeto', categoria: 'Apuntes', autorId: 'u2',
-        descripcion: 'Temario entero, problemas resueltos y los 3 exámenes de años anteriores con soluciones. En PDF y fotocopia.',
-        pideACambio: 'Clases de Python o apuntes de Cálculo II', estado: 'abierta', creadaEn: haceHoras(2), destacada: true },
-      { id: 'o2', titulo: 'Clases de Python para principiantes', tipo: 'favor', categoria: 'Clases', autorId: 'u1',
-        descripcion: 'Dos sesiones de una hora: variables, listas, bucles y funciones. Trae tu portátil. Nivel cero absoluto.',
-        pideACambio: 'Apuntes de Estadística o un café de la máquina', estado: 'abierta', creadaEn: haceHoras(5), destacada: true },
-      { id: 'o3', titulo: 'Te llevo en coche a la estación los viernes', tipo: 'favor', categoria: 'Transporte', autorId: 'u4',
-        descripcion: 'Salgo a las 18:30 del parking de la ETSE dirección estación de tren. Quedan 3 plazas por viernes.',
-        pideACambio: 'Ayuda con una hoja de Excel o apuntes de Contabilidad', estado: 'abierta', creadaEn: haceHoras(9) },
-      { id: 'o4', titulo: 'Corrección de textos en inglés (nivel C1)', tipo: 'favor', categoria: 'Idiomas', autorId: 'u6',
-        descripcion: 'Reviso tu TFG, abstract o carta de motivación. Devuelvo comentarios y versión limpia en 48 h.',
-        pideACambio: 'Ilustración para la portada o maqueta de una sección', estado: 'abierta', creadaEn: haceHoras(14) },
-      { id: 'o5', titulo: 'Ilustración personalizada para tu TFG', tipo: 'favor', categoria: 'Creatividad', autorId: 'u5',
-        descripcion: 'Portada ilustrada o infografía a mano digital. Dos rondas de cambios incluidas.',
-        pideACambio: 'Corrección de inglés o ayuda con Estadística', estado: 'abierta', creadaEn: haceHoras(20) },
-      { id: 'o6', titulo: 'Tupper vegano casero los martes', tipo: 'favor', categoria: 'Comida', autorId: 'u8',
-        descripcion: 'Menú semanal casero: lentejas, curry de garbanzos o pasta de verduras. Llevo el tupper a la ETSE.',
-        pideACambio: 'Apuntes de primero de Biología o compañía para comer', estado: 'abierta', creadaEn: haceHoras(28) },
-      { id: 'o7', titulo: 'Arreglo tu portátil o te instalo el software', tipo: 'favor', categoria: 'Tecnología', autorId: 'u1',
-        descripcion: 'Limpieza, formateo, instalación de Python/Java/Office y configuración de Git. Sin coste de mano de obra.',
-        pideACambio: 'Apuntes de Anatomía o transporte a la estación', estado: 'abierta', creadaEn: haceHoras(33) },
-      { id: 'o8', titulo: 'Apuntes de Anatomía con dibujos a mano', tipo: 'objeto', categoria: 'Apuntes', autorId: 'u3',
-        descripcion: 'Dos tomos encuadernados con esquemas dibujados a mano. Muy visuales para primer y segundo curso.',
-        pideACambio: 'Clases de dibujo o ilustración para el TFG', estado: 'abierta', creadaEn: haceHoras(41) },
-      { id: 'o9', titulo: 'Repaso de Cálculo para primero', tipo: 'favor', categoria: 'Clases', autorId: 'u10',
-        descripcion: 'Dos tardes de repaso antes del parcial: límites, derivadas e integrales. Trae tus ejercicios.',
-        pideACambio: 'Apuntes de Estadística o ayuda con un TFG', estado: 'abierta', creadaEn: haceHoras(7) },
-      { id: 'o10', titulo: 'Resúmenes de Derecho mercantil', tipo: 'objeto', categoria: 'Apuntes', autorId: 'u9',
-        descripcion: 'Temario resumido en esquemas, con casos prácticos resueltos del último curso.',
-        pideACambio: 'Clases de Excel o apuntes de Contabilidad', estado: 'abierta', creadaEn: haceHoras(12) },
-      { id: 'o11', titulo: 'Simulaciones de Física resueltas en Python', tipo: 'objeto', categoria: 'Tecnología', autorId: 'u11',
-        descripcion: 'Cuadernos de simulación (péndulo, muelles, óptica) con el código comentado y las gráficas.',
-        pideACambio: 'Clases de Física o un tupper casero', estado: 'abierta', creadaEn: haceHoras(16) },
-      { id: 'o12', titulo: 'Resúmenes de Formulación Magistral', tipo: 'objeto', categoria: 'Apuntes', autorId: 'u12',
-        descripcion: 'Temario en tablas y esquemas, con las prácticas de laboratorio resueltas y las fórmulas ordenadas.',
-        pideACambio: 'Clases de Química Orgánica o apuntes de Fisiología', estado: 'abierta', creadaEn: haceHoras(22) },
-      { id: 'o13', titulo: 'Te cuido al perro o al gato el fin de semana', tipo: 'favor', categoria: 'Favores', autorId: 'u13',
-        descripcion: 'Me quedo con tu mascota en Lugo de viernes a domingo. Tengo experiencia de prácticas y te mando fotos.',
-        pideACambio: 'Apuntes de Anatomía Animal o un café', estado: 'abierta', creadaEn: haceHoras(30) },
-      { id: 'o14', titulo: 'Clases de oratoria para la defensa del TFG', tipo: 'favor', categoria: 'Clases', autorId: 'u14',
-        descripcion: 'Ensayo de la exposición, estructura del discurso y respuestas a las preguntas del tribunal.',
-        pideACambio: 'Apuntes de Derecho Penal o ayuda con Excel', estado: 'abierta', creadaEn: haceHoras(36) },
-      { id: 'o15', titulo: 'Maquetas y planos en AutoCAD para tu TFG', tipo: 'favor', categoria: 'Creatividad', autorId: 'u7',
-        descripcion: 'Maqueta a escala o planos en AutoCAD para la entrega de fin de grado. Dos correcciones incluidas.',
-        pideACambio: 'Ayuda con estructuras o clases de Estadística', estado: 'abierta', creadaEn: haceHoras(26) }
+      { id: 'o1', titulo: 'Clases de Python aplicadas a Estadística II', tipo: 'favor', categoria: 'Clases', autorId: 'u2',
+        descripcion: 'Quiero aprender a resolver los problemas de la asignatura con Python: listas, bucles y gráficos. Nivel cero.',
+        pideACambio: 'Mis apuntes completos de Estadística II, con exámenes resueltos', estado: 'abierta', creadaEn: haceHoras(2), destacada: true },
+      { id: 'o2', titulo: 'Apuntes de Estadística para el parcial', tipo: 'objeto', categoria: 'Apuntes', autorId: 'u1',
+        descripcion: 'Voy justa y no tengo apuntes ordenados. Me valen los de cualquier año; si además me lo explicas una tarde, mejor.',
+        pideACambio: 'Clases de Python desde cero o te arreglo el portátil', estado: 'abierta', creadaEn: haceHoras(5), destacada: true },
+      { id: 'o3', titulo: 'Ayuda con una hoja de Excel para Contabilidad', tipo: 'favor', categoria: 'Clases', autorId: 'u4',
+        descripcion: 'Tengo que entregar un modelo de costes y me lío con las fórmulas y las tablas dinámicas.',
+        pideACambio: 'Te llevo en coche a la estación los viernes (18:30, parking de la ETSE)', estado: 'abierta', creadaEn: haceHoras(9) },
+      { id: 'o4', titulo: 'Ilustración para la portada de mi TFG', tipo: 'favor', categoria: 'Creatividad', autorId: 'u6',
+        descripcion: 'Trabajo sobre derecho laboral y quiero una portada ilustrada. Dos rondas de cambios.',
+        pideACambio: 'Corrección de tu TFG o de tu carta de motivación en inglés (C1)', estado: 'abierta', creadaEn: haceHoras(14) },
+      { id: 'o5', titulo: 'Corrección de inglés para la memoria del TFG', tipo: 'favor', categoria: 'Idiomas', autorId: 'u5',
+        descripcion: 'Tengo la memoria en inglés y se me escapan giros. Necesito revisión y comentarios.',
+        pideACambio: 'Ilustración personalizada o cartel para tu TFG', estado: 'abierta', creadaEn: haceHoras(20) },
+      { id: 'o6', titulo: 'Apuntes de primero de Biología', tipo: 'objeto', categoria: 'Apuntes', autorId: 'u8',
+        descripcion: 'Me incorporé tarde y me faltan los apuntes de Bioquímica y de Genética.',
+        pideACambio: 'Tupper vegano casero los martes', estado: 'abierta', creadaEn: haceHoras(28) },
+      { id: 'o7', titulo: 'Apuntes de Anatomía para un proyecto de datos', tipo: 'objeto', categoria: 'Apuntes', autorId: 'u1',
+        descripcion: 'Estoy montando una visualización sobre salud y necesito material de referencia con esquemas.',
+        pideACambio: 'Te arreglo el portátil, te instalo el software o te configuro Git', estado: 'abierta', creadaEn: haceHoras(33) },
+      { id: 'o8', titulo: 'Clases de dibujo para láminas anatómicas', tipo: 'favor', categoria: 'Clases', autorId: 'u3',
+        descripcion: 'Estoy en sexto de Medicina y quiero ilustrar mejor mis láminas. También me vendría bien una mano con la portada del TFG.',
+        pideACambio: 'Apuntes de Anatomía con dibujos a mano (dos tomos)', estado: 'abierta', creadaEn: haceHoras(41) },
+      { id: 'o9', titulo: 'Apuntes de Estadística para el TFG', tipo: 'objeto', categoria: 'Apuntes', autorId: 'u10',
+        descripcion: 'Me falta toda la parte de estadística aplicada del trabajo de fin de grado.',
+        pideACambio: 'Repaso de Cálculo para primero: límites, derivadas e integrales', estado: 'abierta', creadaEn: haceHoras(7) },
+      { id: 'o10', titulo: 'Clases de Excel para las prácticas', tipo: 'favor', categoria: 'Clases', autorId: 'u9',
+        descripcion: 'Entro de prácticas en un despacho y necesito soltura con hojas de cálculo y tablas dinámicas.',
+        pideACambio: 'Resúmenes de Derecho mercantil con casos prácticos resueltos', estado: 'abierta', creadaEn: haceHoras(12) },
+      { id: 'o11', titulo: 'Repaso de óptica antes del parcial', tipo: 'favor', categoria: 'Clases', autorId: 'u11',
+        descripcion: 'Voy justo con la parte de óptica y me vendría bien una hora de repaso con alguien que la lleve bien.',
+        pideACambio: 'Simulaciones de Física resueltas en Python, con código y gráficas', estado: 'abierta', creadaEn: haceHoras(16) },
+      { id: 'o12', titulo: 'Repaso de Química Orgánica', tipo: 'favor', categoria: 'Clases', autorId: 'u12',
+        descripcion: 'Me lío con los mecanismos de reacción y necesito repaso antes del parcial.',
+        pideACambio: 'Resúmenes de Formulación Magistral con las prácticas resueltas', estado: 'abierta', creadaEn: haceHoras(22) },
+      { id: 'o13', titulo: 'Apuntes de Anatomía Animal', tipo: 'objeto', categoria: 'Apuntes', autorId: 'u13',
+        descripcion: 'Me faltan los del segundo parcial y entre semana no estoy en Santiago.',
+        pideACambio: 'Te cuido al perro o al gato el fin de semana en Lugo', estado: 'abierta', creadaEn: haceHoras(30) },
+      { id: 'o14', titulo: 'Apuntes de Derecho Penal para el trabajo de fin de curso', tipo: 'objeto', categoria: 'Apuntes', autorId: 'u14',
+        descripcion: 'Necesito el temario y una tabla de datos para el análisis.',
+        pideACambio: 'Clases de oratoria para la defensa del TFG', estado: 'abierta', creadaEn: haceHoras(36) },
+      { id: 'o15', titulo: 'Ayuda con estructuras para la entrega de Paisaje', tipo: 'favor', categoria: 'Clases', autorId: 'u7',
+        descripcion: 'Tenemos una entrega con cálculo de estructuras y estadística y voy perdido.',
+        pideACambio: 'Maquetas a escala y planos en AutoCAD para tu TFG', estado: 'abierta', creadaEn: haceHoras(26) }
     ];
   }
 
