@@ -144,7 +144,6 @@
       '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">' +
         '<span class="badge badge-azul">' + UI.esc(oferta.area) + '</span>' +
         '<span class="badge">' + UI.esc(oferta.categoria) + '</span>' +
-        '<span class="badge">' + (oferta.tipo === 'objeto' ? '📦 Objeto' : '🤝 Favor') + '</span>' +
         (estado === 'cerrada' ? '<span class="badge badge-verde">Trato cerrado</span>'
           : estado === 'acordada' ? '<span class="badge badge-ambar">Acuerdo pendiente</span>'
           : '<span class="badge">Abierta</span>') +
@@ -155,12 +154,15 @@
         (oferta.destacada ? '<span class="badge badge-ambar">★ Destacada</span>' : '') + '</div>' +
     '</div>' +
 
-    '<div class="seccion-titulo"><h2>Quién lo pide</h2>' +
-      '<a href="perfil.html?u=' + encodeURIComponent(autor.id) + '">Ver perfil y valoraciones</a></div>' +
+    '<div class="seccion-titulo"><h2>Quién lo pide</h2></div>' +
 
     '<div class="bloque">' +
       '<div class="card-fila">' +
-        UI.avatar(autor, 'grande') +
+        '<a class="avatar-enlace" href="perfil.html?u=' + encodeURIComponent(autor.id) + '"' +
+          ' title="Ver perfil y valoraciones de ' + UI.esc(autor.nombre) + '"' +
+          ' aria-label="Ver perfil y valoraciones de ' + UI.esc(autor.nombre) + '">' +
+          UI.avatar(autor, 'grande') +
+        '</a>' +
         '<div class="usuario-linea">' +
           '<span class="usuario-nombre" style="font-size:15px">' + UI.esc(autor.nombre) + '</span>' +
           '<span class="usuario-detalle">' + UI.esc(autor.carrera) + ' · ' + UI.curso(autor.curso) + ' · ' + UI.esc(autor.rama) + '</span>' +

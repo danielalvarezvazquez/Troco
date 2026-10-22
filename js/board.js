@@ -18,7 +18,7 @@
      carrera → grado del autor, de la lista de carreras de la USC
      curso   → 1º..6º, Máster, Doctorado (campo `curso` del usuario)
   ---------------------------------------------------------------------- */
-  var filtro = { texto: '', modo: '', area: '', carrera: '', curso: '' };
+  var filtro = { texto: '', categoria: '', area: '', carrera: '', curso: '' };
 
   var elBuscador = document.getElementById('buscador');
   var elLista = document.getElementById('lista');
@@ -28,13 +28,13 @@
 
   /* ---- ¿hay algún filtro puesto? ---------------------------------------- */
   function hayFiltros() {
-    return !!(filtro.texto.trim() || filtro.modo || filtro.area || filtro.carrera || filtro.curso);
+    return !!(filtro.texto.trim() || filtro.categoria || filtro.area || filtro.carrera || filtro.curso);
   }
 
   /* ---- dejar el tablón como al entrar ----------------------------------- */
   function limpiarFiltros() {
     filtro.texto = '';
-    filtro.modo = '';
+    filtro.categoria = '';
     filtro.area = '';
     filtro.carrera = '';
     filtro.curso = '';
@@ -64,11 +64,9 @@
   }
 
   function pintarFiltros() {
-    var modos = [
-      { valor: '', texto: 'Todo' },
-      { valor: 'trueque', texto: 'Trueque de favores y objetos' },
-      { valor: 'clases', texto: 'Clases particulares' }
-    ];
+    var categorias = [{ valor: '', texto: 'Todas las categorías' }].concat(
+      USWAP.CATEGORIAS.map(function (c) { return { valor: c, texto: c }; })
+    );
     var areas = [{ valor: '', texto: 'Todas las áreas' }].concat(
       USWAP.AREAS.map(function (a) { return { valor: a, texto: a }; })
     );
@@ -79,7 +77,7 @@
       USWAP.CURSOS.map(function (c) { return { valor: c, texto: c }; })
     );
 
-    pintarChips(document.getElementById('filtro-modo'), modos, 'modo');
+    pintarChips(document.getElementById('filtro-categorias'), categorias, 'categoria');
     pintarChips(document.getElementById('filtro-areas'), areas, 'area');
     pintarChips(document.getElementById('filtro-carreras'), carreras, 'carrera');
     pintarChips(document.getElementById('filtro-cursos'), cursos, 'curso');
@@ -97,15 +95,12 @@
          (autor.nombre || '') + ' ' + (autor.carrera || '') + ' ' + (autor.rama || ''))
           .toLowerCase().indexOf(texto) !== -1;
 
+      var coincideCategoria = !filtro.categoria || o.categoria === filtro.categoria;
       var coincideArea = !filtro.area || o.area === filtro.area;
       var coincideCarrera = !filtro.carrera || autor.carrera === filtro.carrera;
       var coincideCurso = !filtro.curso || String(autor.curso) === filtro.curso;
 
-      var esClase = o.categoria === 'Clases';
-      var coincideModo = !filtro.modo ||
-        (filtro.modo === 'clases' ? esClase : !esClase);
-
-      return coincideTexto && coincideArea && coincideCarrera && coincideCurso && coincideModo;
+      return coincideTexto && coincideCategoria && coincideArea && coincideCarrera && coincideCurso;
     }).sort(function (a, b) {
       if (orden === 'valoracion') {
         var diferencia = USWAP.mediaDe(b.autorId) - USWAP.mediaDe(a.autorId);
@@ -150,7 +145,7 @@
         '<h3 class="card-titulo">' + UI.esc(o.titulo) + '</h3>' +
         '<p class="card-texto">' + UI.esc(o.descripcion) + '</p>' +
         '<div class="card-pie">' +
-          '<span>' + (o.tipo === 'objeto' ? '📦 Objeto' : '🤝 Favor') + ' · ' + UI.esc(o.categoria) + ' · ' + UI.tiempo(o.creadaEn) + '</span>' +
+          '<span>' + UI.esc(o.categoria) + ' · ' + UI.tiempo(o.creadaEn) + '</span>' +
           '<span>' + (o.destacada ? '<span class="badge badge-ambar">★ Destacada</span>' : '') +
             (autor.avisoBaneo ? '<span class="badge badge-rojo" style="margin-left:5px">⚠ En observación</span>' : '') + '</span>' +
         '</div>' +
@@ -206,8 +201,7 @@
 
     elLista.innerHTML = resultados.map(tarjeta).join('');
     elInfo.textContent = resultados.length + (resultados.length === 1 ? ' petición' : ' peticiones') +
-      (filtro.modo === 'clases' ? ' · clases particulares' : (filtro.modo === 'trueque' ? ' · trueques' : '')) +
-      (filtro.area || filtro.carrera || filtro.curso ? ' · filtros activos' : '');
+      (filtro.categoria || filtro.area || filtro.carrera || filtro.curso ? ' · filtros activos' : '');
   }
 
   /* ---- arranque --------------------------------------------------------- */
