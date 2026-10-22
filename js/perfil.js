@@ -97,7 +97,9 @@
       '</div>' +
 
       '<div style="display:flex;align-items:center;gap:14px;margin-top:16px">' +
-        '<div style="flex:0 0 auto;padding:3px;border-radius:23px;border:1px solid rgba(255,255,255,.22)">' +
+        '<div style="flex:0 0 auto;padding:3px;border-radius:23px;border:2px solid ' +
+          (nivel.marco || 'rgba(255,255,255,.22)') + ';' +
+          (nivel.id === 'radiante' ? 'box-shadow:0 0 16px ' + nivel.marco + ';' : '') + '">' +
           avatarPerfil(u, 'grande') +
         '</div>' +
         '<div style="min-width:0">' +
@@ -108,6 +110,8 @@
             UI.curso(u.curso) + ' · ' + UI.esc(u.rama) + '</div>' +
           '<div style="margin-top:7px;font-size:8.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;' +
             'color:rgba(255,255,255,.34)">USC · Santiago de Compostela</div>' +
+          '<div style="margin-top:7px;width:38px;height:3px;border-radius:99px;background:' +
+            (nivel.marco || 'rgba(255,255,255,.25)') + '"></div>' +
         '</div>' +
       '</div>' +
 
@@ -392,7 +396,7 @@
     '<div style="margin-top:16px">' + filasRango + '</div>' +
 
     '<div style="margin-top:14px;padding-top:12px;border-top:1px solid #eef1f7;font-size:11px;line-height:1.55;color:var(--muted)">' +
-      'Cada valoración de ★4 o ★5 suma 1 punto, ★3 no puntúa y ★1 o ★2 resta 1 punto.' +
+      'Cada reseña suma 10 puntos por estrella: ★1 = 10, ★3 = 30 y ★5 = 50. Los puntos de todas las reseñas se acumulan.' +
     '</div>';
 
   document.body.appendChild(fondo);
