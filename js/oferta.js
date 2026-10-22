@@ -62,7 +62,7 @@
     }
     return '<div class="bloque">' +
       '<p class="detalle-texto" style="font-size:12.5px;margin-bottom:12px">' +
-        'USwap no tiene chat propio: se negocia por WhatsApp o Instagram y se vuelve aquí para cerrar el trato.</p>' +
+        'Hablad por WhatsApp o Instagram. Cuando lo tengáis claro, volved aquí y cerrad el trato.</p>' +
       '<button type="button" class="btn btn-secundario" id="btn-copiar" style="margin-bottom:8px">Copiar mensaje</button>' +
       '<div class="fila">' +
         '<a class="btn btn-whatsapp" href="' + enlaceWa + '" target="_blank" rel="noopener">WhatsApp</a>' +
@@ -179,7 +179,7 @@
         : '') +
     '</div>' +
 
-    '<div class="seccion-titulo"><h2>Contacto</h2><span class="usuario-detalle">chat externo</span></div>' +
+    '<div class="seccion-titulo"><h2>Contacto</h2><span class="usuario-detalle">por WhatsApp o Instagram</span></div>' +
     bloqueContacto() +
 
     '<div class="seccion-titulo"><h2>Trato</h2></div>' +

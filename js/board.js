@@ -195,8 +195,8 @@
 
       elLista.innerHTML =
         '<div class="vacio">' +
-          '<strong>Nada por aquí</strong>' +
-          'Prueba a quitar algún filtro o busca otra cosa.' +
+          '<strong>Nadie ha pedido eso todavía</strong>' +
+          'Prueba a quitar algún filtro o a buscar otra cosa.' +
           '<div class="chips" style="justify-content:center;flex-wrap:wrap;margin:14px 0 6px">' +
             sugerencias +
           '</div>' +

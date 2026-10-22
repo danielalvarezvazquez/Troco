@@ -106,7 +106,7 @@
         window.location.reload();
       });
       document.getElementById('btn-reset').addEventListener('click', function () {
-        if (window.confirm('¿Reiniciar la demo? Se borrarán las ofertas y valoraciones añadidas.')) {
+        if (window.confirm('¿Empezar de cero? Se borran las peticiones y valoraciones que hayáis añadido.')) {
           USWAP.reset();
           window.location.href = 'index.html';
         }
