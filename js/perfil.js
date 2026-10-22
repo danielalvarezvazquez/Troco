@@ -36,6 +36,19 @@
   var posicion = 0;
   clasificacion.forEach(function (f, i) { if (f.usuario.id === u.id) posicion = i + 1; });
 
+  /* --- escalera de rangos y lema de reputación --- */
+  var rangos = (window.USWAP_RANK && window.USWAP_RANK.NIVELES)
+    ? window.USWAP_RANK.NIVELES.slice().sort(function (a, b) { return a.min - b.min; })
+    : [];
+  var idxNivel = -1;
+  rangos.forEach(function (n, i) { if (n.nombre === nivel.nombre) idxNivel = i; });
+  var ratio = (rangos.length > 1 && idxNivel >= 0) ? idxNivel / (rangos.length - 1) : 0;
+  var lema, corLema;
+  if (ratio >= 0.5) { lema = 'Gran intercambiador'; corLema = '#6ee7b7'; }
+  else if (ratio >= 0.3) { lema = 'Intercambiador de confianza'; corLema = '#c4b5fd'; }
+  else if (ratio > 0) { lema = 'Intercambiador activo'; corLema = '#fcd34d'; }
+  else { lema = 'Todavía sin reputación'; corLema = 'rgba(255,255,255,.45)'; }
+
   var total = valoraciones.length;
   var mediaTxt = total ? media.toFixed(1) : '—';
 
@@ -86,31 +99,47 @@
         '</div>' +
       '</div>' +
 
-      '<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:14px;' +
-        'margin-top:18px;padding-top:15px;border-top:1px solid rgba(255,255,255,.12)">' +
+      '<div style="display:flex;align-items:center;justify-content:space-between;gap:14px;' +
+        'margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.12)">' +
+
         '<div style="min-width:0">' +
-          '<div style="display:flex;align-items:baseline;gap:8px">' +
-            '<span style="font-size:30px;font-weight:800;letter-spacing:-1.6px;line-height:1">' + mediaTxt + '</span>' +
-            (total ? UI.estrellas(media, '') : '') +
+          '<div style="display:flex;align-items:baseline;gap:7px">' +
+            '<span style="font-size:42px;font-weight:800;letter-spacing:-2.2px;line-height:.95">' + mediaTxt + '</span>' +
+            '<span style="font-size:11px;font-weight:600;color:rgba(255,255,255,.4)">/ 5</span>' +
           '</div>' +
-          (total
-            ? '<div style="display:flex;gap:11px;margin-top:6px;font-size:10.5px;font-weight:650;flex-wrap:wrap">' +
-                '<span style="color:#6ee7b7">' + positivas + (positivas === 1 ? ' positiva' : ' positivas') + '</span>' +
-                '<span style="color:rgba(255,255,255,.5)">' + neutras + (neutras === 1 ? ' neutra' : ' neutras') + '</span>' +
-                '<span style="color:#fca5a5">' + negativas + (negativas === 1 ? ' negativa' : ' negativas') + '</span>' +
-              '</div>'
-            : '<div style="margin-top:6px;font-size:10.5px;color:rgba(255,255,255,.5)">Sin valoraciones todavía</div>') +
+          '<div style="display:flex;align-items:center;gap:8px;margin-top:8px">' +
+            (total
+              ? UI.estrellas(media, 'grande') +
+                '<span style="font-size:10.5px;color:rgba(255,255,255,.55)">' + total +
+                  (total === 1 ? ' reseña' : ' reseñas') + '</span>'
+              : '<span style="font-size:11px;color:rgba(255,255,255,.5)">Sin reseñas todavía</span>') +
+          '</div>' +
         '</div>' +
+
         '<button type="button" id="btn-rango" aria-expanded="false" aria-controls="rango-panel" ' +
-          'style="text-align:right;flex:0 0 auto;background:none;border:0;padding:0;color:inherit;' +
-          'font-family:inherit;cursor:pointer">' +
-          '<span style="display:block;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;' +
-            'color:rgba(255,255,255,.48)">' + UI.esc(nivel.nombre) + '</span>' +
-          '<span style="display:block;margin-top:3px;font-size:16px;font-weight:750;letter-spacing:-.3px">' + puntos +
-            '<span style="font-size:10px;font-weight:600;letter-spacing:0;color:rgba(255,255,255,.55)">' +
-              (Math.abs(puntos) === 1 ? ' pt' : ' pts') + '</span>' +
-            '<span style="margin-left:5px;font-size:11px;letter-spacing:0;color:rgba(255,255,255,.45)">›</span></span>' +
+          'style="flex:0 0 auto;background:none;border:0;padding:0;font-family:inherit;cursor:pointer;text-align:center">' +
+          '<span style="display:block;font-size:8.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;' +
+            'color:rgba(255,255,255,.42)">Rango</span>' +
+          '<span class="tier ' + nivel.clase + '" style="display:inline-flex;margin-top:6px;background:#fff;' +
+            'padding:7px 14px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:0">' +
+            UI.esc(nivel.nombre) + '</span>' +
+          '<span style="display:block;margin-top:7px;font-size:10px;font-weight:650;color:rgba(255,255,255,.58)">' +
+            puntos + (Math.abs(puntos) === 1 ? ' pt' : ' pts') + ' ›</span>' +
         '</button>' +
+      '</div>' +
+
+      '<div style="margin-top:14px;padding:11px 13px;border-radius:12px;' +
+        'background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10)">' +
+        '<div style="display:flex;align-items:center;gap:9px">' +
+          '<span style="flex:0 0 auto;width:7px;height:7px;border-radius:99px;background:' + corLema + '"></span>' +
+          '<span style="font-size:12.5px;font-weight:700;letter-spacing:-.2px">' + UI.esc(lema) + '</span>' +
+        '</div>' +
+        (total
+          ? '<div style="margin-top:4px;padding-left:16px;font-size:10px;font-weight:600;color:rgba(255,255,255,.5)">' +
+              positivas + (positivas === 1 ? ' positiva' : ' positivas') + ' · ' +
+              neutras + (neutras === 1 ? ' neutra' : ' neutras') + ' · ' +
+              negativas + (negativas === 1 ? ' negativa' : ' negativas') + '</div>'
+          : '') +
       '</div>' +
 
       (prog.siguiente
@@ -199,9 +228,31 @@
         soyYo ? 'Pulsa en Publicar para crear tu primera oferta.' : '');
 
   /* -------------------------------------------------------- valoraciones */
-  document.getElementById('num-val').textContent = total ? total + ' en total' : '';
+  document.getElementById('num-val').textContent = '';
+
+  var filasDist = [5, 4, 3, 2, 1].map(function (n) {
+    var c = valoraciones.filter(function (v) { return v.estrellas === n; }).length;
+    var pct = total ? Math.round((c / total) * 100) : 0;
+    return '<div style="display:flex;align-items:center;gap:8px;margin-top:6px">' +
+      '<span style="width:9px;text-align:right;font-size:10.5px;font-weight:700;color:var(--muted)">' + n + '</span>' +
+      '<div style="flex:1;height:6px;border-radius:99px;background:#eef1f8;overflow:hidden">' +
+        '<div style="height:100%;width:' + pct + '%;border-radius:99px;background:#f59e0b"></div>' +
+      '</div>' +
+      '<span style="width:16px;text-align:right;font-size:10.5px;color:var(--muted)">' + c + '</span>' +
+    '</div>';
+  }).join('');
+
   document.getElementById('valoraciones').innerHTML = total
-    ? valoraciones.map(function (v, i) {
+    ? '<div class="bloque" style="padding:15px 16px">' +
+        '<div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px">' +
+          '<span style="font-size:9px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)">' +
+            'Reputación</span>' +
+          '<span style="font-size:11px;font-weight:600;color:var(--muted)">' + total +
+            (total === 1 ? ' reseña' : ' reseñas') + '</span>' +
+        '</div>' +
+        '<div style="margin-top:10px">' + filasDist + '</div>' +
+      '</div>' +
+      valoraciones.map(function (v, i) {
         var de = USWAP.usuario(v.deUsuarioId) || { nombre: 'Alguien', color: '#94a3b8' };
         return '<div style="padding:15px 2px' +
             (i < total - 1 ? ';border-bottom:1px solid #eef1f7' : '') + '">' +
@@ -222,10 +273,6 @@
     : UI.vacio('Sin valoraciones', 'Cierra tratos y pide que te valoren para subir en el ranking.');
 
   /* ------------------------------------------------------ escalera de rangos */
-  var rangos = (window.USWAP_RANK && window.USWAP_RANK.NIVELES)
-    ? window.USWAP_RANK.NIVELES.slice().sort(function (a, b) { return a.min - b.min; })
-    : [];
-
   var filasRango = rangos.map(function (n, i) {
     var actual = n.nombre === nivel.nombre;
     return '<div style="display:flex;align-items:center;gap:11px;' +
