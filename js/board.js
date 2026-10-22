@@ -16,6 +16,7 @@
   var elLista = document.getElementById('lista');
   var elInfo = document.getElementById('resultado-info');
   var elLimpiar = document.getElementById('btn-limpiar');
+  var elOrden = document.getElementById('orden');
 
   /* ---- ¿hay algún filtro puesto? ---------------------------------------- */
   function hayFiltros() {
@@ -81,6 +82,7 @@
   /* ---- filtrar --------------------------------------------------------- */
   function filtrar() {
     var texto = filtro.texto.trim().toLowerCase();
+    var orden = elOrden ? elOrden.value : 'destacada';
 
     return USWAP.ofertas().filter(function (o) {
       var autor = USWAP.usuario(o.autorId) || {};
@@ -94,7 +96,14 @@
 
       return coincideTexto && coincideArea && coincideCarrera && coincideCurso;
     }).sort(function (a, b) {
-      if (!!b.destacada !== !!a.destacada) return (b.destacada ? 1 : 0) - (a.destacada ? 1 : 0);
+      if (orden === 'valoracion') {
+        var diferencia = USWAP.mediaDe(b.autorId) - USWAP.mediaDe(a.autorId);
+        if (diferencia) return diferencia;
+        return new Date(b.creadaEn) - new Date(a.creadaEn);
+      }
+      if (orden !== 'reciente' && !!b.destacada !== !!a.destacada) {
+        return (b.destacada ? 1 : 0) - (a.destacada ? 1 : 0);
+      }
       return new Date(b.creadaEn) - new Date(a.creadaEn);
     });
   }
@@ -161,4 +170,5 @@
   });
 
   if (elLimpiar) elLimpiar.addEventListener('click', limpiarFiltros);
+  if (elOrden) elOrden.addEventListener('change', pintarLista);
 })();
