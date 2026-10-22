@@ -111,6 +111,7 @@
     }).sort(function (a, b) {
       if (b.puntos !== a.puntos) return b.puntos - a.puntos;
       if (b.media !== a.media) return b.media - a.media;
+      if (!!a.usuario.avisoBaneo !== !!b.usuario.avisoBaneo) return a.usuario.avisoBaneo ? 1 : -1;
       return b.num - a.num;
     });
   }
@@ -238,7 +239,8 @@
           '<span class="usuario-detalle">' + UI.esc(f.usuario.carrera) + ' · ' + UI.curso(f.usuario.curso) + ' · ' +
             UI.esc(f.usuario.rama) + '</span>' +
           '<span class="tier ' + nivel.clase + '" style="margin-top:2px">' + nivel.icono + ' ' + nivel.nombre +
-            (f.num ? ' · ' + UI.estrellas(f.media, '') : '') + '</span>' +
+            (f.num ? ' · ' + UI.estrellas(f.media, '') : '') +
+            (f.usuario.avisoBaneo ? ' <span class="badge badge-rojo">⚠ En observación</span>' : '') + '</span>' +
         '</div>' +
         '<div class="rank-puntos">' + f.puntos + '<small>puntos</small></div>' +
       '</div>';

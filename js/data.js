@@ -12,7 +12,7 @@
 (function () {
   'use strict';
 
-  var VERSION = 8;                 // subir si cambia la forma de los datos
+  var VERSION = 9;                 // subir si cambia la forma de los datos
   var KEY = 'uswap.v1';            // clave de localStorage
 
   /* Hash djb2: suficiente para una demo sin backend (NO es seguridad real) */
@@ -54,6 +54,7 @@
       color: '#f59e0b', instagram: 'javier.barcala', whatsapp: '34600444555' },
     { id: 'u5', nombre: 'Sergio León', carrera: 'Bellas Artes', rama: 'Artes y Humanidades', curso: '2º',
       habilidades: ['Ilustración', 'Photoshop', 'Serigrafía'], bio: 'Hago ilustración editorial y carteles para TFGs. Campus de Pontevedra.',
+      avisoBaneo: 'Tres tratos seguidos sin responder y dos valoraciones negativas. Si vuelve a pasar, la cuenta se bloquea.',
       color: '#10b981', instagram: 'sergio.leon', whatsapp: '34600555666' },
     { id: 'u6', nombre: 'Núria Costa', carrera: 'Derecho', rama: 'Ciencias Sociales y Jurídicas', curso: '5º',
       habilidades: ['Redacción', 'Debate', 'Inglés C1'], bio: 'Corrijo textos académicos y preparo defensas orales en la Facultad de Derecho.',
@@ -206,7 +207,6 @@
       u2: [5, 4, 4, 5, 5],
       u3: [3, 4, 2, 5],
       u4: [4, 4, 5],
-      u5: [1, 2, 3],
       u6: [5, 5, 4, 4, 5, 5],
       u7: [4, 2, 4],
       u8: [5, 3, 4]

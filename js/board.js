@@ -122,6 +122,10 @@
   /* ---- reputación del autor: ★ 4.8 (12) o etiqueta "Nuevo" -------------- */
   function reputacion(autor) {
     var total = autor && autor.id ? USWAP.valoracionesDe(autor.id).length : 0;
+    /* una cuenta con aviso de expulsión se muestra con cero estrellas, no como "Nuevo" */
+    if (!total && autor && autor.avisoBaneo) {
+      return '<span class="usuario-detalle" style="color:#fca5a5">★ 0.0 (0)</span>';
+    }
     if (!total) return '<span class="badge">Nuevo</span>';
 
     return '<span class="usuario-detalle">★ ' + USWAP.mediaDe(autor.id).toFixed(1) +
@@ -147,7 +151,8 @@
         '<p class="card-texto">' + UI.esc(o.descripcion) + '</p>' +
         '<div class="card-pie">' +
           '<span>' + (o.tipo === 'objeto' ? '📦 Objeto' : '🤝 Favor') + ' · ' + UI.esc(o.categoria) + ' · ' + UI.tiempo(o.creadaEn) + '</span>' +
-          '<span>' + (o.destacada ? '<span class="badge badge-ambar">★ Destacada</span>' : '') + '</span>' +
+          '<span>' + (o.destacada ? '<span class="badge badge-ambar">★ Destacada</span>' : '') +
+            (autor.avisoBaneo ? '<span class="badge badge-rojo" style="margin-left:5px">⚠ En observación</span>' : '') + '</span>' +
         '</div>' +
       '</a>';
   }

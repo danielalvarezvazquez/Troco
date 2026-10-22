@@ -54,7 +54,7 @@
   else { lema = 'Todavía sin reputación'; corLema = 'rgba(255,255,255,.45)'; }
 
   var total = valoraciones.length;
-  var mediaTxt = total ? media.toFixed(1) : '—';
+  var mediaTxt = total ? media.toFixed(1) : (u.avisoBaneo ? '0.0' : '-');
 
   /* --- descuentos en comercios de Compostela (se desbloquean con puntos) --- */
   var TIENDAS = [
@@ -261,6 +261,19 @@
       celda(cerradas, cerradas === 1 ? 'trato cerrado' : 'tratos cerrados') +
       celda(puntos, Math.abs(puntos) === 1 ? 'punto' : 'puntos') +
     '</div>' +
+
+    /* --- aviso de expulsión (cuentas en observación) --- */
+    (u.avisoBaneo
+      ? '<div class="bloque" style="margin-top:12px;border-color:#fecaca;background:#fef2f2">' +
+          '<div style="display:flex;gap:10px;align-items:flex-start">' +
+            '<span style="font-size:17px;line-height:1.2">⚠️</span>' +
+            '<div>' +
+              '<b style="display:block;font-size:13px;color:#b91c1c;margin-bottom:2px">Aviso de expulsión</b>' +
+              '<span style="font-size:12.5px;color:#7f1d1d;line-height:1.45">' + UI.esc(u.avisoBaneo) + '</span>' +
+            '</div>' +
+          '</div>' +
+        '</div>'
+      : '') +
 
     (u.bio
       ? '<div class="bloque" style="margin-top:14px;padding:16px 18px;border-radius:16px;' +
