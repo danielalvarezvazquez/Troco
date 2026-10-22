@@ -315,7 +315,7 @@
     '<div class="seccion-titulo"><h2 style="font-size:15px;letter-spacing:-.2px">Descuentos</h2>' +
       '<span class="usuario-detalle" id="desc-saldo-top">' + saldo + ' pts</span></div>' +
     '<div class="bloque" style="padding:0;border-radius:16px;overflow:hidden">' +
-      '<button type="button" id="desc-toggle" aria-expanded="false" aria-controls="desc-cuerpo" ' +
+      '<button type="button" id="desc-toggle" aria-expanded="true" aria-controls="desc-cuerpo" ' +
         'style="width:100%;display:flex;align-items:center;gap:12px;padding:14px 15px;background:none;' +
         'border:0;font-family:inherit;cursor:pointer;text-align:left">' +
         '<span style="flex:1;min-width:0">' +
@@ -323,9 +323,10 @@
             (soyYo ? 'Canjea tus puntos' : 'Descuentos en Compostela') + '</span>' +
           '<span id="desc-sub" style="display:block;margin-top:2px;font-size:11.5px;color:var(--muted)"></span>' +
         '</span>' +
-        '<span id="desc-chevron" style="font-size:13px;color:var(--muted);transition:transform .22s">▾</span>' +
+        '<span id="desc-chevron" style="font-size:13px;color:var(--muted);transition:transform .22s;' +
+          'transform:rotate(180deg)">▾</span>' +
       '</button>' +
-      '<div id="desc-cuerpo" style="display:none;padding:0 15px 15px">' +
+      '<div id="desc-cuerpo" style="display:block;padding:0 15px 15px">' +
         '<div style="display:flex;align-items:center;gap:9px;margin-bottom:11px">' +
           '<div style="flex:1;height:6px;border-radius:99px;background:#eef1f8;overflow:hidden">' +
             '<div id="desc-barra" style="height:100%;width:100%;border-radius:99px;' +
