@@ -12,7 +12,7 @@
 (function () {
   'use strict';
 
-  var VERSION = 4;                 // subir si cambia la forma de los datos
+  var VERSION = 6;                 // subir si cambia la forma de los datos
   var KEY = 'uswap.v1';            // clave de localStorage
 
   var AREAS = ['Tecnología', 'Ciencias', 'Salud', 'Diseño', 'Humanidades', 'Economía'];
@@ -29,8 +29,8 @@
     { id: 'u2', nombre: 'Marc Puig', carrera: 'Matemáticas', curso: 2, area: 'Ciencias',
       habilidades: ['Cálculo', 'LaTeX', 'Guitarra'], bio: 'Apuntes ordenados y clases de repaso de Cálculo.',
       color: '#0ea5e9', instagram: 'marc.puig', whatsapp: '34600222333' },
-    { id: 'u3', nombre: 'Lucía Romero', carrera: 'Medicina', curso: 4, area: 'Salud',
-      habilidades: ['Anatomía', 'Primeros auxilios', 'Dibujo'], bio: 'Cuarto de Medicina. Mis apuntes llevan dibujos a mano.',
+    { id: 'u3', nombre: 'Lucía Romero', carrera: 'Medicina', curso: 6, area: 'Salud',
+      habilidades: ['Anatomía', 'Primeros auxilios', 'Dibujo'], bio: 'Sexto curso de Medicina. Mis apuntes llevan dibujos a mano.',
       color: '#ec4899', instagram: 'lucia.romero', whatsapp: '34600333444' },
     { id: 'u4', nombre: 'Javier Barcala', carrera: 'ADE', curso: 3, area: 'Economía',
       habilidades: ['Excel', 'Contabilidad', 'Inglés'], bio: 'Tengo coche y voy a la estación todos los viernes.',
@@ -41,21 +41,30 @@
     { id: 'u6', nombre: 'Núria Costa', carrera: 'Derecho', curso: 5, area: 'Humanidades',
       habilidades: ['Redacción', 'Debate', 'Inglés C1'], bio: 'Corrijo textos académicos y preparo defensas orales.',
       color: '#8b5cf6', instagram: 'nuria.costa', whatsapp: '34600666777' },
-    { id: 'u7', nombre: 'Tomás Vidal', carrera: 'Arquitectura', curso: 3, area: 'Diseño',
-      habilidades: ['AutoCAD', 'Maquetas', 'Fotografía'], bio: 'Maquetas y planos a cambio de ayuda con estructuras.',
+    { id: 'u7', nombre: 'Tomás Vidal', carrera: 'Paisaje', curso: 3, area: 'Diseño',
+      habilidades: ['AutoCAD', 'Maquetas', 'Fotografía'], bio: 'Tercero de Paisaje, en el campus de Lugo. Maquetas y planos a cambio de ayuda con estructuras.',
       color: '#ef4444', instagram: 'tomas.vidal', whatsapp: '34600777888' },
     { id: 'u8', nombre: 'Elena Sanz', carrera: 'Biología', curso: 1, area: 'Ciencias',
       habilidades: ['Laboratorio', 'Francés', 'Cocina'], bio: 'Primero de Biología. Llevo tupper vegano los martes.',
       color: '#14b8a6', instagram: 'elena.sanz', whatsapp: '34600888999' },
-    { id: 'u9', nombre: 'Nerea Ibáñez', carrera: 'Doble Grado en ADE y Derecho', curso: 5, area: 'Economía',
-      habilidades: ['Contabilidad', 'Derecho mercantil', 'Excel'], bio: 'Quinto del doble grado. Resumo temarios y preparo casos prácticos.',
+    { id: 'u9', nombre: 'Nerea Ibáñez', carrera: 'Derecho', curso: 5, area: 'Humanidades',
+      habilidades: ['Contabilidad', 'Derecho mercantil', 'Excel'], bio: 'Quinto de Derecho. Resumo temarios y preparo casos prácticos.',
       color: '#0284c7', instagram: 'nerea.ibanez', whatsapp: '34600999000' },
-    { id: 'u10', nombre: 'Pau Ferrán', carrera: 'Doble Grado en Informática y Matemáticas', curso: 6, area: 'Tecnología',
-      habilidades: ['Python', 'Álgebra', 'Cálculo'], bio: 'Sexto del doble grado. Doy repaso de mates a gente de primero.',
+    { id: 'u10', nombre: 'Pau Ferrán', carrera: 'Doble Grado en Ingeniería Informática y Matemáticas', curso: 5, area: 'Tecnología',
+      habilidades: ['Python', 'Álgebra', 'Cálculo'], bio: 'Quinto del doble grado. Doy repaso de mates a gente de primero.',
       color: '#7c3aed', instagram: 'pau.ferran', whatsapp: '34600123123' },
-    { id: 'u11', nombre: 'Iván Prats', carrera: 'Doble Grado en Física e Informática', curso: 4, area: 'Ciencias',
+    { id: 'u11', nombre: 'Iván Prats', carrera: 'Doble Grado en Matemáticas y Física', curso: 4, area: 'Ciencias',
       habilidades: ['Física', 'Python', 'Análisis de datos'], bio: 'Cuarto del doble grado. Laboratorio, simulaciones y prácticas.',
-      color: '#0d9488', instagram: 'ivan.prats', whatsapp: '34600777444' }
+      color: '#0d9488', instagram: 'ivan.prats', whatsapp: '34600777444' },
+    { id: 'u12', nombre: 'Uxía Nogueira', carrera: 'Farmacia', curso: 4, area: 'Salud',
+      habilidades: ['Química orgánica', 'Formulación', 'Excel'], bio: 'Cuarto de Farmacia. Resúmenes de formulación magistral en tablas.',
+      color: '#c026d3', instagram: 'uxia.nogueira', whatsapp: '34600333555' },
+    { id: 'u13', nombre: 'Brais Lema', carrera: 'Veterinaria', curso: 3, area: 'Salud',
+      habilidades: ['Anatomía animal', 'Cirugía', 'Gallego'], bio: 'Tercero de Veterinaria en Lugo. Cuido animales y presto apuntes con dibujos.',
+      color: '#16a34a', instagram: 'brais.lema', whatsapp: '34600111223' },
+    { id: 'u14', nombre: 'Sabela Ríos', carrera: 'Criminología', curso: 2, area: 'Humanidades',
+      habilidades: ['Derecho penal', 'Estadística', 'Oratoria'], bio: 'Segundo de Criminología. Preparo defensas orales y análisis de datos.',
+      color: '#64748b', instagram: 'sabela.rios', whatsapp: '34600444556' }
   ];
 
   /* ----------------------------------------------------------------- ofertas
@@ -98,7 +107,19 @@
         pideACambio: 'Clases de Excel o apuntes de Contabilidad', estado: 'abierta', creadaEn: haceHoras(12) },
       { id: 'o11', titulo: 'Simulaciones de Física resueltas en Python', tipo: 'objeto', categoria: 'Tecnología', autorId: 'u11',
         descripcion: 'Cuadernos de simulación (péndulo, muelles, óptica) con el código comentado y las gráficas.',
-        pideACambio: 'Clases de Física o un tupper casero', estado: 'abierta', creadaEn: haceHoras(16) }
+        pideACambio: 'Clases de Física o un tupper casero', estado: 'abierta', creadaEn: haceHoras(16) },
+      { id: 'o12', titulo: 'Resúmenes de Formulación Magistral', tipo: 'objeto', categoria: 'Apuntes', autorId: 'u12',
+        descripcion: 'Temario en tablas y esquemas, con las prácticas de laboratorio resueltas y las fórmulas ordenadas.',
+        pideACambio: 'Clases de Química Orgánica o apuntes de Fisiología', estado: 'abierta', creadaEn: haceHoras(22) },
+      { id: 'o13', titulo: 'Te cuido al perro o al gato el fin de semana', tipo: 'favor', categoria: 'Favores', autorId: 'u13',
+        descripcion: 'Me quedo con tu mascota en Lugo de viernes a domingo. Tengo experiencia de prácticas y te mando fotos.',
+        pideACambio: 'Apuntes de Anatomía Animal o un café', estado: 'abierta', creadaEn: haceHoras(30) },
+      { id: 'o14', titulo: 'Clases de oratoria para la defensa del TFG', tipo: 'favor', categoria: 'Clases', autorId: 'u14',
+        descripcion: 'Ensayo de la exposición, estructura del discurso y respuestas a las preguntas del tribunal.',
+        pideACambio: 'Apuntes de Derecho Penal o ayuda con Excel', estado: 'abierta', creadaEn: haceHoras(36) },
+      { id: 'o15', titulo: 'Maquetas y planos en AutoCAD para tu TFG', tipo: 'favor', categoria: 'Creatividad', autorId: 'u7',
+        descripcion: 'Maqueta a escala o planos en AutoCAD para la entrega de fin de grado. Dos correcciones incluidas.',
+        pideACambio: 'Ayuda con estructuras o clases de Estadística', estado: 'abierta', creadaEn: haceHoras(26) }
     ];
   }
 
@@ -124,7 +145,10 @@
       u5: [1, 2, 3],
       u6: [5, 5, 4, 4, 5, 5],
       u7: [4, 2, 4],
-      u8: [5, 3, 4]
+      u8: [5, 3, 4],
+      u9: [4, 5],
+      u10: [5, 5, 4],
+      u13: [4, 3]
     };
     var out = [], n = 0;
     Object.keys(patron).forEach(function (uid) {
