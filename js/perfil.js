@@ -58,16 +58,16 @@
 
   /* --- descuentos en comercios de Compostela (se pagan con puntos) --- */
   var TIENDAS = [
-    { id: 'copy10', nombre: 'CopyCampus', tipo: 'copisteria', valor: '10%', detalle: 'Fotocopias y encuadernación', precio: 50 },
-    { id: 'campus15', nombre: 'Copistería Campus', tipo: 'copisteria', valor: '15%', detalle: 'Material de oficina y plastificados', precio: 80 },
-    { id: 'etse', nombre: 'Cafetería ETSE', tipo: 'comida', valor: 'Gratis', detalle: 'Café o infusión por la mañana', precio: 60 },
-    { id: 'take', nombre: 'Take', tipo: 'comida', valor: '6,50 €', detalle: 'Menú + bebida', precio: 100 },
-    { id: 'pizza', nombre: 'Pizzería Obradoiro', tipo: 'comida', valor: '2x1', detalle: 'Pizzas medianas de martes a jueves', precio: 150 },
-    { id: 'yoga', nombre: 'Yoga Compostela', tipo: 'gimnasio', valor: '1 clase', detalle: 'Clase suelta de iniciación', precio: 120 },
-    { id: 'gym', nombre: 'Gimnasio Compostela', tipo: 'gimnasio', valor: 'Gratis', detalle: 'Matrícula del curso completo', precio: 300 },
-    { id: 'libro', nombre: 'Librería Universitaria', tipo: 'libreria', valor: '10%', detalle: 'Manuales y lectura recomendada', precio: 200 },
-    { id: 'cine', nombre: 'Cine Compostela', tipo: 'ocio', valor: '5 €', detalle: 'Entrada de cualquier sesión', precio: 110 },
-    { id: 'sala', nombre: 'Sala Riquela', tipo: 'ocio', valor: '2x1', detalle: 'Conciertos entre semana', precio: 180 }
+    { id: 'copy10', nombre: 'CopyCampus', tipo: 'copisteria', valor: '10%', detalle: 'Fotocopias y encuadernación', precio: 250 },
+    { id: 'campus15', nombre: 'Copistería Campus', tipo: 'copisteria', valor: '15%', detalle: 'Material de oficina y plastificados', precio: 400 },
+    { id: 'etse', nombre: 'Cafetería ETSE', tipo: 'comida', valor: 'Gratis', detalle: 'Café o infusión por la mañana', precio: 300 },
+    { id: 'take', nombre: 'Take', tipo: 'comida', valor: '6,50 €', detalle: 'Menú + bebida', precio: 500 },
+    { id: 'pizza', nombre: 'Pizzería Obradoiro', tipo: 'comida', valor: '2x1', detalle: 'Pizzas medianas de martes a jueves', precio: 750 },
+    { id: 'yoga', nombre: 'Yoga Compostela', tipo: 'gimnasio', valor: '1 clase', detalle: 'Clase suelta de iniciación', precio: 600 },
+    { id: 'gym', nombre: 'Gimnasio Compostela', tipo: 'gimnasio', valor: 'Gratis', detalle: 'Matrícula del curso completo', precio: 1500 },
+    { id: 'libro', nombre: 'Librería Universitaria', tipo: 'libreria', valor: '10%', detalle: 'Manuales y lectura recomendada', precio: 1000 },
+    { id: 'cine', nombre: 'Cine Compostela', tipo: 'ocio', valor: '5 €', detalle: 'Entrada de cualquier sesión', precio: 550 },
+    { id: 'sala', nombre: 'Sala Riquela', tipo: 'ocio', valor: '2x1', detalle: 'Conciertos entre semana', precio: 900 }
   ];
   var TIPOS = [
     { id: '', texto: 'Todos' },
@@ -371,7 +371,7 @@
       '</div>' +
     '</div>' +
       '<div class="usuario-detalle" style="margin:9px 4px 0;line-height:1.5">' +
-        'Ganas 10 puntos por cada estrella. Se canjean enseñando tu credencial USwap en el comercio.' +
+        'Ganas puntos con cada reseña (★3 +20, ★4 +40, ★5 +80). Se canjean enseñando tu credencial USwap en el comercio.' +
       '</div>'
       : '');
 
@@ -739,7 +739,7 @@
 
     '<div style="margin-top:14px;padding-top:12px;border-top:1px solid #eef1f7;font-size:11.5px;' +
       'line-height:1.55;color:var(--muted)">' +
-      'Cada estrella suma 10 puntos. Las reseñas de 1 estrella también cuentan.' +
+      '★1 resta 20, ★2 no suma, ★3 suma 20, ★4 suma 40 y ★5 suma 80.' +
     '</div>';
 
   document.body.appendChild(fondo);
