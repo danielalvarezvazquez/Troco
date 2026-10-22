@@ -34,6 +34,11 @@
         <textarea class="textarea" id="descripcion" maxlength="280"
                   placeholder="Qué incluye, en qué estado está, cuándo puedes entregarlo…"></textarea>
 
+        <div id="aviso-contenido" class="oculto" role="alert"
+             style="margin-top:12px;padding:10px 12px;border-radius:12px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:12.5px;line-height:1.45">
+          <b>Esto no parece apropiado.</b> Replantea el texto: aquí se publican cosas útiles y respetuosas con los demás.
+        </div>
+
         <label class="label" for="area">Área de la petición</label>
         <select class="select" id="area"></select>
         <div class="usuario-detalle" style="margin-top:5px">De qué va lo que pides: Matemáticas, Salud, Lenguaje…</div>
@@ -44,6 +49,9 @@
         <label class="label" for="carrera">Tu carrera</label>
         <select class="select" id="carrera"></select>
         <div class="usuario-detalle" style="margin-top:5px">Aparecerá en tu tarjeta. Puedes cambiarla cuando quieras.</div>
+
+        <p class="usuario-detalle" style="margin:14px 2px 0;line-height:1.5">
+          Publica solo cosas útiles y respetuosas. Nada que ofenda o haga daño a otras personas.</p>
 
         <button class="btn btn-primario btn-bloque" id="btn-publicar" type="submit" disabled>Publicar en el tablón</button>
         <a class="btn btn-secundario" style="margin-top:8px" href="index.html">Cancelar</a>

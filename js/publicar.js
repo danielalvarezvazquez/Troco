@@ -21,6 +21,37 @@
   var preview = document.getElementById('preview');
   var contador = document.getElementById('contador-titulo');
   var boton = document.getElementById('btn-publicar');
+  var avisoContenido = document.getElementById('aviso-contenido');
+
+  /* ---- filtro de contenido inapropiado ---------------------------------
+     Lista corta y comprobada por palabra completa: solo para que la demo no
+     publique insultos ni contenido violento o sexual. No es un moderador real.
+  ---------------------------------------------------------------------- */
+  var PALABRAS_INAPROPIADAS = [
+    'puta', 'puto', 'hijoputa', 'mierda', 'cabron', 'cabrona', 'gilipollas',
+    'imbecil', 'idiota', 'estupido', 'estupida', 'subnormal', 'retrasado', 'retrasada',
+    'maricon', 'marica', 'polla', 'joder', 'follar', 'violar', 'violacion',
+    'asesinar', 'asesinato', 'matar', 'nazi', 'racista', 'machista',
+    'porno', 'pornografia', 'sexo', 'desnudo', 'desnuda', 'droga', 'cocaina'
+  ];
+
+  function normalizar(texto) {
+    return String(texto || '').toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9ñ\s]/g, ' ');
+  }
+
+  function esInapropiado(texto) {
+    var limpio = ' ' + normalizar(texto).replace(/\s+/g, ' ') + ' ';
+    for (var i = 0; i < PALABRAS_INAPROPIADAS.length; i++) {
+      if (limpio.indexOf(' ' + PALABRAS_INAPROPIADAS[i] + ' ') !== -1) return true;
+    }
+    return false;
+  }
+
+  function mostrarAviso(visible) {
+    if (avisoContenido) avisoContenido.classList.toggle('oculto', !visible);
+  }
 
   var yo = USWAP.usuario(USWAP.yo());
 
@@ -87,6 +118,7 @@
   function actualizar() {
     contador.textContent = titulo.value.length + '/' + MAX_TITULO;
     boton.disabled = titulo.value.trim().length < 4;
+    mostrarAviso(false);
     pintarPreview();
   }
 
@@ -105,6 +137,17 @@
       titulo.focus();
       return;
     }
+
+    /* nada que ofenda: se corta antes de publicar y se invita a reescribirlo */
+    if (esInapropiado(valorTitulo + ' ' + descripcion.value)) {
+      mostrarAviso(true);
+      avisoContenido.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      UI.toast('Esto no es apropiado. Edítalo antes de publicar.');
+      titulo.focus();
+      return;
+    }
+
+    mostrarAviso(false);
 
     USWAP.addOferta({
       titulo: valorTitulo,
