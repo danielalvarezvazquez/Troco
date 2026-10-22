@@ -18,6 +18,7 @@
   var descripcion = document.getElementById('descripcion');
   var tipo = document.getElementById('tipo');
   var categoria = document.getElementById('categoria');
+  var carrera = document.getElementById('carrera');
   var preview = document.getElementById('preview');
   var contador = document.getElementById('contador-titulo');
   var boton = document.getElementById('btn-publicar');
@@ -32,6 +33,15 @@
 
   categoria.innerHTML = USWAP.CATEGORIAS.map(function (c) {
     return '<option value="' + UI.esc(c) + '">' + UI.esc(c) + '</option>';
+  }).join('');
+
+  /* carreras de la USC; si la del perfil no está en la lista, se añade delante */
+  var listaCarreras = USWAP.CARRERAS.slice();
+  if (yo.carrera && listaCarreras.indexOf(yo.carrera) === -1) listaCarreras.unshift(yo.carrera);
+
+  carrera.innerHTML = listaCarreras.map(function (c) {
+    return '<option value="' + UI.esc(c) + '"' + (c === yo.carrera ? ' selected' : '') + '>' +
+      UI.esc(c) + '</option>';
   }).join('');
 
   function texto(valor, porDefecto) {
@@ -64,7 +74,7 @@
           UI.avatar(yo) +
           '<div class="usuario-linea">' +
             '<span class="usuario-nombre">' + UI.esc(yo.nombre) + ' · tú</span>' +
-            '<span class="usuario-detalle">' + UI.esc(yo.carrera) + ' · ' + UI.curso(yo.curso) + '</span>' +
+            '<span class="usuario-detalle">' + UI.esc(carrera.value || yo.carrera) + ' · ' + UI.curso(yo.curso) + '</span>' +
           '</div>' +
           '<span class="badge badge-azul" style="margin-left:auto">' + UI.esc(area.value || 'Otros') + '</span>' +
         '</div>' +
@@ -108,6 +118,12 @@
       categoria: tipo.value === 'clase' ? 'Clases' : categoria.value,
       area: area.value
     });
+
+    /* si ha elegido otra carrera, se guarda también en su perfil */
+    if (carrera.value && carrera.value !== yo.carrera) {
+      USWAP.actualizarPerfil({ carrera: carrera.value });
+      yo.carrera = carrera.value;
+    }
 
     UI.toast('Petición publicada');
     setTimeout(function () { window.location.href = 'index.html'; }, 700);

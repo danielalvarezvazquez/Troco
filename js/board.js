@@ -14,11 +14,11 @@
   var UI = window.USWAP_UI;
 
   /* ---- estado de los filtros (vacío = sin filtrar) ----------------------
-     área  → de qué va la petición (campo `area` de la oferta)
-     rama  → gran bloque de estudios del autor (campo `rama` del usuario)
-     curso → 1º..6º, Máster, Doctorado (campo `curso` del usuario)
+     área    → de qué va la petición (campo `area` de la oferta)
+     carrera → grado del autor, de la lista de carreras de la USC
+     curso   → 1º..6º, Máster, Doctorado (campo `curso` del usuario)
   ---------------------------------------------------------------------- */
-  var filtro = { texto: '', modo: '', area: '', rama: '', curso: '' };
+  var filtro = { texto: '', modo: '', area: '', carrera: '', curso: '' };
 
   var elBuscador = document.getElementById('buscador');
   var elLista = document.getElementById('lista');
@@ -28,7 +28,7 @@
 
   /* ---- ¿hay algún filtro puesto? ---------------------------------------- */
   function hayFiltros() {
-    return !!(filtro.texto.trim() || filtro.modo || filtro.area || filtro.rama || filtro.curso);
+    return !!(filtro.texto.trim() || filtro.modo || filtro.area || filtro.carrera || filtro.curso);
   }
 
   /* ---- dejar el tablón como al entrar ----------------------------------- */
@@ -36,7 +36,7 @@
     filtro.texto = '';
     filtro.modo = '';
     filtro.area = '';
-    filtro.rama = '';
+    filtro.carrera = '';
     filtro.curso = '';
     elBuscador.value = '';
     pintarFiltros();
@@ -72,8 +72,8 @@
     var areas = [{ valor: '', texto: 'Todas las áreas' }].concat(
       USWAP.AREAS.map(function (a) { return { valor: a, texto: a }; })
     );
-    var ramas = [{ valor: '', texto: 'Todas las ramas' }].concat(
-      USWAP.RAMAS.map(function (r) { return { valor: r, texto: r }; })
+    var carreras = [{ valor: '', texto: 'Todas las carreras' }].concat(
+      USWAP.CARRERAS.map(function (c) { return { valor: c, texto: c }; })
     );
     var cursos = [{ valor: '', texto: 'Todos los cursos' }].concat(
       USWAP.CURSOS.map(function (c) { return { valor: c, texto: c }; })
@@ -81,7 +81,7 @@
 
     pintarChips(document.getElementById('filtro-modo'), modos, 'modo');
     pintarChips(document.getElementById('filtro-areas'), areas, 'area');
-    pintarChips(document.getElementById('filtro-ramas'), ramas, 'rama');
+    pintarChips(document.getElementById('filtro-carreras'), carreras, 'carrera');
     pintarChips(document.getElementById('filtro-cursos'), cursos, 'curso');
   }
 
@@ -98,14 +98,14 @@
           .toLowerCase().indexOf(texto) !== -1;
 
       var coincideArea = !filtro.area || o.area === filtro.area;
-      var coincideRama = !filtro.rama || autor.rama === filtro.rama;
+      var coincideCarrera = !filtro.carrera || autor.carrera === filtro.carrera;
       var coincideCurso = !filtro.curso || String(autor.curso) === filtro.curso;
 
       var esClase = o.categoria === 'Clases';
       var coincideModo = !filtro.modo ||
         (filtro.modo === 'clases' ? esClase : !esClase);
 
-      return coincideTexto && coincideArea && coincideRama && coincideCurso && coincideModo;
+      return coincideTexto && coincideArea && coincideCarrera && coincideCurso && coincideModo;
     }).sort(function (a, b) {
       if (orden === 'valoracion') {
         var diferencia = USWAP.mediaDe(b.autorId) - USWAP.mediaDe(a.autorId);
@@ -207,7 +207,7 @@
     elLista.innerHTML = resultados.map(tarjeta).join('');
     elInfo.textContent = resultados.length + (resultados.length === 1 ? ' petición' : ' peticiones') +
       (filtro.modo === 'clases' ? ' · clases particulares' : (filtro.modo === 'trueque' ? ' · trueques' : '')) +
-      (filtro.area || filtro.rama || filtro.curso ? ' · filtros activos' : '');
+      (filtro.area || filtro.carrera || filtro.curso ? ' · filtros activos' : '');
   }
 
   /* ---- arranque --------------------------------------------------------- */

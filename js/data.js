@@ -12,7 +12,7 @@
 (function () {
   'use strict';
 
-  var VERSION = 9;                 // subir si cambia la forma de los datos
+  var VERSION = 11;                // subir si cambia la forma de los datos
   var KEY = 'uswap.v1';            // clave de localStorage
 
   /* Hash djb2: suficiente para una demo sin backend (NO es seguridad real) */
@@ -35,6 +35,73 @@
 
   var CATEGORIAS = ['Apuntes', 'Clases', 'Transporte', 'Comida', 'Objetos', 'Creatividad', 'Idiomas', 'Favores'];
 
+  /* Carreras y grados que se imparten en la USC (campus de Santiago, Lugo y
+     Pontevedra), más los posgrados que usan los perfiles de la demo. Se usa
+     para el filtro del tablón y para elegir tu carrera al publicar. */
+  var CARRERAS = [
+    'Administración y Dirección de Empresas',
+    'Bellas Artes',
+    'Biología',
+    'Bioquímica',
+    'Biotecnología',
+    'Ciencia Política y de la Administración',
+    'Ciencias de la Cultura y Difusión Cultural',
+    'Comunicación Audiovisual',
+    'Criminología',
+    'Derecho',
+    'Dirección y Gestión Pública',
+    'Economía',
+    'Educación Social',
+    'Empresa y Tecnología',
+    'Enfermería',
+    'Farmacia',
+    'Filosofía',
+    'Física',
+    'Fisioterapia',
+    'Geografía y Ordenación del Territorio',
+    'Gestión Cultural',
+    'Historia',
+    'Historia del Arte',
+    'Ingeniería Agrícola y Agroalimentaria',
+    'Ingeniería Civil',
+    'Ingeniería de Procesos Químicos Industriales',
+    'Ingeniería Forestal y del Medio Natural',
+    'Ingeniería Informática',
+    'Ingeniería Química',
+    'Inteligencia Artificial',
+    'Lengua y Literatura Españolas',
+    'Lengua y Literatura Gallegas',
+    'Lengua y Literatura Inglesas',
+    'Lenguas y Literaturas Modernas',
+    'Magisterio en Educación Infantil',
+    'Magisterio en Educación Primaria',
+    'Matemáticas',
+    'Medicina',
+    'Nutrición Humana y Dietética',
+    'Odontología',
+    'Óptica y Optometría',
+    'Paisaje',
+    'Pedagogía',
+    'Periodismo',
+    'Psicología',
+    'Química',
+    'Relaciones Laborales y Recursos Humanos',
+    'Robótica',
+    'Trabajo Social',
+    'Veterinaria',
+    'Doble Grado en Comunicación Audiovisual y Periodismo',
+    'Doble Grado en Educación Infantil y Primaria',
+    'Doble Grado en Farmacia y Óptica y Optometría',
+    'Doble Grado en Ingeniería Agrícola y Forestal',
+    'Doble Grado en Ingeniería Informática y Matemáticas',
+    'Doble Grado en Matemáticas y Física',
+    'Doble Grado en Química y Biología',
+    'Doble Grado en Química y Física',
+    /* posgrados que aparecen en los perfiles de ejemplo */
+    'Máster en Ciencia de Datos',
+    'Doctorado en Física'
+  ];
+
   /* ---------------------------------------------------------------- usuarios
      id, nombre, carrera (texto libre), rama, curso, habilidades[], bio, color,
      instagram, whatsapp
@@ -49,7 +116,7 @@
     { id: 'u3', nombre: 'Lucía Romero', carrera: 'Medicina', rama: 'Ciencias de la Salud', curso: '4º',
       habilidades: ['Anatomía', 'Primeros auxilios', 'Dibujo'], bio: 'Cuarto de Medicina en la USC. Mis apuntes llevan dibujos a mano.',
       color: '#ec4899', instagram: 'lucia.romero', whatsapp: '34600333444' },
-    { id: 'u4', nombre: 'Javier Barcala', carrera: 'ADE', rama: 'Ciencias Sociales y Jurídicas', curso: '3º',
+    { id: 'u4', nombre: 'Javier Barcala', carrera: 'Administración y Dirección de Empresas', rama: 'Ciencias Sociales y Jurídicas', curso: '3º',
       habilidades: ['Excel', 'Contabilidad', 'Inglés'], bio: 'Tengo coche y bajo a la estación de Santiago todos los viernes.',
       color: '#f59e0b', instagram: 'javier.barcala', whatsapp: '34600444555' },
     { id: 'u5', nombre: 'Sergio León', carrera: 'Bellas Artes', rama: 'Artes y Humanidades', curso: '2º',
@@ -178,7 +245,10 @@
         estado: 'abierta', creadaEn: haceHoras(24) },
       { id: 'o16', titulo: 'Necesito apuntes de Derecho Penal', tipo: 'objeto', categoria: 'Apuntes', area: 'Ciencias jurídicas', autorId: 'u14',
         descripcion: 'Para el trabajo de fin de curso de Criminología, con el temario y una tabla de datos para el análisis.',
-        estado: 'abierta', creadaEn: haceHoras(38) }
+        estado: 'abierta', creadaEn: haceHoras(38) },
+      { id: 'o17', titulo: 'Necesito ayuda con estructuras para la entrega de Paisaje', tipo: 'favor', categoria: 'Clases', area: 'Otros', autorId: 'u7',
+        descripcion: 'Tenemos una entrega con cálculo de estructuras y voy perdido. Busco dos tardes de repaso en Lugo o por videollamada.',
+        estado: 'abierta', creadaEn: haceHoras(27) }
     ];
 
     /* toda oferta necesita el campo acuerdo, aunque esté vacío */
@@ -261,6 +331,7 @@
     RAMAS: RAMAS,
     CURSOS: CURSOS,
     CATEGORIAS: CATEGORIAS,
+    CARRERAS: CARRERAS,
 
     estado: estado,
     guardar: guardarCambios,
