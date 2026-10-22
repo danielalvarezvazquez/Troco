@@ -127,12 +127,22 @@
       ' (' + total + ')</span>';
   }
 
+  /* ---- color de la categoría: tiñe el filo de la tarjeta y el chip ------- */
+  var COLOR_CATEGORIA = {
+    'Apuntes': '#6d5efc',
+    'Enseñanza': '#2f7cf6',
+    'Favores': '#0f9d58',
+    'Objetos': '#db2777',
+    'Otros': '#64748b'
+  };
+
   /* ---- una tarjeta del tablón ------------------------------------------ */
   function tarjeta(o) {
     var autor = USWAP.usuario(o.autorId) || { nombre: 'Anónimo', carrera: '', curso: '' };
+    var color = COLOR_CATEGORIA[o.categoria] || '#6d5efc';
 
     return '' +
-      '<a class="card" href="oferta.html?id=' + encodeURIComponent(o.id) + '">' +
+      '<a class="card" href="oferta.html?id=' + encodeURIComponent(o.id) + '" style="--cat:' + color + '">' +
         '<div class="card-fila">' +
           UI.avatar(autor) +
           '<div class="usuario-linea">' +
@@ -145,9 +155,16 @@
         '<h3 class="card-titulo">' + UI.esc(o.titulo) + '</h3>' +
         '<p class="card-texto">' + UI.esc(o.descripcion) + '</p>' +
         '<div class="card-pie">' +
-          '<span>' + UI.esc(o.categoria) + ' · ' + UI.tiempo(o.creadaEn) + '</span>' +
-          '<span>' + (o.destacada ? '<span class="badge badge-ambar">★ Destacada</span>' : '') +
-            (autor.avisoBaneo ? '<span class="badge badge-rojo" style="margin-left:5px">⚠ En observación</span>' : '') + '</span>' +
+          '<span class="card-meta">' +
+            '<span class="card-cat" style="color:' + color + ';background:' + color + '1a">' +
+              UI.esc(o.categoria) + '</span>' +
+            UI.tiempo(o.creadaEn) +
+          '</span>' +
+          '<span class="card-acciones">' +
+            (o.destacada ? '<span class="badge badge-ambar">★ Destacada</span>' : '') +
+            (autor.avisoBaneo ? '<span class="badge badge-rojo">⚠ En observación</span>' : '') +
+            '<span class="card-cta">Ver <span aria-hidden="true">→</span></span>' +
+          '</span>' +
         '</div>' +
       '</a>';
   }
