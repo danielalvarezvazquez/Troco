@@ -82,6 +82,15 @@
     });
   }
 
+  /* ---- reputación del autor: ★ 4.8 (12) o etiqueta "Nuevo" -------------- */
+  function reputacion(autor) {
+    var total = autor && autor.id ? USWAP.valoracionesDe(autor.id).length : 0;
+    if (!total) return '<span class="badge">Nuevo</span>';
+
+    return '<span class="usuario-detalle">★ ' + USWAP.mediaDe(autor.id).toFixed(1) +
+      ' (' + total + ')</span>';
+  }
+
   /* ---- una tarjeta del tablón ------------------------------------------ */
   function tarjeta(o) {
     var autor = USWAP.usuario(o.autorId) || { nombre: 'Anónimo', carrera: '', curso: '' };
@@ -92,6 +101,7 @@
           UI.avatar(autor) +
           '<div class="usuario-linea">' +
             '<span class="usuario-nombre">' + UI.esc(autor.nombre) + '</span>' +
+            reputacion(autor) +
             '<span class="usuario-detalle">' + UI.esc(autor.carrera) + ' · ' + UI.esc(autor.curso) + 'º</span>' +
           '</div>' +
           '<span class="badge badge-azul" style="margin-left:auto">' + UI.esc(o.categoria) + '</span>' +
