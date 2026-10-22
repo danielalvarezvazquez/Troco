@@ -13,15 +13,15 @@
   /* ---- niveles: se aplica el de mayor "min" que no supere los puntos ----- */
   var NIVELES = [
     { id: 'observacion', nombre: 'En observación', min: -9999, icono: '⚠️', clase: 'tier-observacion',
-      premio: 'Sin recompensas hasta recuperar puntos positivos. Dos valoraciones negativas seguidas y la cuenta revisa sus ofertas.' },
+      premio: 'Sin recompensas hasta recuperar puntos positivos. Dos valoraciones negativas seguidas y la cuenta revisa sus peticiones.' },
     { id: 'bronce', nombre: 'Bronce', min: 0, icono: '🥉', clase: 'tier-bronce',
       premio: 'Insignia de bienvenida en el perfil y acceso al tablón completo.' },
     { id: 'plata', nombre: 'Plata', min: 3, icono: '🥈', clase: 'tier-plata',
-      premio: 'Tu oferta aparece destacada en el tablón durante 24 h.' },
+      premio: 'Tu petición aparece destacada en el tablón durante 24 h.' },
     { id: 'oro', nombre: 'Oro', min: 6, icono: '🥇', clase: 'tier-oro',
       premio: 'Sello verificado, prioridad en el tablón y 1 destacado al mes.' },
     { id: 'elite', nombre: 'Élite', min: 10, icono: '💎', clase: 'tier-elite',
-      premio: '2 destacados al mes, insignia Élite y acceso anticipado a las ofertas nuevas.' }
+      premio: '2 destacados al mes, insignia Élite y acceso anticipado a las peticiones nuevas.' }
   ];
 
   function tier(puntos) {

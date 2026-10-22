@@ -43,12 +43,12 @@
         : '') +
       (soyYo
         ? '<a class="btn btn-secundario btn-bloque" href="editar-perfil.html">Editar perfil</a>'
-        : '<a class="btn btn-secundario btn-bloque" href="index.html">Ver ofertas en el tablón</a>') +
+        : '<a class="btn btn-secundario btn-bloque" href="index.html">Ver peticiones en el tablón</a>') +
     '</div>' +
 
     '<div class="stats" style="margin-top:12px">' +
       '<div class="stat"><b>' + media.toFixed(1) + '</b><span>estrellas</span></div>' +
-      '<div class="stat"><b>' + ofertas.length + '</b><span>ofertas</span></div>' +
+      '<div class="stat"><b>' + ofertas.length + '</b><span>peticiones</span></div>' +
       '<div class="stat"><b>' + puntos + '</b><span>puntos</span></div>' +
     '</div>' +
 
@@ -81,7 +81,7 @@
           '<div class="card-pie"><span>' + UI.esc(o.categoria) + '</span><span>' + UI.tiempo(o.creadaEn) + '</span></div>' +
         '</a>';
       }).join('')
-    : UI.vacio('Todavía no ha publicado nada', soyYo ? 'Pulsa en Publicar para crear tu primera oferta.' : '');
+    : UI.vacio('Todavía no ha publicado nada', soyYo ? 'Pulsa en Publicar para crear tu primera petición.' : '');
 
   /* -------------------------------------------------------- valoraciones */
   document.getElementById('num-val').textContent = valoraciones.length ? valoraciones.length + ' en total' : '';

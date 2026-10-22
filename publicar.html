@@ -17,25 +17,25 @@
 
     <main class="contenido">
       <section class="hero">
-        <h1>Publica lo que ofreces</h1>
-        <p>Di qué das y qué pides a cambio. Cuanto más concreto, mejor.</p>
+        <h1>Publica lo que necesitas</h1>
+        <p>Cuenta qué necesitas y qué ofreces a cambio. Cuanto más concreto, mejor.</p>
       </section>
 
       <form id="form-oferta" class="bloque" novalidate>
         <label class="label" for="titulo">Título</label>
         <input class="input" id="titulo" maxlength="70" required
-               placeholder="Ej. Apuntes de Estadística II">
+               placeholder="Ej. Clases de Estadística para el parcial">
 
         <label class="label" for="descripcion">Descripción</label>
         <textarea class="textarea" id="descripcion" maxlength="280"
-                  placeholder="Qué incluye, en qué estado está, cuándo puedes entregarlo…"></textarea>
+                  placeholder="Qué necesitas exactamente, para qué asignatura y cuándo lo necesitas…"></textarea>
 
         <div class="fila" style="margin-top:16px">
           <div style="flex:1">
             <label class="label" for="tipo">Tipo</label>
             <select class="select" id="tipo">
-              <option value="favor">Favor / servicio</option>
-              <option value="objeto">Objeto</option>
+              <option value="favor">Un favor o servicio</option>
+              <option value="objeto">Un objeto</option>
             </select>
           </div>
           <div style="flex:1">
@@ -44,9 +44,9 @@
           </div>
         </div>
 
-        <label class="label" for="pideACambio">Qué pides a cambio</label>
+        <label class="label" for="pideACambio">Qué ofreces a cambio</label>
         <input class="input" id="pideACambio" maxlength="90"
-               placeholder="Ej. Clases de Python o un café">
+               placeholder="Ej. Apuntes de Estadística o un café">
 
         <button class="btn btn-primario btn-bloque" type="submit">Publicar en el tablón</button>
         <a class="btn btn-secundario" style="margin-top:8px" href="index.html">Cancelar</a>

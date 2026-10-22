@@ -16,7 +16,7 @@
   var oferta = oid ? USWAP.oferta(oid) : null;
 
   if (!oferta) {
-    cont.innerHTML = UI.vacio('Oferta no encontrada', 'Puede que se haya eliminado. Vuelve al tablón.');
+    cont.innerHTML = UI.vacio('Petición no encontrada', 'Puede que se haya eliminado. Vuelve al tablón.');
     return;
   }
 
@@ -25,7 +25,7 @@
   var numVal = USWAP.valoracionesDe(autor.id).length;
   var cerrada = oferta.estado === 'cerrada';
 
-  var textoWa = 'Hola ' + autor.nombre + ', he visto tu oferta "' + oferta.titulo +
+  var textoWa = 'Hola ' + autor.nombre + ', he visto tu petición "' + oferta.titulo +
     '" en USwap. ¿Sigue disponible? Te propongo: ';
   var enlaceWa = 'https://wa.me/' + encodeURIComponent(autor.whatsapp || '') +
     '?text=' + encodeURIComponent(textoWa);
@@ -37,19 +37,19 @@
     '<div class="bloque">' +
       '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">' +
         '<span class="badge badge-azul">' + UI.esc(oferta.categoria) + '</span>' +
-        '<span class="badge">' + (oferta.tipo === 'objeto' ? '📦 Objeto' : '🤝 Favor') + '</span>' +
+        '<span class="badge">' + (oferta.tipo === 'objeto' ? '📦 Pide un objeto' : '🤝 Pide un favor') + '</span>' +
         (cerrada ? '<span class="badge badge-verde">Trato cerrado</span>' : '<span class="badge">Abierta</span>') +
       '</div>' +
       '<h1 class="detalle-titulo">' + UI.esc(oferta.titulo) + '</h1>' +
       '<p class="detalle-texto">' + UI.esc(oferta.descripcion) + '</p>' +
       '<div class="cambio" style="margin-top:14px">' +
-        '<span>⇄</span><span><b>Pide a cambio:</b> ' + UI.esc(oferta.pideACambio) + '</span>' +
+        '<span>⇄</span><span><b>A cambio ofrezco:</b> ' + UI.esc(oferta.pideACambio) + '</span>' +
       '</div>' +
       '<div class="card-pie"><span>Publicada ' + UI.tiempo(oferta.creadaEn) + '</span>' +
         (oferta.destacada ? '<span class="badge badge-ambar">★ Destacada</span>' : '') + '</div>' +
     '</div>' +
 
-    '<div class="seccion-titulo"><h2>Quién lo ofrece</h2>' +
+    '<div class="seccion-titulo"><h2>Quién lo pide</h2>' +
       '<a href="perfil.html?u=' + encodeURIComponent(autor.id) + '">Ver perfil</a></div>' +
 
     '<div class="bloque">' +

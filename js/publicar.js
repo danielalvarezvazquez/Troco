@@ -39,7 +39,7 @@
       pideACambio: pideACambio
     });
 
-    UI.toast('Oferta publicada');
+    UI.toast('Petición publicada');
     setTimeout(function () { window.location.href = 'index.html'; }, 700);
   });
 })();
