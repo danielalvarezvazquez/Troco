@@ -188,14 +188,14 @@
 
   /* ---- recompensas: desbloqueadas / pendientes --------------------------- */
   function filaNivel(nivel, desbloqueado, esActual) {
-    var esObservacion = nivel.id === 'observacion';
-    var estado = esObservacion
+    var esPiso = nivel.min < 0;
+    var estado = esPiso
       ? '<span class="badge badge-rojo">Estado actual</span>'
       : desbloqueado
         ? '<span class="badge badge-verde">✔ Desbloqueado</span>'
         : '<span class="badge" style="background:#f1f5f9;color:#64748b">🔒 Bloqueado</span>';
 
-    var estilo = esObservacion
+    var estilo = esPiso
       ? 'background:#fff5f5;border:1px solid #fecaca;border-radius:12px;padding:11px;margin-bottom:8px'
       : desbloqueado
         ? 'background:#f2fbf5;border-bottom:none;border-radius:12px;padding:11px;margin-bottom:8px'
@@ -203,15 +203,15 @@
 
     return '<div class="recompensa" style="' + estilo + '">' +
       '<div class="recompensa-icono" style="' +
-        (esObservacion ? 'background:#fee2e2' : desbloqueado ? 'background:#e4f7ea' : '') + '">' + nivel.icono + '</div>' +
+        (esPiso ? 'background:#fee2e2' : desbloqueado ? 'background:#e4f7ea' : '') + '">' + nivel.icono + '</div>' +
       '<div class="recompensa-texto">' +
         '<b>' + nivel.nombre +
           (esActual
-            ? ' <span class="badge ' + (esObservacion ? 'badge-rojo' : 'badge-azul') + '">Tu nivel</span>'
+            ? ' <span class="badge ' + (esPiso ? 'badge-rojo' : 'badge-azul') + '">Tu nivel</span>'
             : '') +
-          (esObservacion
+          (esPiso
             ? ''
-            : '<span class="usuario-detalle" style="font-weight:600"> · desde ' + (nivel.min <= 0 ? 0 : nivel.min) + ' pts</span>') +
+            : '<span class="usuario-detalle" style="font-weight:600"> · desde ' + nivel.min + ' pts</span>') +
         '</b>' +
         UI.esc(nivel.premio) +
         '<div style="margin-top:4px">' + estado + '</div>' +
@@ -223,19 +223,23 @@
     var el = document.getElementById('recompensas');
     if (!el) return;
 
+    /* Los niveles con min >= 0 son recompensas; el de min negativo es el
+       suelo (Hierro / En observación) y solo se muestra si estás ahí. */
+    var nivelesRecompensa = NIVELES.filter(function (n) { return n.min >= 0; });
+    var piso = NIVELES.filter(function (n) { return n.min < 0; })[0];
+
     var filas = [];
-    if (miNivel.id === 'observacion') {
-      filas.push({ nivel: miNivel, desbloqueado: false, actual: true });
+    if (miPuntos < 0 && piso) {
+      filas.push({ nivel: piso, desbloqueado: false, actual: true });
     }
-    NIVELES.forEach(function (n) {
-      if (n.id === 'observacion') return;
+    nivelesRecompensa.forEach(function (n) {
       filas.push({ nivel: n, desbloqueado: miPuntos >= n.min, actual: n.id === miNivel.id });
     });
 
-    var desbloqueadas = filas.filter(function (f) { return f.nivel.id !== 'observacion' && f.desbloqueado; }).length;
-    var resumen = miNivel.id === 'observacion'
-      ? 'Estás en observación: vuelve a 0 puntos para empezar a desbloquear recompensas.'
-      : 'Llevas ' + desbloqueadas + ' de ' + (NIVELES.length - 1) + ' recompensas desbloqueadas.';
+    var desbloqueadas = nivelesRecompensa.filter(function (n) { return miPuntos >= n.min; }).length;
+    var resumen = miPuntos < 0
+      ? 'Estás en ' + miNivel.nombre + ': vuelve a 0 puntos para empezar a desbloquear recompensas.'
+      : 'Llevas ' + desbloqueadas + ' de ' + nivelesRecompensa.length + ' recompensas desbloqueadas.';
 
     var html = filas.map(function (f) {
       var bloque = filaNivel(f.nivel, f.desbloqueado, f.actual);
