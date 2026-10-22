@@ -12,7 +12,7 @@
 (function () {
   'use strict';
 
-  var VERSION = 7;                 // subir si cambia la forma de los datos
+  var VERSION = 8;                 // subir si cambia la forma de los datos
   var KEY = 'uswap.v1';            // clave de localStorage
 
   /* Hash djb2: suficiente para una demo sin backend (NO es seguridad real) */
@@ -53,7 +53,8 @@
       habilidades: ['Excel', 'Contabilidad', 'Inglés'], bio: 'Tengo coche y bajo a la estación de Santiago todos los viernes.',
       color: '#f59e0b', instagram: 'javier.barcala', whatsapp: '34600444555' },
     { id: 'u5', nombre: 'Sergio León', carrera: 'Bellas Artes', rama: 'Artes y Humanidades', curso: '2º',
-      habilidades: ['Ilustración', 'Photoshop', 'Serigrafía'], bio: 'Hago ilustración editorial y carteles para TFGs. Campus de Pontevedra.',
+      habilidades: ['Ilustración', 'Dibujo', 'Pintura', 'Escultura', 'Serigrafía', 'Fotografía', 'Photoshop', 'Maquetas', 'Dibujo técnico', 'Edición de vídeo'],
+      bio: 'Ilustración editorial y carteles para TFGs. El perfil con mejor reputación de la USC.',
       color: '#10b981', instagram: 'sergio.leon', whatsapp: '34600555666' },
     { id: 'u6', nombre: 'Núria Costa', carrera: 'Derecho', rama: 'Ciencias Sociales y Jurídicas', curso: '5º',
       habilidades: ['Redacción', 'Debate', 'Inglés C1'], bio: 'Corrijo textos académicos y preparo defensas orales en la Facultad de Derecho.',
@@ -149,7 +150,17 @@
         pideACambio: 'Que la respondas y la pases a un par de personas', estado: 'abierta', creadaEn: haceHoras(7), destacada: true },
       { id: 'o12', titulo: 'Prácticas de laboratorio de Física', tipo: 'favor', categoria: 'Clases', area: 'Ciencias', autorId: 'u10',
         descripcion: 'Preparo el guion de prácticas y te ayudo con la toma de datos y el tratamiento de errores.',
-        pideACambio: 'Apuntes de Matemáticas o ayuda con LaTeX', estado: 'abierta', creadaEn: haceHoras(30) }
+        pideACambio: 'Apuntes de Matemáticas o ayuda con LaTeX', estado: 'abierta', creadaEn: haceHoras(30) },
+      { id: 'o13', titulo: 'Cartel ilustrado para el concierto de Bellas Artes', tipo: 'favor', categoria: 'Creatividad', area: 'Habilidades', autorId: 'u5',
+        descripcion: 'Cartel y stories para el concierto del campus. Entrega en una semana con dos rondas de cambios.',
+        pideACambio: 'Apuntes de Historia del Arte o una corrección de inglés',
+        estado: 'cerrada', creadaEn: haceHoras(60),
+        acuerdo: { proponente: 'u5', confirmadoPor: ['u5', 'u6'], fecha: haceHoras(36) } },
+      { id: 'o14', titulo: 'Serigrafía de camisetas para la tuna', tipo: 'favor', categoria: 'Creatividad', area: 'Habilidades', autorId: 'u5',
+        descripcion: 'Diseño y estampado de 20 camisetas con el escudo del grupo. Materiales incluidos.',
+        pideACambio: 'Clases de guitarra o apuntes de Estadística',
+        estado: 'cerrada', creadaEn: haceHoras(96),
+        acuerdo: { proponente: 'u7', confirmadoPor: ['u5', 'u7'], fecha: haceHoras(70) } }
     ];
 
     /* toda oferta necesita el campo acuerdo, aunque esté vacío */
@@ -172,13 +183,23 @@
     'Me ayudó muchísimo con el examen.'
   ];
 
+  /* Reseñas del perfil de referencia (Sergio León): todas de 5 estrellas. */
+  var COMENTARIOS_TOP = [
+    'El mejor intercambio que he hecho en la USC.',
+    'Rápido, claro y muy atento. Repetiré seguro.',
+    'Material impecable y entrega puntual.',
+    'Me salvó la entrega del TFG.',
+    'Trato de diez, súper recomendable.',
+    'Explicó todo con muchísima paciencia.'
+  ];
+
   function valoracionesBase() {
     var patron = {
       u1: [5, 5, 4, 5],
       u2: [5, 4, 4, 5, 5],
       u3: [3, 4, 2, 5],
       u4: [4, 4, 5],
-      u5: [1, 2, 3],
+      u5: [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
       u6: [5, 5, 4, 4, 5, 5],
       u7: [4, 2, 4],
       u8: [5, 3, 4]
@@ -187,9 +208,15 @@
     Object.keys(patron).forEach(function (uid) {
       patron[uid].forEach(function (estrellas, i) {
         n += 1;
+        var esTop = uid === 'u5';
         out.push({
-          id: 'v' + n, ofertaId: 'seed', deUsuarioId: 'u' + ((n % 8) + 1), aUsuarioId: uid,
-          estrellas: estrellas, comentario: COMENTARIOS[(n + i) % COMENTARIOS.length],
+          id: 'v' + n, ofertaId: 'seed',
+          deUsuarioId: esTop ? 'u' + ((n % 4) + 1) : 'u' + ((n % 8) + 1),
+          aUsuarioId: uid,
+          estrellas: estrellas,
+          comentario: esTop
+            ? COMENTARIOS_TOP[i % COMENTARIOS_TOP.length]
+            : COMENTARIOS[(n + i) % COMENTARIOS.length],
           creadaEn: haceHoras(n * 13)
         });
       });
