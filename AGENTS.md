@@ -80,7 +80,7 @@ Definido en `js/data.js` (P1). Campos exactos, en español:
 ```js
 usuario  { id, nombre, carrera (texto libre), rama, curso, bio, habilidades[], color,
            instagram, whatsapp, email, passwordHash, nacimiento, telVerificado, igVerificado }
-oferta   { id, titulo, descripcion, categoria, area, autorId, pideACambio,
+oferta   { id, titulo, descripcion, categoria, area, autorId,
            estado:'abierta'|'acordada'|'cerrada', creadaEn, destacada,
            acuerdo:{ proponente, confirmadoPor:[uids], fecha } }
 valoración { id, ofertaId, deUsuarioId, aUsuarioId, estrellas:1..5, comentario, creadaEn }

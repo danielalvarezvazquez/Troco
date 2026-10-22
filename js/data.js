@@ -12,7 +12,7 @@
 (function () {
   'use strict';
 
-  var VERSION = 11;                // subir si cambia la forma de los datos
+  var VERSION = 12;                // subir si cambia la forma de los datos
   var KEY = 'uswap.v1';            // clave de localStorage
 
   /* Hash djb2: suficiente para una demo sin backend (NO es seguridad real) */
@@ -187,7 +187,7 @@
 
   /* ----------------------------------------------------------------- ofertas
      id, titulo, descripcion, categoria, area (de la petición),
-     autorId, pideACambio, estado ('abierta'|'acordada'|'cerrada'), creadaEn (ISO), destacada
+     autorId, estado ('abierta'|'acordada'|'cerrada'), creadaEn (ISO), destacada
      acuerdo: { proponente, confirmadoPor:[uids], fecha }
        - abierta   → nadie ha propuesto cerrar
        - acordada  → una parte ha propuesto/confirmado; falta la otra
@@ -197,58 +197,53 @@
 
   function ofertasBase() {
     var base = [
-      { id: 'o1', titulo: 'Apuntes completos de Estadística II', categoria: 'Apuntes', area: 'Matemáticas', autorId: 'u2',
-        descripcion: 'Temario entero, problemas resueltos y los 3 exámenes de años anteriores con soluciones. PDF y fotocopia en la Biblioteca Concepción Arenal.',
-        pideACambio: 'Clases de Python o apuntes de Cálculo II', estado: 'abierta', creadaEn: haceHoras(2), destacada: true },
-      { id: 'o2', titulo: 'Clases de Python para principiantes', categoria: 'Enseñanza', area: 'Tecnología', autorId: 'u1',
-        descripcion: 'Dos sesiones de una hora: variables, listas, bucles y funciones. Trae tu portátil. Nivel cero, quedamos en la ETSE.',
-        pideACambio: 'Apuntes de Estadística o un café de la máquina', estado: 'abierta', creadaEn: haceHoras(5), destacada: true },
-      { id: 'o3', titulo: 'Te llevo en coche a la estación los viernes', categoria: 'Otros', area: 'Otros', autorId: 'u4',
-        descripcion: 'Salgo a las 18:30 del parking de la ETSE dirección estación de tren de Santiago. Quedan 3 plazas por viernes.',
-        pideACambio: 'Ayuda con una hoja de Excel o apuntes de Contabilidad', estado: 'abierta', creadaEn: haceHoras(9) },
-      { id: 'o4', titulo: 'Corrección de textos en inglés (nivel C1)', categoria: 'Enseñanza', area: 'Lenguaje', autorId: 'u6',
-        descripcion: 'Reviso tu TFG, abstract o carta de motivación. Devuelvo comentarios y versión limpia en 48 h.',
-        pideACambio: 'Ilustración para la portada o maqueta de una sección', estado: 'abierta', creadaEn: haceHoras(14) },
-      { id: 'o5', titulo: 'Ilustración personalizada para tu TFG', categoria: 'Favores', area: 'Habilidades', autorId: 'u5',
-        descripcion: 'Portada ilustrada o infografía a mano digital. Dos rondas de cambios incluidas.',
-        pideACambio: 'Corrección de inglés o ayuda con Estadística', estado: 'abierta', creadaEn: haceHoras(20) },
-      { id: 'o6', titulo: 'Tupper vegano casero los martes', categoria: 'Favores', area: 'Otros', autorId: 'u8',
-        descripcion: 'Menú semanal casero: lentejas, curry de garbanzos o pasta de verduras. Llevo el tupper a la ETSE (Campus Vida).',
-        pideACambio: 'Apuntes de primero de Biología o compañía para comer', estado: 'abierta', creadaEn: haceHoras(28) },
-      { id: 'o7', titulo: 'Arreglo tu portátil o te instalo el software', categoria: 'Favores', area: 'Tecnología', autorId: 'u1',
-        descripcion: 'Limpieza, formateo, instalación de Python/Java/Office y configuración de Git. Sin coste de mano de obra; quedamos en la ETSE o en la biblioteca.',
-        pideACambio: 'Apuntes de Anatomía o transporte a la estación', estado: 'abierta', creadaEn: haceHoras(33) },
-      { id: 'o8', titulo: 'Apuntes de Anatomía con dibujos a mano', categoria: 'Apuntes', area: 'Salud', autorId: 'u3',
-        descripcion: 'Dos tomos encuadernados con esquemas dibujados a mano. Muy visuales para primer y segundo curso de Medicina.',
-        pideACambio: 'Clases de dibujo o ilustración para el TFG', estado: 'abierta', creadaEn: haceHoras(41) },
-      /* Oferta ya cerrada: sirve para demostrar el acuerdo a dos bandas y la valoración.
+      { id: 'o1', titulo: 'Necesito apuntes completos de Estadística II', categoria: 'Apuntes', area: 'Matemáticas', autorId: 'u2',
+        descripcion: 'Busco el temario entero, problemas resueltos y los exámenes de otros años con soluciones. Me vale PDF o fotocopia en la Biblioteca Concepción Arenal.',
+        estado: 'abierta', creadaEn: haceHoras(2), destacada: true },
+      { id: 'o2', titulo: 'Necesito clases de Python para principiantes', categoria: 'Enseñanza', area: 'Tecnología', autorId: 'u1',
+        descripcion: 'Busco dos sesiones de una hora: variables, listas, bucles y funciones. Nivel cero, quedamos en la ETSE y llevo mi portátil.',
+        estado: 'abierta', creadaEn: haceHoras(5), destacada: true },
+      { id: 'o3', titulo: 'Necesito que me lleven a la estación los viernes', categoria: 'Otros', area: 'Otros', autorId: 'u4',
+        descripcion: 'Salgo a las 18:30 del parking de la ETSE hacia la estación de tren de Santiago y busco quien comparta coche.',
+        estado: 'abierta', creadaEn: haceHoras(9) },
+      { id: 'o4', titulo: 'Necesito corrección de textos en inglés (nivel C1)', categoria: 'Enseñanza', area: 'Lenguaje', autorId: 'u6',
+        descripcion: 'Busco revisión de mi TFG, abstract o carta de motivación, con comentarios y versión limpia en 48 h.',
+        estado: 'abierta', creadaEn: haceHoras(14) },
+      { id: 'o5', titulo: 'Necesito una ilustración para mi TFG', categoria: 'Favores', area: 'Habilidades', autorId: 'u5',
+        descripcion: 'Busco portada ilustrada o infografía a mano digital, con dos rondas de cambios.',
+        estado: 'abierta', creadaEn: haceHoras(20) },
+      { id: 'o6', titulo: 'Necesito tupper casero los martes', categoria: 'Favores', area: 'Otros', autorId: 'u8',
+        descripcion: 'Busco menú semanal: lentejas, curry de garbanzos o pasta de verduras, que me lo lleven a la ETSE (Campus Vida).',
+        estado: 'abierta', creadaEn: haceHoras(28) },
+      { id: 'o8', titulo: 'Necesito apuntes de Anatomía con dibujos a mano', categoria: 'Apuntes', area: 'Salud', autorId: 'u3',
+        descripcion: 'Busco dos tomos encuadernados con esquemas dibujados a mano, para primero y segundo de Medicina.',
+        estado: 'abierta', creadaEn: haceHoras(41) },
+      /* Petición ya cerrada: sirve para demostrar el acuerdo a dos bandas y la valoración.
          Ana (u1) propuso el acuerdo y Marc (u2, autor) lo confirmó. */
-      { id: 'o9', titulo: 'Apuntes de Cálculo I con ejercicios resueltos', categoria: 'Apuntes', area: 'Matemáticas', autorId: 'u2',
-        descripcion: 'Temario completo, 40 ejercicios resueltos a mano y dos exámenes corregidos. Incluye formulario resumen.',
-        pideACambio: 'Clases de Python o un café de la máquina', estado: 'cerrada', creadaEn: haceHoras(80),
+      { id: 'o9', titulo: 'Necesito apuntes de Cálculo I con ejercicios resueltos', categoria: 'Apuntes', area: 'Matemáticas', autorId: 'u2',
+        descripcion: 'Busco temario completo, 40 ejercicios resueltos a mano y dos exámenes corregidos, con formulario resumen.',
+        estado: 'cerrada', creadaEn: haceHoras(80),
         acuerdo: { proponente: 'u1', confirmadoPor: ['u1', 'u2'], fecha: haceHoras(20) } },
-      { id: 'o10', titulo: 'Repaso de Derecho Civil para el examen', categoria: 'Enseñanza', area: 'Ciencias jurídicas', autorId: 'u6',
-        descripcion: 'Dos sesiones de repaso de obligaciones y contratos, con casos prácticos y esquemas de respuesta.',
-        pideACambio: 'Ayuda con Excel o una ilustración para apuntes', estado: 'abierta', creadaEn: haceHoras(12) },
+      { id: 'o10', titulo: 'Necesito repaso de Derecho Civil para el examen', categoria: 'Enseñanza', area: 'Ciencias jurídicas', autorId: 'u6',
+        descripcion: 'Busco dos sesiones de obligaciones y contratos, con casos prácticos y esquemas de respuesta.',
+        estado: 'abierta', creadaEn: haceHoras(12) },
       { id: 'o11', titulo: 'Necesito 40 respuestas para mi encuesta del TFM', categoria: 'Favores', area: 'Ciencias sociales', autorId: 'u9',
         descripcion: 'Encuesta anónima de 5 minutos sobre hábitos de consumo en el campus. Comparto los resultados con quien la haga.',
-        pideACambio: 'Que la respondas y la pases a un par de personas', estado: 'abierta', creadaEn: haceHoras(7), destacada: true },
-      { id: 'o12', titulo: 'Prácticas de laboratorio de Física', categoria: 'Enseñanza', area: 'Ciencias', autorId: 'u10',
-        descripcion: 'Preparo el guion de prácticas y te ayudo con la toma de datos y el tratamiento de errores.',
-        pideACambio: 'Apuntes de Matemáticas o ayuda con LaTeX', estado: 'abierta', creadaEn: haceHoras(30) },
-      { id: 'o13', titulo: 'Cartel ilustrado para el concierto de Bellas Artes', categoria: 'Favores', area: 'Habilidades', autorId: 'u5',
-        descripcion: 'Cartel y stories para el concierto del campus. Entrega en una semana con dos rondas de cambios.',
-        pideACambio: 'Apuntes de Historia del Arte o una corrección de inglés',
+        estado: 'abierta', creadaEn: haceHoras(7), destacada: true },
+      { id: 'o12', titulo: 'Necesito ayuda con las prácticas de laboratorio de Física', categoria: 'Enseñanza', area: 'Ciencias', autorId: 'u10',
+        descripcion: 'Busco que me preparen el guion de prácticas y me ayuden con la toma de datos y el tratamiento de errores.',
+        estado: 'abierta', creadaEn: haceHoras(30) },
+      { id: 'o13', titulo: 'Necesito un cartel ilustrado para el concierto de Bellas Artes', categoria: 'Favores', area: 'Habilidades', autorId: 'u5',
+        descripcion: 'Busco cartel y stories para el concierto del campus, con dos rondas de cambios.',
         estado: 'cerrada', creadaEn: haceHoras(60),
         acuerdo: { proponente: 'u5', confirmadoPor: ['u5', 'u6'], fecha: haceHoras(36) } },
-      { id: 'o14', titulo: 'Serigrafía de camisetas para la tuna', categoria: 'Favores', area: 'Habilidades', autorId: 'u5',
-        descripcion: 'Diseño y estampado de 20 camisetas con el escudo del grupo. Materiales incluidos.',
-        pideACambio: 'Clases de guitarra o apuntes de Estadística',
+      { id: 'o14', titulo: 'Necesito serigrafía de camisetas para la tuna', categoria: 'Favores', area: 'Habilidades', autorId: 'u5',
+        descripcion: 'Busco diseño y estampado de 20 camisetas con el escudo del grupo.',
         estado: 'cerrada', creadaEn: haceHoras(96),
         acuerdo: { proponente: 'u7', confirmadoPor: ['u5', 'u7'], fecha: haceHoras(70) } },
-      { id: 'o15', titulo: 'Calculadora científica Casio FX-991', categoria: 'Objetos', area: 'Matemáticas', autorId: 'u7',
-        descripcion: 'La uso para estructuras y ya no la necesito. Funciona perfecta, con tapa y pilas nuevas.',
-        pideACambio: 'Un café o apuntes de Física', estado: 'abierta', creadaEn: haceHoras(18) },
+      { id: 'o15', titulo: 'Necesito una calculadora científica Casio FX-991', categoria: 'Objetos', area: 'Matemáticas', autorId: 'u7',
+        descripcion: 'Busco una para estructuras; me vale usada si funciona bien y tiene tapa.',
+        estado: 'abierta', creadaEn: haceHoras(18) },
       { id: 'o16', titulo: 'Necesito repasar Cálculo antes del parcial', categoria: 'Enseñanza', area: 'Matemáticas', autorId: 'u11',
         descripcion: 'Estoy en el doble grado y voy justo con límites, derivadas e integrales. Busco dos tardes de repaso.',
         estado: 'abierta', creadaEn: haceHoras(11) },
