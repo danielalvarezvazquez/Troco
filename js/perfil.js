@@ -125,9 +125,16 @@
 
       '<div style="position:relative;border-radius:25px;padding:2px;' +
         'background:linear-gradient(140deg,' + corMarco + ',' + corRango + ' 45%,' + corMarco + ')">' +
-        '<div style="border-radius:23px;padding:18px 18px 22px;color:#fff;' +
+        '<div style="position:relative;overflow:hidden;border-radius:23px;padding:18px 18px 22px;color:#fff;' +
           'background:radial-gradient(120% 115% at 88% -18%, rgba(91,91,246,.45) 0%, rgba(91,91,246,0) 58%),' +
           'linear-gradient(158deg,#17213b 0%,#0c1220 100%)">' +
+
+      '<div id="brillo-paso" style="position:absolute;inset:0;pointer-events:none">' +
+        '<div id="brillo-barra" style="position:absolute;top:-30%;left:-70%;width:55%;height:165%;' +
+          'transform:rotate(10deg);' +
+          'background:linear-gradient(105deg,rgba(255,255,255,0),rgba(255,255,255,.16),rgba(255,255,255,0));' +
+          'opacity:0"></div>' +
+      '</div>' +
 
       '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;' +
         'font-size:11.5px;color:rgba(255,255,255,.55)">' +
@@ -320,6 +327,15 @@
       { opacity: intensidade, transform: 'scale(.995)' },
       { opacity: Math.min(intensidade + 0.28, 0.95), transform: 'scale(1.012)' }
     ], { duration: 2400, iterations: Infinity, direction: 'alternate', easing: 'ease-in-out' });
+  }
+
+  var brilloBarra = document.getElementById('brillo-barra');
+  if (brilloBarra && brilloBarra.animate && !senMovemento) {
+    brilloBarra.animate([
+      { left: '-70%', opacity: 0 },
+      { opacity: .85, offset: 0.2 },
+      { left: '135%', opacity: 0 }
+    ], { duration: 5200, iterations: Infinity, easing: 'ease-in-out', delay: 900 });
   }
 
   if (!senMovemento) {

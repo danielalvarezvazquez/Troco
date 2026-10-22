@@ -170,16 +170,15 @@
 
     var extras = seleccion.filter(function (h) { return TODAS.indexOf(h) === -1; });
     if (extras.length) {
-      html += '<div style="font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;' +
-        'color:#8592a6;margin:2px 0 6px">Tuyas</div>' +
+      html += '<div style="font-size:12px;font-weight:700;letter-spacing:0;color:#64748b;margin:2px 0 7px">Tuyas</div>' +
         '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">' +
           extras.map(chip).join('') +
         '</div>';
     }
 
     CATALOGO.forEach(function (g) {
-      html += '<div style="font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;' +
-          'color:#8592a6;margin:12px 0 6px">' + UI.esc(g.titulo) + '</div>' +
+      html += '<div style="font-size:12px;font-weight:700;letter-spacing:0;color:#64748b;margin:14px 0 7px">' +
+          UI.esc(g.titulo) + '</div>' +
         '<div style="display:flex;flex-wrap:wrap;gap:6px">' + g.items.map(chip).join('') + '</div>';
     });
 
