@@ -106,6 +106,8 @@
             UI.esc(u.carrera) + '</div>' +
           '<div style="margin-top:2px;font-size:11px;color:rgba(255,255,255,.48)">' +
             UI.curso(u.curso) + ' · ' + UI.esc(u.rama) + '</div>' +
+          '<div style="margin-top:7px;font-size:8.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;' +
+            'color:rgba(255,255,255,.34)">USC · Santiago de Compostela</div>' +
         '</div>' +
       '</div>' +
 

@@ -24,7 +24,7 @@
         </div>
         <h1 style="margin:9px 0 5px;font-size:23px;letter-spacing:-.8px;line-height:1.15">Tu perfil</h1>
         <p style="margin:0;font-size:12.5px;line-height:1.5;color:rgba(255,255,255,.68)">
-          Así te verán los demás cuando abran tu credencial.
+          Tu ficha en la USC. Así te verán los demás estudiantes de Compostela.
         </p>
       </section>
 
@@ -64,7 +64,7 @@
             <input class="input" id="nombre" required maxlength="40">
 
             <label class="label" for="bio">Descripción</label>
-            <textarea class="textarea" id="bio" maxlength="180" placeholder="Qué estudias, qué se te da bien, qué ofreces…"></textarea>
+            <textarea class="textarea" id="bio" maxlength="180" placeholder="Qué estudias en la USC, qué se te da bien, qué ofreces…"></textarea>
             <div class="usuario-detalle" id="contador-bio" style="margin-top:6px;text-align:right;font-variant-numeric:tabular-nums">0 / 180</div>
 
             <label class="label" for="habilidades">Habilidades</label>
@@ -78,8 +78,41 @@
 
           <!-- pestaña: estudios -->
           <div data-panel="estudios" hidden>
-            <label class="label" style="margin-top:0" for="carrera">Carrera</label>
-            <input class="input" id="carrera" maxlength="60" placeholder="Ej. Ingeniería Informática">
+            <label class="label" style="margin-top:0" for="carrera">Carrera en la USC</label>
+            <input class="input" id="carrera" maxlength="60" list="grados-usc" placeholder="Ej. Grao en Enxeñaría Informática">
+            <datalist id="grados-usc">
+              <option value="Grao en Enxeñaría Informática"></option>
+              <option value="Grao en Enxeñaría Química"></option>
+              <option value="Grao en Matemáticas"></option>
+              <option value="Grao en Física"></option>
+              <option value="Grao en Química"></option>
+              <option value="Grao en Bioloxía"></option>
+              <option value="Grao en Biotecnoloxía"></option>
+              <option value="Grao en Ciencia e Tecnoloxía dos Alimentos"></option>
+              <option value="Grao en Enoloxía"></option>
+              <option value="Grao en Medicina"></option>
+              <option value="Grao en Enfermaría"></option>
+              <option value="Grao en Farmacia"></option>
+              <option value="Grao en Odontoloxía"></option>
+              <option value="Grao en Veterinaria"></option>
+              <option value="Grao en Psicoloxía"></option>
+              <option value="Grao en Fisioterapia"></option>
+              <option value="Grao en Dereito"></option>
+              <option value="Grao en ADE"></option>
+              <option value="Grao en Economía"></option>
+              <option value="Grao en Belas Artes"></option>
+              <option value="Grao en Arquitectura"></option>
+              <option value="Grao en Filoloxía Galega"></option>
+              <option value="Grao en Filoloxía Inglesa"></option>
+              <option value="Grao en Historia"></option>
+              <option value="Grao en Xornalismo"></option>
+              <option value="Grao en Comunicación Audiovisual"></option>
+              <option value="Grao en Maxisterio"></option>
+              <option value="Grao en Turismo"></option>
+              <option value="Grao en Traballo Social"></option>
+              <option value="Máster en Enxeñaría Informática"></option>
+            </datalist>
+            <div class="usuario-detalle" style="margin-top:5px">Grados oficiales de la USC · Santiago de Compostela</div>
 
             <div class="fila" style="margin-top:16px">
               <div style="flex:1">

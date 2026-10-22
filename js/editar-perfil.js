@@ -134,12 +134,16 @@
 
   /* ------------------------------------------------------------ habilidades */
   var CATALOGO = [
-    { titulo: 'Tecnología', items: ['Python', 'Java', 'Excel', 'Diseño UI', 'Photoshop', 'AutoCAD', 'Git', 'Ofimática'] },
-    { titulo: 'Ciencias y salud', items: ['Cálculo', 'Estadística', 'LaTeX', 'Laboratorio', 'Anatomía', 'Primeros auxilios'] },
-    { titulo: 'Diseño y creatividad', items: ['Ilustración', 'Dibujo', 'Serigrafía', 'Fotografía', 'Maquetas', 'Carteles'] },
-    { titulo: 'Idiomas y letras', items: ['Inglés', 'Francés', 'Redacción', 'Debate', 'Corrección de textos'] },
-    { titulo: 'Economía', items: ['Contabilidad', 'Finanzas', 'Marketing'] },
-    { titulo: 'Vida y oficios', items: ['Apuntes', 'Clases particulares', 'Transporte', 'Cocina', 'Repostería', 'Guitarra'] }
+    { titulo: 'Tecnología e informática', items: ['Python', 'Java', 'C', 'SQL', 'Bases de datos', 'Redes', 'Linux', 'Git', 'Diseño UI', 'Ofimática'] },
+    { titulo: 'Matemáticas y física', items: ['Cálculo', 'Álgebra', 'Estadística', 'LaTeX', 'R', 'MATLAB', 'Física', 'Análisis de datos'] },
+    { titulo: 'Biología y laboratorio', items: ['Laboratorio', 'Microbiología', 'Genética', 'Botánica', 'Zoología', 'Química', 'Bioquímica', 'Enología'] },
+    { titulo: 'Salud', items: ['Anatomía', 'Fisiología', 'Primeros auxilios', 'Enfermería', 'Farmacología', 'Nutrición', 'Fisioterapia', 'Psicología', 'Odontología'] },
+    { titulo: 'Derecho y empresa', items: ['Derecho civil', 'Redacción jurídica', 'Debate', 'Contabilidad', 'Finanzas', 'Fiscalidad', 'Marketing', 'Gestión de proyectos', 'Recursos humanos'] },
+    { titulo: 'Arte y diseño', items: ['Ilustración', 'Dibujo', 'Pintura', 'Escultura', 'Serigrafía', 'Fotografía', 'Photoshop', 'Maquetas', 'Dibujo técnico', 'Edición de vídeo'] },
+    { titulo: 'Arquitectura', items: ['AutoCAD', 'Urbanismo', 'Topografía', 'Planos'] },
+    { titulo: 'Letras, historia y comunicación', items: ['Redacción', 'Corrección de textos', 'Gallego', 'Latín', 'Historia', 'Periodismo', 'Investigación'] },
+    { titulo: 'Idiomas', items: ['Inglés', 'Francés', 'Portugués', 'Alemán', 'Italiano'] },
+    { titulo: 'Vida y oficios', items: ['Apuntes', 'Clases particulares', 'Transporte', 'Cocina gallega', 'Repostería', 'Guitarra', 'Gaita', 'Guía del Camino'] }
   ];
 
   var TODAS = [];
