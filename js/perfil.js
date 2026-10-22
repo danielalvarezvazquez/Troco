@@ -265,6 +265,15 @@
       '</div>' +
 
       (soyYo
+        ? '<div style="display:flex;align-items:center;gap:7px;margin-top:12px;font-size:11.5px;' +
+            'color:rgba(255,255,255,.55)">' +
+            '<span>Saldo para descuentos</span>' +
+            '<b id="cred-saldo" style="font-size:13px;color:#fff">' + saldo + ' pts</b>' +
+            '<span>· ' + puntos + ' pts ganados</span>' +
+          '</div>'
+        : '') +
+
+      (soyYo
         ? '<a class="btn" style="margin-top:16px;background:#fff;color:#0f172a;box-shadow:none" href="editar-perfil.html">Editar perfil</a>'
         : '<div class="fila" style="margin-top:16px">' +
             (u.whatsapp
@@ -321,7 +330,8 @@
           ? 'Añádelas en Editar perfil para que te encuentren.'
           : 'Todavía no ha añadido habilidades.')) +
 
-    '<div class="seccion-titulo"><h2 style="font-size:15px;letter-spacing:-.2px">Descuentos</h2>' +
+    (soyYo
+      ? '<div class="seccion-titulo"><h2 style="font-size:15px;letter-spacing:-.2px">Descuentos</h2>' +
       '<span class="usuario-detalle" id="desc-saldo-top">' + saldo + ' pts</span></div>' +
     '<div class="bloque" style="padding:0;border-radius:16px;overflow:hidden">' +
       '<button type="button" id="desc-toggle" aria-expanded="true" aria-controls="desc-cuerpo" ' +
@@ -347,9 +357,10 @@
         '<div id="desc-lista" style="display:grid;grid-template-columns:1fr 1fr;gap:9px"></div>' +
       '</div>' +
     '</div>' +
-    '<div class="usuario-detalle" style="margin:9px 4px 0;line-height:1.5">' +
-      'Ganas 10 puntos por cada estrella. Se canjean enseñando tu credencial USwap en el comercio.' +
-    '</div>';
+      '<div class="usuario-detalle" style="margin:9px 4px 0;line-height:1.5">' +
+        'Ganas 10 puntos por cada estrella. Se canjean enseñando tu credencial USwap en el comercio.' +
+      '</div>'
+      : '');
 
   /* --- brillo del marco + entrada animada --- */
   var marcoGlow = document.getElementById('marco-glow');
@@ -417,12 +428,15 @@
   }
 
   function pintarDescuentos() {
+    var contSaldo = document.getElementById('desc-saldo-top');
+    if (!contSaldo) return;
+
     var saldoAhora = saldoActual();
     var disponibles = TIENDAS.filter(function (t) {
       return !yaCanjeado(t.id) && t.precio <= saldoAhora;
     }).length;
 
-    document.getElementById('desc-saldo-top').textContent = saldoAhora + ' pts';
+    contSaldo.textContent = saldoAhora + ' pts';
     document.getElementById('desc-sub').textContent =
       disponibles + (disponibles === 1 ? ' descuento a tu alcance' : ' descuentos a tu alcance');
 
@@ -435,6 +449,8 @@
     if (cartera) {
       cartera.textContent = saldoAhora + ' de ' + Math.max(0, puntos) + ' pts';
     }
+    var credSaldo = document.getElementById('cred-saldo');
+    if (credSaldo) credSaldo.textContent = saldoAhora + ' pts';
 
     document.getElementById('desc-filtros').innerHTML = TIPOS.map(function (tp) {
       return '<button type="button" class="chip chip-mini' + (filtroTipo === tp.id ? ' activo' : '') +
@@ -519,13 +535,15 @@
     UI.toast('Canjeado: ' + tienda.valor + ' en ' + tienda.nombre);
   }
 
-  descToggle.addEventListener('click', function () {
-    var aberto = descCuerpo.style.display !== 'none';
-    descCuerpo.style.display = aberto ? 'none' : 'block';
-    descToggle.setAttribute('aria-expanded', aberto ? 'false' : 'true');
-    descChevron.style.transform = aberto ? '' : 'rotate(180deg)';
-    if (!aberto) pintarDescuentos();
-  });
+  if (descToggle && descCuerpo) {
+    descToggle.addEventListener('click', function () {
+      var aberto = descCuerpo.style.display !== 'none';
+      descCuerpo.style.display = aberto ? 'none' : 'block';
+      descToggle.setAttribute('aria-expanded', aberto ? 'false' : 'true');
+      descChevron.style.transform = aberto ? '' : 'rotate(180deg)';
+      if (!aberto) pintarDescuentos();
+    });
+  }
 
   pintarDescuentos();
 
