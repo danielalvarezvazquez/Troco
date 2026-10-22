@@ -7,125 +7,153 @@
 <style>
   :root{
     --fondo:#070b18;
-    --tinta:#e9edf9;
-    --muted:#96a2bd;
+    --tinta:#eef2fb;
+    --muted:#9aa6c2;
     --primario:#6d6dfb;
     --acento:#a78bfa;
     --oro:#fbbf24;
     --verde:#34d399;
-    --linea:rgba(255,255,255,.10);
-    --tarjeta:rgba(255,255,255,.045);
+    --rojo:#f87171;
+    --linea:rgba(255,255,255,.12);
+    --tarjeta:rgba(255,255,255,.05);
     --fuente:"Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
   }
   *{box-sizing:border-box}
   html,body{height:100%}
-  body{
-    margin:0;background:var(--fondo);color:var(--tinta);font-family:var(--fuente);
-    overflow:hidden;-webkit-font-smoothing:antialiased;
-  }
-  /* fondo */
+  body{margin:0;background:var(--fondo);color:var(--tinta);font-family:var(--fuente);
+       overflow:hidden;-webkit-font-smoothing:antialiased}
   body::before{
     content:"";position:fixed;inset:0;pointer-events:none;
     background:
-      radial-gradient(60vw 60vw at 85% -10%, rgba(109,109,251,.28) 0%, rgba(109,109,251,0) 60%),
-      radial-gradient(45vw 45vw at -5% 105%, rgba(167,139,250,.18) 0%, rgba(167,139,250,0) 60%);
+      radial-gradient(58vw 58vw at 88% -12%, rgba(109,109,251,.30) 0%, rgba(109,109,251,0) 60%),
+      radial-gradient(46vw 46vw at -6% 106%, rgba(167,139,250,.20) 0%, rgba(167,139,250,0) 60%);
   }
+
   .deck{position:relative;height:100%}
   .slide{
     position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
-    padding:clamp(20px,4.5vh,54px) clamp(22px,5vw,76px) clamp(56px,9vh,92px);
-    gap:clamp(10px,1.6vh,20px);
+    padding:clamp(18px,3.6vh,44px) clamp(20px,4.4vw,64px) clamp(50px,7vh,78px);
+    gap:clamp(10px,1.8vh,22px);
   }
-  .slide.activa{display:flex;animation:entrar .34s ease both}
-  @keyframes entrar{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .slide.activa{display:flex;animation:entrar .32s ease both}
+  @keyframes entrar{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 
-  .kicker{
-    font-size:clamp(10px,1.05vw,13px);font-weight:700;letter-spacing:.20em;text-transform:uppercase;
-    color:var(--muted);
-  }
-  h1{font-size:clamp(28px,4.6vw,60px);line-height:1.02;letter-spacing:-.035em;margin:0;font-weight:800}
-  h2{font-size:clamp(22px,3.2vw,40px);line-height:1.08;letter-spacing:-.03em;margin:0;font-weight:800;max-width:22ch}
+  .kicker{font-size:clamp(11px,1.05vw,14px);font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+  h1{font-size:clamp(40px,6.6vw,96px);line-height:.98;letter-spacing:-.04em;margin:0;font-weight:800}
+  h2{font-size:clamp(28px,4.1vw,58px);line-height:1.04;letter-spacing:-.035em;margin:0;font-weight:800;max-width:24ch}
   h2 .suave{color:var(--muted);font-weight:600}
-  p{margin:0;font-size:clamp(12px,1.45vw,17px);line-height:1.55;color:#c9d3e8;max-width:70ch}
+  p{margin:0;font-size:clamp(15px,1.65vw,22px);line-height:1.45;color:#cdd7ea;max-width:62ch}
   .sub{color:var(--muted)}
+  .nota{font-size:clamp(12px,1.05vw,14px);color:#8390aa;line-height:1.45}
 
-  .dos{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(16px,3vw,44px);align-items:center}
-  .tres{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(9px,1.3vw,16px)}
-  .cuatro{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(9px,1.2vw,14px)}
-  .tarjeta{
-    background:var(--tarjeta);border:1px solid var(--linea);border-radius:clamp(12px,1.4vw,18px);
-    padding:clamp(11px,1.5vw,20px);
+  .dos{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,3vw,48px);align-items:center}
+  .tres{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,1.4vw,18px)}
+  .cinco{display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(8px,1.1vw,14px)}
+
+  .tarjeta{background:var(--tarjeta);border:1px solid var(--linea);border-radius:clamp(14px,1.5vw,20px);padding:clamp(12px,1.5vw,22px)}
+  .tarjeta b{display:block;font-size:clamp(15px,1.45vw,20px);letter-spacing:-.02em;margin-bottom:4px}
+  .tarjeta span{display:block;font-size:clamp(12px,1.15vw,16px);line-height:1.4;color:var(--muted)}
+  .tarjeta.destacada{border-color:rgba(109,109,251,.5);background:rgba(109,109,251,.14)}
+  .tarjeta.oro{border-color:rgba(251,191,36,.4);background:rgba(251,191,36,.09)}
+
+  .icono{font-size:clamp(24px,2.6vw,38px);line-height:1;display:block;margin-bottom:8px}
+  .etiqueta{display:inline-block;font-size:clamp(9px,.85vw,11px);font-weight:800;letter-spacing:.06em;
+            text-transform:uppercase;color:#a5b4fc;background:rgba(109,109,251,.16);
+            border:1px solid rgba(109,109,251,.3);border-radius:6px;padding:2px 7px;margin-bottom:8px}
+  .etiqueta.oro{color:#fde68a;background:rgba(251,191,36,.12);border-color:rgba(251,191,36,.35)}
+  .etiqueta.verde{color:#a7f3d0;background:rgba(52,211,153,.12);border-color:rgba(52,211,153,.32)}
+  .compacta .tarjeta{padding:10px 12px}
+  .compacta .tarjeta b{font-size:clamp(13px,1.2vw,17px);margin-bottom:2px}
+  .compacta .tarjeta span{font-size:clamp(10.5px,.95vw,13px);line-height:1.3}
+  .compacta .etiqueta{font-size:clamp(8.5px,.8vw,10px);padding:1px 6px;margin-bottom:6px}
+  .compacta{gap:clamp(7px,.9vw,11px)}
+  .chip{display:inline-flex;align-items:center;gap:8px;padding:6px 13px;border-radius:999px;
+        border:1px solid var(--linea);background:rgba(255,255,255,.06);
+        font-size:clamp(12px,1.15vw,15px);font-weight:600;color:#cfd9ec}
+  .chip.oro{border-color:rgba(251,191,36,.45);color:#fde68a;background:rgba(251,191,36,.10)}
+  .punto{width:8px;height:8px;border-radius:99px;background:var(--primario);box-shadow:0 0 10px var(--primario)}
+
+  /* comparación del trueque */
+  .comparacion{display:flex;align-items:center;justify-content:center;gap:clamp(8px,2vw,26px);flex-wrap:nowrap}
+  .persoa{
+    flex:1 1 0;min-width:0;background:var(--tarjeta);border:1px solid var(--linea);
+    border-radius:20px;padding:clamp(12px,1.6vw,22px);text-align:center;
   }
-  .tarjeta b{display:block;font-size:clamp(12px,1.2vw,15px);letter-spacing:-.01em;margin-bottom:4px}
-  .tarjeta span{display:block;font-size:clamp(10.5px,1.02vw,13.5px);line-height:1.45;color:var(--muted)}
-  .tarjeta.destacada{border-color:rgba(109,109,251,.45);background:rgba(109,109,251,.12)}
-  .tarjeta.oro{border-color:rgba(251,191,36,.35);background:rgba(251,191,36,.08)}
-
-  .chip{
-    display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;
-    border:1px solid var(--linea);background:rgba(255,255,255,.05);
-    font-size:clamp(10px,1vw,12.5px);font-weight:600;color:#c9d3e8;
+  .persoa .nome{font-size:clamp(17px,1.9vw,26px);font-weight:800;letter-spacing:-.02em}
+  .persoa .da,.persoa .quere{display:block;font-size:clamp(11.5px,1.05vw,15px);line-height:1.35;margin-top:6px}
+  .persoa .da{color:#a9f5d0}
+  .persoa .quere{color:#fcd34d}
+  .cruz{
+    flex:0 0 auto;width:clamp(44px,5vw,68px);height:clamp(44px,5vw,68px);border-radius:50%;
+    display:grid;place-items:center;font-size:clamp(22px,2.6vw,38px);font-weight:800;color:var(--rojo);
+    background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.4);
   }
-  .chip.oro{border-color:rgba(251,191,36,.4);color:#fde68a;background:rgba(251,191,36,.10)}
-  .punto{width:7px;height:7px;border-radius:99px;background:var(--primario);box-shadow:0 0 10px var(--primario)}
 
-  .cifra{font-size:clamp(34px,5vw,64px);font-weight:800;letter-spacing:-.04em;line-height:.95}
-  .cifra small{display:block;font-size:clamp(10px,1vw,13px);font-weight:600;letter-spacing:.02em;color:var(--muted);margin-top:6px}
+  /* gráfico hub */
+  .hub{width:100%;height:auto;max-height:46vh;display:block}
+  .hub text{font-family:var(--fuente)}
 
-  .lista{display:flex;flex-direction:column;gap:clamp(6px,.9vh,10px);margin:0;padding:0;list-style:none}
-  .lista li{display:flex;gap:10px;align-items:flex-start;font-size:clamp(11.5px,1.28vw,15.5px);line-height:1.45;color:#cfd8ea}
-  .lista li i{color:var(--primario);font-style:normal;font-weight:800}
+  /* mapa */
+  .mapa{width:100%;height:auto;max-height:48vh;display:block}
+  .mapa text{font-family:var(--fuente)}
 
-  .flujo{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-  .flujo .paso{
-    padding:7px 12px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid var(--linea);
-    font-size:clamp(10px,1.05vw,13px);font-weight:650;
+  /* gráfico bola de nieve */
+  .barras{display:flex;align-items:flex-end;gap:clamp(10px,2.4vw,40px);height:clamp(190px,30vh,300px);padding:0 4px}
+  .barra-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:8px}
+  .barra-col .valor{font-size:clamp(16px,1.9vw,26px);font-weight:800;letter-spacing:-.02em}
+  .barra-col .barra{
+    width:100%;border-radius:12px 12px 4px 4px;
+    background:linear-gradient(180deg,var(--acento),var(--primario));
+    box-shadow:0 14px 30px -18px var(--primario);
   }
-  .flujo .frecha{color:var(--muted);font-size:clamp(12px,1.3vw,16px)}
+  .barra-col .cando{font-size:clamp(10.5px,.95vw,13px);color:var(--muted);text-align:center;line-height:1.3}
 
-  .nota{font-size:clamp(10px,.95vw,12.5px);color:#7e8aa5;line-height:1.5}
+  /* rueda del bucle */
+  .rueda{position:relative;width:clamp(300px,42vh,400px);aspect-ratio:1/1;margin:0 auto;flex:0 0 auto}
+  .rueda .anel{position:absolute;inset:8%;border-radius:50%;border:2px dashed rgba(255,255,255,.16)}
+  .rueda .centro{
+    position:absolute;inset:50% auto auto 50%;transform:translate(-50%,-50%);
+    width:33%;aspect-ratio:1/1;border-radius:50%;display:grid;place-items:center;text-align:center;
+    background:rgba(109,109,251,.16);border:1px solid rgba(109,109,251,.5);
+    font-size:clamp(11px,1.1vw,14px);font-weight:800;line-height:1.2;padding:8px;
+  }
+  .rueda .nodo{
+    position:absolute;left:50%;top:50%;width:28%;height:44px;margin-left:-14%;margin-top:-22px;
+    transform:rotate(var(--a)) translateY(calc(-1 * var(--r))) rotate(calc(-1 * var(--a)));
+    transform-origin:center;
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    background:rgba(255,255,255,.06);border:1px solid var(--linea);border-radius:12px;
+    padding:4px 6px;font-size:clamp(10.5px,1vw,13px);font-weight:700;line-height:1.15;
+  }
+
+  .cifra{font-size:clamp(38px,5.4vw,74px);font-weight:800;letter-spacing:-.045em;line-height:.92}
+  .cifra small{display:block;font-size:clamp(11px,.95vw,13.5px);font-weight:600;color:var(--muted);margin-top:6px;letter-spacing:0}
 
   /* portada */
-  .portada{align-items:flex-start;justify-content:center}
-  .marca{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:-.02em;font-size:clamp(12px,1.2vw,15px)}
-  .marca .logo{
-    width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:15px;color:#fff;
-    background:linear-gradient(135deg,var(--primario),var(--acento));box-shadow:0 10px 24px -12px var(--primario);
-  }
-  .portada h1{font-size:clamp(38px,7vw,88px);margin-top:clamp(8px,1.5vh,18px)}
-  .portada .claim{font-size:clamp(16px,2.2vw,28px);color:#c9d3e8;font-weight:500;letter-spacing:-.02em}
-  .portada .pe{font-size:clamp(11px,1.15vw,14px);color:var(--muted)}
+  .portada{align-items:flex-start}
+  .marca{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:-.02em;font-size:clamp(13px,1.25vw,16px)}
+  .logo{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;font-size:16px;color:#fff;
+        background:linear-gradient(135deg,var(--primario),var(--acento));box-shadow:0 10px 24px -12px var(--primario)}
 
   /* hud */
-  .hud{
-    position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;
-    padding:14px clamp(22px,5vw,76px);font-size:11.5px;color:#7e8aa5;z-index:5;pointer-events:none;
-  }
-  .hud .marca{font-size:12px;color:#aab4ca}
-  .hud .marca .logo{width:24px;height:24px;border-radius:8px;font-size:11px}
+  .hud{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;
+       padding:14px clamp(20px,4.4vw,64px);font-size:12px;color:#7e8aa5;z-index:5;pointer-events:none}
+  .hud .marca{font-size:12.5px;color:#aab4ca}
+  .hud .logo{width:24px;height:24px;border-radius:8px;font-size:11px}
   .contador{font-variant-numeric:tabular-nums;font-weight:700;color:#9aa5bd}
-
   .barra{position:fixed;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.08);z-index:6}
   .barra > div{height:100%;width:0;background:linear-gradient(90deg,var(--primario),var(--acento));transition:width .25s ease}
-
-  .navegacion{
-    position:fixed;right:clamp(14px,3vw,30px);bottom:clamp(14px,3vh,26px);display:flex;gap:8px;z-index:7;
-  }
-  .navegacion button{
-    width:38px;height:38px;border-radius:11px;border:1px solid var(--linea);background:rgba(255,255,255,.06);
-    color:#cfd8ea;font-size:15px;cursor:pointer;transition:background .15s,transform .12s;
-  }
-  .navegacion button:hover{background:rgba(255,255,255,.12)}
+  .navegacion{position:fixed;right:clamp(14px,3vw,30px);bottom:clamp(14px,3vh,26px);display:flex;gap:8px;z-index:7}
+  .navegacion button{width:40px;height:40px;border-radius:12px;border:1px solid var(--linea);
+       background:rgba(255,255,255,.06);color:#cfd8ea;font-size:16px;cursor:pointer;transition:background .15s,transform .12s}
+  .navegacion button:hover{background:rgba(255,255,255,.13)}
   .navegacion button:active{transform:scale(.95)}
+  .pie{position:fixed;left:clamp(20px,4.4vw,64px);bottom:clamp(16px,3vh,26px);font-size:11px;color:#5f6c86;z-index:6}
 
-  .pie{
-    position:fixed;left:clamp(22px,5vw,76px);bottom:clamp(16px,3vh,26px);font-size:10.5px;color:#63708a;z-index:6;
-  }
-
-  @media (max-width:820px){
+  @media (max-width:880px){
     .dos{grid-template-columns:1fr;gap:14px}
-    .tres,.cuatro{grid-template-columns:1fr 1fr}
-    .hud{padding:10px 16px}
+    .cinco{grid-template-columns:1fr 1fr}
+    .tres{grid-template-columns:1fr 1fr}
     .pie{display:none}
   }
   @media print{
@@ -141,223 +169,241 @@
 
 <header class="hud">
   <div class="marca"><span class="logo">U</span> USwap · Compostela</div>
-  <div class="contador"><span id="actual">1</span> / <span id="total">13</span></div>
+  <div class="contador"><span id="actual">1</span> / <span id="total">12</span></div>
 </header>
 
 <div class="deck" id="deck">
 
-  <!-- 1 · Portada -->
+  <!-- 1 -->
   <section class="slide portada activa">
-    <span class="chip oro">Demo · 5 minutos · ETSE 2026</span>
-    <div class="marca" style="margin-top:10px"><span class="logo">U</span> USwap</div>
-    <h1>Intercambia lo que sabes.</h1>
-    <p class="claim">Marketplace de favores y objetos entre estudiantes de la USC.</p>
-    <p class="pe" style="margin-top:6px">Santiago de Compostela · Universidad de Santiago de Compostela</p>
-    <p class="nota" style="margin-top:18px">Usa <b>←</b> <b>→</b> o <b>espacio</b> para navegar · <b>Ctrl + P</b> para exportar a PDF</p>
+    <span class="chip oro">Demo · 5 min · ETSE</span>
+    <div class="marca" style="margin-top:8px"><span class="logo">U</span> USwap</div>
+    <h1>Intercambia<br>lo que sabes.</h1>
+    <p class="sub" style="margin-top:12px">Favores y objetos entre estudiantes de la USC.</p>
+    <p class="nota" style="margin-top:16px">← → para pasar · Ctrl + P para PDF</p>
   </section>
 
-  <!-- 2 · Problema -->
+  <!-- 2 · por qué funciona el trueque -->
   <section class="slide">
-    <div class="kicker">01 · El problema</div>
-    <h2>No falta talento. Falta que <span class="suave">coincida</span>.</h2>
-    <p>En un campus todo el mundo sabe hacer algo que otro necesita. Pero para que haya trato tienen que coincidir tres cosas a la vez: lo que ofreces, lo que la otra persona necesita y el momento.</p>
-    <div class="dos" style="margin-top:8px">
-      <div class="tarjeta" style="border-color:rgba(251,191,36,.3);background:rgba(251,191,36,.06)">
-        <b style="color:#fde68a">El ejemplo de siempre</b>
-        <span style="color:#d8dff0;font-size:clamp(11.5px,1.15vw,14.5px);line-height:1.6">
-          Ana da clases de Python y quiere apuntes de Estadística.<br>
-          Marc tiene los apuntes, pero necesita clases de Cálculo, no de Python.<br><br>
-          Sin un tercero que cierre el círculo, <b>no hay trato</b>.
-        </span>
-      </div>
-      <div>
-        <div class="cifra">2 lados<small>que deben encajar a la vez</small></div>
-        <p class="nota" style="margin-top:14px">La economía lo llama <b>doble coincidencia de deseos</b> (Jevons, 1875). Es el motivo por el que el trueque directo casi nunca escala… y por el que se inventó el dinero.</p>
-      </div>
+    <div class="kicker">01 · El trueque ya funciona</div>
+    <h2>La gente <span class="suave">ya se intercambia cosas</span>.</h2>
+    <div class="cinco" style="margin-top:6px">
+      <div class="tarjeta"><span class="icono">🤝</span><b>Reciprocidad</b><span>Si me ayudas, te devuelvo el favor.</span></div>
+      <div class="tarjeta"><span class="icono">💸</span><b>Cero dinero</b><span>No hace falta pagar nada.</span></div>
+      <div class="tarjeta"><span class="icono">🏫</span><b>Confianza</b><span>Mismo campus, mismas clases.</span></div>
+      <div class="tarjeta"><span class="icono">📚</span><b>Ya existe</b><span>Apuntes, tiempo, un sitio en el coche.</span></div>
+      <div class="tarjeta"><span class="icono">☕</span><b>Barrio</b><span>Todo queda a un paseo.</span></div>
     </div>
+    <p style="margin-top:10px">El trueque no hay que inventarlo: <b>solo hay que hacerlo fácil</b>.</p>
   </section>
 
-  <!-- 3 · Solución -->
+  <!-- 3 · doble coincidencia -->
   <section class="slide">
-    <div class="kicker">02 · La solución</div>
-    <h2>USwap convierte un trueque imposible en <span class="suave">una red</span>.</h2>
-    <div class="cuatro" style="margin-top:10px">
-      <div class="tarjeta"><b>Tablón con filtros</b><span>Área de la petición, rama y curso. Descubre la demanda que ya existe en tu facultad.</span></div>
-      <div class="tarjeta"><b>Acuerdo a dos bandas</b><span>Nadie cierra el trato solo: una parte propone y la otra confirma. Menos falsos cierres.</span></div>
-      <div class="tarjeta"><b>Reputación y 9 rangos</b><span>Estrellas solo después de cerrar, una vez por persona. De Hierro a Radiante.</span></div>
-      <div class="tarjeta destacada"><b>Puntos con salida</b><span>10 puntos por estrella que se canjean en comercios de Compostela.</span></div>
-    </div>
-    <p class="nota" style="margin-top:12px">Cada pieza resuelve una parte del problema: el tablón resuelve el <b>descubrimiento</b>, el acuerdo a dos bandas el <b>riesgo</b>, la reputación la <b>confianza</b> y los puntos la <b>liquidez</b>.</p>
-  </section>
-
-  <!-- 4 · Empresas reales -->
-  <section class="slide">
-    <div class="kicker">03 · Validación</div>
-    <h2>Esto ya funciona en otros sitios. <span class="suave">Esto es lo que copiamos.</span></h2>
-    <div class="tres" style="margin-top:10px">
-      <div class="tarjeta"><b>Wallapop · Vinted</b><span>Compraventa entre particulares. Aprendemos que la <b>reputación</b> y el chat convierten desconocidos en clientes.</span></div>
-      <div class="tarjeta"><b>BlaBlaCar</b><span>Compartir coche entre desconocidos. Aprendemos que <b>verificación + reseñas</b> bastan para confiar sin pagar por adelantado.</span></div>
-      <div class="tarjeta"><b>Airbnb</b><span>Reseñas <b>bidireccionales</b>: ambos lados se valoran. Es exactamente nuestro modelo de valoración.</span></div>
-      <div class="tarjeta"><b>Fiverr · TaskRabbit</b><span>Habilidades y favores empaquetados como servicio. Aprendemos a <b>describir bien la oferta</b> y qué se pide a cambio.</span></div>
-      <div class="tarjeta"><b>Too Good To Go</b><span>App móvil + comercio de barrio. Aprendemos que el <b>comercio local</b> es aliado, no competencia.</span></div>
-      <div class="tarjeta"><b>Duolingo · Strava</b><span>Rachas, niveles e insignias. Aprendemos que la <b>gamificación</b> sostiene el hábito semana a semana.</span></div>
-    </div>
-  </section>
-
-  <!-- 5 · Doble coincidencia -->
-  <section class="slide">
-    <div class="kicker">04 · El nudo del problema</div>
-    <h2>La doble coincidencia se rompe con <span class="suave">una moneda interna</span>.</h2>
-    <div class="dos" style="margin-top:8px">
-      <div>
-        <p style="margin-bottom:10px">Es lo que hacen desde hace décadas las redes de <b>trueque empresarial</b> (Bartercard, ITEX) y los <b>bancos de tiempo</b>: no esperan a que dos personas quieran lo mismo, usan un crédito intermedio.</p>
-        <ul class="lista">
-          <li><i>1.</i> Das un favor o un objeto y ganas <b>puntos</b> cuando te valoran.</li>
-          <li><i>2.</i> Esos puntos <b>no caducan con la otra persona</b>: valen en cualquier comercio colaborador.</li>
-          <li><i>3.</i> El trato deja de ser bilateral: A ayuda a B, B ayuda a C, C cobra en descuentos.</li>
-        </ul>
+    <div class="kicker">02 · El nudo</div>
+    <h2>Pero dos deseos <span class="suave">casi nunca encajan</span>.</h2>
+    <div class="comparacion" style="margin-top:6px">
+      <div class="persoa">
+        <div class="nome">Ana</div>
+        <span class="da">da clases de Python</span>
+        <span class="quere">quiere apuntes de Estadística</span>
       </div>
-      <div class="tarjeta destacada">
-        <b style="margin-bottom:10px">Sin USwap</b>
-        <div class="flujo" style="margin-bottom:14px">
-          <span class="paso">Ana</span><span class="frecha">→</span><span class="paso">Marc</span><span class="frecha">✕</span>
-          <span class="nota" style="display:block;width:100%;margin-top:6px">Marc no necesita lo que Ana ofrece.</span>
-        </div>
-        <b style="margin-bottom:10px">Con USwap</b>
-        <div class="flujo">
-          <span class="paso">Ana da clase</span><span class="frecha">→</span>
-          <span class="paso">+50 pts</span><span class="frecha">→</span>
-          <span class="paso">CopyCampus</span>
-        </div>
-        <p class="nota" style="margin-top:10px">El valor no se queda atrapado en un trueque que no encaja.</p>
+      <div class="cruz">✕</div>
+      <div class="persoa">
+        <div class="nome">Marc</div>
+        <span class="da">tiene los apuntes</span>
+        <span class="quere">quiere clases de Cálculo</span>
       </div>
     </div>
+    <p class="nota" style="margin-top:8px">Doble coincidencia de deseos (Jevons, 1875): por eso existe el dinero.</p>
   </section>
 
-  <!-- 6 · Confianza -->
+  <!-- 4 · solución -->
   <section class="slide">
-    <div class="kicker">05 · Confianza</div>
-    <h2>La confianza no se pide: <span class="suave">se diseña</span>.</h2>
-    <div class="cuatro" style="margin-top:10px">
-      <div class="tarjeta"><b>+16 años</b><span>Registro con fecha de nacimiento. Comunidad con edad universitaria.</span></div>
-      <div class="tarjeta"><b>Contacto verificado</b><span>Al menos teléfono o Instagram antes de entrar. La app solo genera enlaces, el chat es externo.</span></div>
-      <div class="tarjeta"><b>Solo se valora al cerrar</b><span>Una valoración por persona y trato, y solo si ambos confirmaron el acuerdo. Sin reseñas de favor.</span></div>
-      <div class="tarjeta"><b>Acuerdo a dos bandas</b><span>Ninguna de las partes puede cerrar sola. El historial no se puede inflar.</span></div>
-    </div>
-    <p class="nota" style="margin-top:14px">Es la misma lógica que BlaBlaCar (verificación) y Airbnb (reseñas cruzadas), aplicada a favores entre estudiantes.</p>
-  </section>
+    <div class="kicker">03 · La solución</div>
+    <h2>Una moneda interna <span class="suave">rompe el nudo</span>.</h2>
+    <div class="dos" style="align-items:center">
+      <svg class="hub" viewBox="0 0 900 420" role="img" aria-label="Esquema: los puntos conectan a todos con todos">
+        <defs>
+          <marker id="fl" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto-start-reverse">
+            <path d="M0,0 L7,3 L0,6 Z" fill="#6d6dfb"/>
+          </marker>
+        </defs>
 
-  <!-- 7 · Santiago -->
-  <section class="slide">
-    <div class="kicker">06 · Por qué aquí</div>
-    <h2>Santiago es el sitio perfecto para arrancar.</h2>
-    <div class="cuatro" style="margin-top:10px">
-      <div class="tarjeta"><div class="cifra">20.000+<small>estudiantes en la USC</small></div><span>Masa crítica suficiente sin salir de una ciudad.</span></div>
-      <div class="tarjeta"><div class="cifra">3<small>campus a pie</small></div><span>Vida, Norte y Sur. Todo queda a menos de 20 minutos andando.</span></div>
-      <div class="tarjeta"><div class="cifra">2<small>grados por facultad</small></div><span>La confianza se contagia: compartes clase, biblioteca y cafetería.</span></div>
-      <div class="tarjeta"><div class="cifra">10<small>meses de curso</small></div><span>Septiembre a junio, con picos claros en exámenes y entregas de TFG.</span></div>
-    </div>
-    <p style="margin-top:12px">En Madrid o Barcelona este producto se diluye: demasiada gente, demasiada distancia, cero sentimiento de comunidad. En Compostela, si alguien no responde, <b>te lo encuentras en clase</b>.</p>
-  </section>
+        <text x="30" y="34" fill="#8390aa" font-size="15" font-weight="700" letter-spacing="2">SIN MONEDA</text>
+        <text x="490" y="34" fill="#8390aa" font-size="15" font-weight="700" letter-spacing="2">CON PUNTOS</text>
 
-  <!-- 8 · Ambientación -->
-  <section class="slide">
-    <div class="kicker">07 · Ambientada en Compostela</div>
-    <h2>Todo pasa en sitios que reconoces.</h2>
-    <div class="dos" style="margin-top:8px">
-      <ul class="lista">
-        <li><i>·</i> <b>ETSE</b> — clases de Python, arreglo de portátiles, tupper los martes.</li>
-        <li><i>·</i> <b>Campus Vida</b> — apuntes de Cálculo, repaso de Estadística.</li>
-        <li><i>·</i> <b>Biblioteca Concepción Arenal</b> — fotocopias y material compartido.</li>
-        <li><i>·</i> <b>Estación de tren</b> — plazas de coche los viernes.</li>
-        <li><i>·</i> <b>CopyCampus y Take</b> — descuentos reales al canjear puntos.</li>
-        <li><i>·</i> <b>Facultades de Derecho, Medicina, Bellas Artes…</b> — cada rama, sus habilidades.</li>
-      </ul>
-      <div class="tarjeta">
-        <b>Así se lee una oferta real</b>
-        <span style="margin-top:8px">«Clases de Python para principiantes · ETSE · pide a cambio apuntes de Estadística o un café de la máquina».</span>
-        <span style="margin-top:8px">«Te llevo en coche a la estación los viernes · salgo del parking de la ETSE a las 18:30».</span>
-        <span style="margin-top:8px">El lenguaje y los sitios son los del campus, no los de una startup genérica.</span>
+        <circle cx="120" cy="210" r="52" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.28)" stroke-width="2"/>
+        <text x="120" y="216" text-anchor="middle" fill="#eef2fb" font-size="20" font-weight="700">Ana</text>
+        <circle cx="330" cy="210" r="52" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.28)" stroke-width="2"/>
+        <text x="330" y="216" text-anchor="middle" fill="#eef2fb" font-size="20" font-weight="700">Marc</text>
+
+        <line x1="176" y1="210" x2="274" y2="210" stroke="#f87171" stroke-width="3" stroke-dasharray="9 9"/>
+        <circle cx="225" cy="210" r="23" fill="#070b18"/>
+        <text x="225" y="220" text-anchor="middle" fill="#f87171" font-size="26" font-weight="800">✕</text>
+
+        <circle cx="690" cy="210" r="58" fill="rgba(109,109,251,.20)" stroke="#6d6dfb" stroke-width="2.5"/>
+        <text x="690" y="205" text-anchor="middle" fill="#cdd7ff" font-size="17" font-weight="800">PUNTOS</text>
+        <text x="690" y="226" text-anchor="middle" fill="#9aa6c2" font-size="12">10 / estrella</text>
+
+        <line x1="690" y1="150" x2="690" y2="116" stroke="#6d6dfb" stroke-width="2.5" marker-end="url(#fl)"/>
+        <circle cx="690" cy="82" r="34" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.28)" stroke-width="2"/>
+        <text x="690" y="87" text-anchor="middle" fill="#eef2fb" font-size="15" font-weight="700">Ana</text>
+
+        <line x1="750" y1="210" x2="784" y2="210" stroke="#6d6dfb" stroke-width="2.5" marker-end="url(#fl)"/>
+        <circle cx="818" cy="210" r="34" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.28)" stroke-width="2"/>
+        <text x="818" y="215" text-anchor="middle" fill="#eef2fb" font-size="15" font-weight="700">Marc</text>
+
+        <line x1="690" y1="270" x2="690" y2="304" stroke="#6d6dfb" stroke-width="2.5" marker-end="url(#fl)"/>
+        <circle cx="690" cy="338" r="34" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.28)" stroke-width="2"/>
+        <text x="690" y="343" text-anchor="middle" fill="#eef2fb" font-size="15" font-weight="700">Lucía</text>
+
+        <line x1="630" y1="210" x2="596" y2="210" stroke="#6d6dfb" stroke-width="2.5" marker-end="url(#fl)"/>
+        <circle cx="562" cy="210" r="34" fill="rgba(251,191,36,.14)" stroke="rgba(251,191,36,.55)" stroke-width="2"/>
+        <text x="562" y="215" text-anchor="middle" fill="#fde68a" font-size="14" font-weight="700">CopyCampus</text>
+      </svg>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="tarjeta destacada"><b>1 · Publicas lo que necesitas</b><span>Quien responde propone qué quiere a cambio.</span></div>
+        <div class="tarjeta destacada"><b>2 · Ganas puntos</b><span>Te valoran al cerrar; valen con cualquiera.</span></div>
+        <div class="tarjeta destacada"><b>3 · Los gastas</b><span>Descuentos en comercios de Compostela.</span></div>
       </div>
     </div>
   </section>
 
-  <!-- 9 · Arranque -->
+  <!-- 5 · confianza -->
   <section class="slide">
-    <div class="kicker">08 · Arranque</div>
-    <h2>La bola de nieve: de 30 personas a todo el campus.</h2>
-    <div class="cuatro" style="margin-top:10px">
-      <div class="tarjeta"><b>Fase 0 · Núcleo</b><span>4 fundadores + 30 amigos de la ETSE. 20 ofertas reales antes de abrir. Que el tablón nunca esté vacío.</span></div>
-      <div class="tarjeta"><b>Fase 1 · Embajadores</b><span>Un embajador por grado. Reto entre facultades: cuál cierra más tratos en una semana.</span></div>
-      <div class="tarjeta"><b>Fase 2 · Comercios</b><span>10 comercios colaboradores. Sus descuentos son la razón para registrarse incluso sin trato.</span></div>
-      <div class="tarjeta"><b>Fase 3 · Asignaturas</b><span>Grupos de WhatsApp y Telegram por asignatura. QR en fotocopiadoras, cafeterías y bibliotecas.</span></div>
+    <div class="kicker">04 · Confianza</div>
+    <h2>La confianza <span class="suave">se diseña</span>.</h2>
+    <div class="tres" style="margin-top:6px">
+      <div class="tarjeta"><span class="icono">🎓</span><b>+16 años</b><span>Comunidad universitaria.</span></div>
+      <div class="tarjeta"><span class="icono">✅</span><b>Contacto verificado</b><span>Teléfono o Instagram antes de entrar.</span></div>
+      <div class="tarjeta"><span class="icono">⭐</span><b>Solo tras cerrar</b><span>Una valoración por persona y trato.</span></div>
+      <div class="tarjeta"><span class="icono">🤝</span><b>Acuerdo a dos bandas</b><span>Nadie cierra solo.</span></div>
+      <div class="tarjeta"><span class="icono">🏆</span><b>9 rangos</b><span>De Hierro a Radiante.</span></div>
+      <div class="tarjeta"><span class="icono">🔒</span><b>Descuentos privados</b><span>Solo se ven en tu perfil.</span></div>
     </div>
-    <p class="nota" style="margin-top:12px">Regla de oro: <b>una facultad a la vez</b>. Mejor 200 usuarios activos en la ETSE que 2.000 dispersos por toda Galicia.</p>
   </section>
 
-  <!-- 10 · Bucle viral -->
+  <!-- 6 · Santiago -->
   <section class="slide">
-    <div class="kicker">09 · Crecimiento</div>
-    <h2>El propio trato es el canal de captación.</h2>
-    <div class="flujo" style="margin:14px 0 6px">
-      <span class="paso">Publicas</span><span class="frecha">→</span>
-      <span class="paso">Alguien responde</span><span class="frecha">→</span>
-      <span class="paso">Acuerdo a dos bandas</span><span class="frecha">→</span>
-      <span class="paso">Os valoráis</span><span class="frecha">→</span>
-      <span class="paso">Ganas puntos</span><span class="frecha">→</span>
-      <span class="paso">Descuento en CopyCampus</span>
-    </div>
-    <div class="dos" style="margin-top:6px">
-      <p>Cada intercambio implica a <b>dos personas</b>: la otra parte entra en la app obligatoriamente para confirmar el acuerdo y valorar. No hay que inventar un programa de referidos, el flujo del trato ya es la invitación.</p>
-      <div class="tarjeta oro">
-        <b>Palancas de viralidad</b>
-        <span style="margin-top:6px">· El rango y la corona del Nº 1 se ven en el perfil → ganas de subir.</span>
-        <span style="margin-top:4px">· Los descuentos se presumen («me han dado un 10% en CopyCampus»).</span>
-        <span style="margin-top:4px">· El tablón vacío se evita sembrando cada facultad antes de abrirla.</span>
+    <div class="kicker">05 · Compostela</div>
+    <h2>Todo queda <span class="suave">a un paseo</span>.</h2>
+    <div class="dos" style="align-items:center">
+      <svg class="mapa" viewBox="0 0 620 360" role="img" aria-label="Mapa esquemático del campus">
+        <rect x="0" y="0" width="620" height="360" rx="26" fill="rgba(255,255,255,.035)" stroke="rgba(255,255,255,.10)"/>
+        <g stroke="rgba(255,255,255,.06)" stroke-width="1">
+          <path d="M0 90 H620"/><path d="M0 180 H620"/><path d="M0 270 H620"/>
+          <path d="M120 0 V360"/><path d="M240 0 V360"/><path d="M360 0 V360"/><path d="M480 0 V360"/>
+        </g>
+        <path d="M140 96 L300 150 L262 246 L404 268 L486 130" fill="none" stroke="rgba(109,109,251,.55)" stroke-width="3" stroke-dasharray="7 8" stroke-linecap="round"/>
+        <g>
+          <circle cx="140" cy="96" r="9" fill="#6d6dfb"/><text x="156" y="101" fill="#eef2fb" font-size="15" font-weight="700">ETSE</text>
+          <circle cx="300" cy="150" r="9" fill="#6d6dfb"/><text x="316" y="155" fill="#eef2fb" font-size="15" font-weight="700">Campus Vida</text>
+          <circle cx="262" cy="246" r="9" fill="#6d6dfb"/><text x="278" y="251" fill="#eef2fb" font-size="15" font-weight="700">Biblioteca</text>
+          <circle cx="404" cy="268" r="9" fill="#6d6dfb"/><text x="420" y="273" fill="#eef2fb" font-size="15" font-weight="700">Obradoiro</text>
+          <circle cx="486" cy="130" r="9" fill="#fbbf24"/><text x="502" y="135" fill="#fde68a" font-size="15" font-weight="700">Estación</text>
+        </g>
+        <text x="26" y="332" fill="#8390aa" font-size="13">Mapa esquemático · 15 min a pie entre extremos</text>
+      </svg>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="cifra">20.000+<small>estudiantes en la USC</small></div>
+        <div class="cifra">3<small>campus a pie</small></div>
+        <p class="nota">Si alguien no responde, te lo encuentras en clase.</p>
       </div>
     </div>
   </section>
 
-  <!-- 11 · Métricas -->
+  <!-- 7 · bola de nieve -->
   <section class="slide">
-    <div class="kicker">10 · Cómo sabemos si funciona</div>
-    <h2>Cuatro números y una regla.</h2>
-    <div class="cuatro" style="margin-top:10px">
-      <div class="tarjeta"><div class="cifra">40%<small>publica en 7 días</small></div><span>Activación: si no publicas, no existes para los demás.</span></div>
-      <div class="tarjeta"><div class="cifra">&lt;48 h<small>primer acuerdo</small></div><span>Un tablón que no genera respuestas en dos días se muere.</span></div>
-      <div class="tarjeta"><div class="cifra">60%<small>acuerdos que se cierran</small></div><span>Del «hemos llegado a un acuerdo» al cierre confirmado por los dos.</span></div>
-      <div class="tarjeta"><div class="cifra">2,5<small>invitados por trato</small></div><span>Crecimiento: cada trato arrastra a la otra parte y a su grupo.</span></div>
+    <div class="kicker">06 · Arranque</div>
+    <h2>Bola de nieve, <span class="suave">una facultad a la vez</span>.</h2>
+    <div class="barras" style="margin-top:6px">
+      <div class="barra-col"><div class="valor">30</div><div class="barra" style="height:12%"></div><div class="cando">Semana 1<br>núcleo ETSE</div></div>
+      <div class="barra-col"><div class="valor">200</div><div class="barra" style="height:34%"></div><div class="cando">Mes 1<br>embajadores</div></div>
+      <div class="barra-col"><div class="valor">800</div><div class="barra" style="height:68%"></div><div class="cando">Mes 3<br>3 facultades</div></div>
+      <div class="barra-col"><div class="valor">2.000</div><div class="barra" style="height:100%"></div><div class="cando">Curso<br>todo el campus</div></div>
     </div>
-    <p class="nota" style="margin-top:12px">Son objetivos de piloto, no promesas: en la demo medimos activación, acuerdos, cierres y valoraciones por semana.</p>
+    <p class="nota" style="margin-top:6px">Objetivo de piloto, no promesa: sembramos 20 ofertas antes de abrir cada facultad.</p>
   </section>
 
-  <!-- 12 · Riesgos -->
+  <!-- 8 · bucle -->
   <section class="slide">
-    <div class="kicker">11 · Riesgos</div>
-    <h2>Qué puede salir mal y qué hacemos.</h2>
-    <div class="tres" style="margin-top:10px">
-      <div class="tarjeta"><b>Masa crítica</b><span>Arrancamos facultad a facultad y sembramos 20 ofertas antes de abrir cada una.</span></div>
-      <div class="tarjeta"><b>Seguridad</b><span>+16 años, contacto verificado, sin pagos dentro de la app y valoración solo tras cierre real.</span></div>
-      <div class="tarjeta"><b>Tratos que no se cierran</b><span>El acuerdo a dos bandas evita que una parte marque el trato como hecho sin la otra.</span></div>
-      <div class="tarjeta"><b>Estacionalidad</b><span>En verano el volumen cae: los descuentos en comercios y el campus de Lugo y Pontevedra lo compensan.</span></div>
-      <div class="tarjeta"><b>Poca oferta al principio</b><span>Los descuentos y el perfil con rango dan valor aunque todavía no haya trato perfecto.</span></div>
-      <div class="tarjeta"><b>Datos y privacidad</b><span>Los descuentos son privados: solo se ven en tu propio perfil. El contacto se muestra únicamente a quien lo abre.</span></div>
+    <div class="kicker">07 · Crecimiento</div>
+    <h2>El trato <span class="suave">es la invitación</span>.</h2>
+    <div class="dos" style="grid-template-columns:.9fr 1.1fr;align-items:center">
+      <div class="rueda">
+        <div class="anel"></div>
+        <div class="centro">Cada trato<br>trae a 2</div>
+        <div class="nodo" style="--a:0deg;--r:clamp(100px,13vh,135px)">Publicas</div>
+        <div class="nodo" style="--a:72deg;--r:clamp(100px,13vh,135px)">Te responden</div>
+        <div class="nodo" style="--a:144deg;--r:clamp(100px,13vh,135px)">Acuerdo</div>
+        <div class="nodo" style="--a:216deg;--r:clamp(100px,13vh,135px)">Os valoráis</div>
+        <div class="nodo" style="--a:288deg;--r:clamp(100px,13vh,135px)">Puntos y descuento</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="tarjeta oro"><b>👑 Corona al Nº 1</b><span>Estatus visible en el perfil.</span></div>
+        <div class="tarjeta oro"><b>☕ Descuento real</b><span>Se presume fuera de la app.</span></div>
+        <div class="tarjeta oro"><b>👥 La otra parte entra</b><span>Para confirmar el acuerdo tiene que registrarse.</span></div>
+      </div>
     </div>
   </section>
 
-  <!-- 13 · Cierre -->
+  <!-- 9 · empresas: intercambio de cosas -->
+  <section class="slide">
+    <div class="kicker">08 · Ya funciona</div>
+    <h2>Intercambiar cosas <span class="suave">no es nuevo</span>.</h2>
+    <div class="cuatro compacta" style="margin-top:4px">
+      <div class="tarjeta"><span class="etiqueta">Segunda mano</span><b>Vinted</b><span>Ropa usada entre personas.</span></div>
+      <div class="tarjeta"><span class="etiqueta">Segunda mano</span><b>Wallapop</b><span>Compraventa de barrio.</span></div>
+      <div class="tarjeta"><span class="etiqueta">Cambio puro</span><b>Swapz</b><span>Cambiar sin pagar.</span></div>
+      <div class="tarjeta"><span class="etiqueta">Cambio puro</span><b>BookMooch</b><span>Libros por libros.</span></div>
+      <div class="tarjeta"><span class="etiqueta verde">Regalo</span><b>Freecycle</b><span>Regalar en vez de tirar.</span></div>
+      <div class="tarjeta"><span class="etiqueta verde">Regalo</span><b>Buy Nothing</b><span>Regalar entre vecinos.</span></div>
+      <div class="tarjeta"><span class="etiqueta verde">Regalo</span><b>OLIO</b><span>Comida y objetos que sobran.</span></div>
+      <div class="tarjeta"><span class="etiqueta">Casas</span><b>HomeExchange</b><span>Tu casa por otra casa.</span></div>
+    </div>
+  </section>
+
+  <!-- 10 · empresas: trueque y tiempo -->
+  <section class="slide">
+    <div class="kicker">09 · Ya funciona</div>
+    <h2>Y el trueque <span class="suave">también es industria</span>.</h2>
+    <div class="tres" style="margin-top:4px">
+      <div class="tarjeta"><span class="etiqueta oro">Trueque</span><b>Bartercard</b><span>Empresas que cambian con créditos.</span></div>
+      <div class="tarjeta"><span class="etiqueta oro">Trueque</span><b>ITEX</b><span>Red de intercambio entre negocios.</span></div>
+      <div class="tarjeta"><span class="etiqueta oro">Trueque</span><b>BarterQuest</b><span>Cambiar bienes y servicios.</span></div>
+      <div class="tarjeta"><span class="etiqueta">Tiempo</span><b>TimeBanks</b><span>Una hora por una hora.</span></div>
+      <div class="tarjeta"><span class="etiqueta">Hospitalidad</span><b>Couchsurfing</b><span>Sofá a cambio de nada.</span></div>
+      <div class="tarjeta"><span class="etiqueta">Hospitalidad</span><b>Workaway</b><span>Trabajo por alojamiento.</span></div>
+    </div>
+    <p class="nota" style="margin-top:6px">Bartercard e ITEX son la prueba de que una moneda interna hace funcionar el trueque a gran escala.</p>
+  </section>
+
+  <!-- 10 · métricas -->
+  <section class="slide">
+    <div class="kicker">10 · Cómo lo medimos</div>
+    <h2>Cuatro números.</h2>
+    <div class="dos" style="grid-template-columns:repeat(4,1fr);gap:14px">
+      <div class="tarjeta"><div class="cifra">40%<small>publica en 7 días</small></div></div>
+      <div class="tarjeta"><div class="cifra">&lt;48h<small>primer acuerdo</small></div></div>
+      <div class="tarjeta"><div class="cifra">60%<small>acuerdos cerrados</small></div></div>
+      <div class="tarjeta"><div class="cifra">2,5<small>invitados por trato</small></div></div>
+    </div>
+    <p class="nota" style="margin-top:10px">Objetivos de piloto. En la demo medimos activación, acuerdos, cierres y valoraciones por semana.</p>
+  </section>
+
+  <!-- 11 · cierre -->
   <section class="slide portada">
-    <div class="kicker">12 · Cierre</div>
-    <h1 style="font-size:clamp(30px,5.4vw,68px)">Compostela ya comparte.<br>USwap lo pone en una app.</h1>
-    <p class="claim" style="margin-top:10px">El siguiente paso es un piloto en la ETSE: 200 estudiantes, 10 comercios y un mes de acuerdos.</p>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px">
-      <span class="chip"><span class="punto"></span> Tablón con filtros</span>
+    <div class="kicker">11 · Cierre</div>
+    <h1 style="font-size:clamp(34px,5.6vw,74px)">Compostela ya comparte.<br>USwap lo pone en una app.</h1>
+    <p class="sub" style="margin-top:12px">Piloto ETSE: 200 estudiantes · 10 comercios · 1 mes.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px">
+      <span class="chip"><span class="punto"></span> Tablón</span>
       <span class="chip"><span class="punto"></span> Acuerdo a dos bandas</span>
       <span class="chip"><span class="punto"></span> 9 rangos</span>
       <span class="chip oro">👑 Nº 1 con corona</span>
-      <span class="chip"><span class="punto"></span> Descuentos con puntos</span>
+      <span class="chip"><span class="punto"></span> Descuentos</span>
     </div>
-    <p class="nota" style="margin-top:20px">Demo: <b>USwap</b> · Santiago de Compostela · USC</p>
   </section>
 
 </div>
@@ -372,7 +418,6 @@
 <script>
 (function () {
   'use strict';
-
   var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
   var total = slides.length;
   var i = 0;
@@ -386,7 +431,6 @@
     document.getElementById('barra').style.width = ((i + 1) / total * 100) + '%';
     if (history.replaceState) history.replaceState(null, '', '#' + (i + 1));
   }
-
   function siguiente() { pintar(i + 1); }
   function anterior() { pintar(i - 1); }
 
@@ -395,11 +439,9 @@
       e.preventDefault(); siguiente();
     } else if (e.key === 'ArrowLeft' || e.key === 'PageUp' || e.key === 'Backspace') {
       e.preventDefault(); anterior();
-    } else if (e.key === 'Home') {
-      e.preventDefault(); pintar(0);
-    } else if (e.key === 'End') {
-      e.preventDefault(); pintar(total - 1);
-    } else if (e.key === 'f' || e.key === 'F') {
+    } else if (e.key === 'Home') { e.preventDefault(); pintar(0); }
+    else if (e.key === 'End') { e.preventDefault(); pintar(total - 1); }
+    else if (e.key === 'f' || e.key === 'F') {
       if (document.fullscreenElement) document.exitFullscreen();
       else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
     }
@@ -408,7 +450,6 @@
   document.getElementById('prev').addEventListener('click', anterior);
   document.getElementById('next').addEventListener('click', siguiente);
 
-  /* deslizar en móvil */
   var x0 = null;
   document.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
   document.addEventListener('touchend', function (e) {
