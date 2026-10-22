@@ -100,10 +100,31 @@
   }
 
   /* --------------------------------------------------- credencial superior */
+  var corRango = nivel.color || '#5b5bf6';
+  var corMarco = nivel.marco || '#8b5cf6';
+
+  function aclarar(hex, cantidade) {
+    if (!/^#[0-9a-f]{6}$/i.test(hex || '')) return hex;
+    function canal(i) {
+      var v = parseInt(hex.substr(i, 2), 16);
+      return Math.round(v + (255 - v) * cantidade);
+    }
+    return 'rgb(' + canal(1) + ',' + canal(3) + ',' + canal(5) + ')';
+  }
+  if (corRango === corMarco) corRango = aclarar(corRango, 0.38);
+
+  var intensidade = 0.18 + ratio * 0.34;
+
   document.getElementById('perfil').innerHTML = '' +
-    '<div style="position:relative;border-radius:22px;padding:18px 18px 42px;color:#fff;' +
-      'background:radial-gradient(120% 115% at 88% -18%, rgba(91,91,246,.62) 0%, rgba(91,91,246,0) 58%),' +
-      'linear-gradient(158deg,#16203a 0%,#0d1424 100%)">' +
+    '<div style="position:relative">' +
+      '<div id="marco-glow" style="position:absolute;inset:-3px;border-radius:26px;pointer-events:none;' +
+        'background:linear-gradient(140deg,' + corMarco + ',' + corRango + ',' + corMarco + ');' +
+        'filter:blur(16px);opacity:' + intensidade.toFixed(2) + '"></div>' +
+      '<div style="position:relative;border-radius:23px;padding:2px;' +
+        'background:linear-gradient(140deg,' + corMarco + ',' + corRango + ' 45%,' + corMarco + ')">' +
+        '<div style="border-radius:21px;padding:18px 18px 42px;color:#fff;' +
+          'background:radial-gradient(120% 115% at 88% -18%, rgba(91,91,246,.42) 0%, rgba(91,91,246,0) 58%),' +
+          'linear-gradient(158deg,#16203a 0%,#0d1424 100%)">' +
 
       '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;' +
         'font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.48)">' +
@@ -134,8 +155,7 @@
             UI.curso(u.curso) + ' · ' + UI.esc(u.rama) + '</div>' +
           '<div style="margin-top:7px;font-size:8.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;' +
             'color:rgba(255,255,255,.34)">USC · Santiago de Compostela</div>' +
-          '<div style="margin-top:7px;width:38px;height:3px;border-radius:99px;background:' +
-            (nivel.marco || 'rgba(255,255,255,.25)') + '"></div>' +
+          '<div style="margin-top:7px;width:38px;height:3px;border-radius:99px;background:' + corMarco + '"></div>' +
         '</div>' +
       '</div>' +
 
@@ -205,6 +225,8 @@
         ? '<div style="display:flex;justify-content:center;gap:18px;margin-top:15px;padding-top:13px;' +
             'border-top:1px solid rgba(255,255,255,.12)">' + micro + '</div>'
         : '') +
+        '</div>' +
+      '</div>' +
     '</div>' +
 
     /* --- ficha de cifras, montada sobre la credencial --- */
@@ -274,6 +296,16 @@
     '<div class="usuario-detalle" style="margin:8px 4px 0;line-height:1.5">' +
       'Se canjean enseñando tu credencial USwap en el comercio.' +
     '</div>';
+
+  /* --- brillo animado del marco según el rango --- */
+  var marcoGlow = document.getElementById('marco-glow');
+  var senMovemento = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  if (marcoGlow && marcoGlow.animate && !senMovemento) {
+    marcoGlow.animate([
+      { opacity: intensidade, transform: 'scale(.995)' },
+      { opacity: Math.min(intensidade + 0.28, 0.95), transform: 'scale(1.012)' }
+    ], { duration: 2400, iterations: Infinity, direction: 'alternate', easing: 'ease-in-out' });
+  }
 
   /* --------------------------------------------------- títulos que dependen de quién es */
   var tituloOfertas = document.getElementById('titulo-ofertas');
@@ -402,9 +434,10 @@
         (i < rangos.length - 1 && !actual ? 'border-bottom:1px solid #eef1f7;' : '') + '">' +
         '<span style="flex:0 0 auto;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;' +
           'font-size:10px;font-weight:800;background:' + (actual ? '#fff' : '#f1f4fa') + ';' +
-          'color:' + (actual ? 'var(--primario-oscuro)' : '#8592a6') + '">' + (i + 1) + '</span>' +
+          'color:' + (actual ? 'var(--primario-oscuro)' : (n.color || '#8592a6')) + '">' + (i + 1) + '</span>' +
         '<span style="flex:1;min-width:0">' +
-          '<span style="display:block;font-size:13px;font-weight:700;letter-spacing:-.1px">' + UI.esc(n.nombre) + '</span>' +
+          '<span style="display:block;font-size:13px;font-weight:700;letter-spacing:-.1px;color:' +
+            (n.color || '#0f172a') + '">' + UI.esc(n.nombre) + '</span>' +
           '<span style="display:block;margin-top:1px;font-size:10.5px;color:var(--muted)">' +
             (n.min <= 0 ? 'Desde el inicio' : 'Desde ' + n.min + (n.min === 1 ? ' punto' : ' puntos')) + '</span>' +
         '</span>' +
@@ -430,7 +463,7 @@
       '<div>' +
         '<div style="font-size:9px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)">' +
           'Escalera de rangos</div>' +
-        '<h2 style="margin:8px 0 3px;font-size:20px;letter-spacing:-.6px">' + UI.esc(nivel.nombre) + '</h2>' +
+        '<h2 style="margin:8px 0 3px;font-size:20px;letter-spacing:-.6px;color:' + corRango + '">' + UI.esc(nivel.nombre) + '</h2>' +
         '<div class="usuario-detalle">' + UI.esc(u.nombre) + ' · ' + puntos +
           (Math.abs(puntos) === 1 ? ' punto' : ' puntos') + '</div>' +
       '</div>' +
