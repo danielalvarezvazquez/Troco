@@ -162,7 +162,7 @@
       yo.carrera = carrera.value;
     }
 
-    UI.toast('Petición publicada');
+    UI.toast('Publicado. A ver si alguien se anima.');
     setTimeout(function () { window.location.href = 'index.html'; }, 700);
   });
 

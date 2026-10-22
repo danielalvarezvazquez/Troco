@@ -757,6 +757,27 @@ body {
 .card-cta { color: var(--oro-oscuro); }
 .card:hover .card-titulo { color: var(--oro-oscuro); }
 
+/* al final del tablón: invita a publicar si no encuentras nada */
+.sugerencia-publicar {
+  display: block;
+  margin-top: 4px;
+  padding: 13px 14px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 12.5px;
+  font-weight: 650;
+  color: var(--oro-oscuro);
+  background: rgba(234, 179, 8, .07);
+  border: 1px dashed rgba(161, 98, 7, .38);
+  border-radius: 14px;
+  transition: background .15s, border-color .15s, transform .12s;
+}
+.sugerencia-publicar:hover {
+  background: rgba(234, 179, 8, .12);
+  border-color: rgba(161, 98, 7, .6);
+}
+.sugerencia-publicar:active { transform: scale(.99); }
+
 /* botón flotante de subir, en oro */
 .arriba {
   background: linear-gradient(135deg, #fde047, #a16207);

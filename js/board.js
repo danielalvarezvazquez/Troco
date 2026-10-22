@@ -163,7 +163,7 @@
           '<span class="card-acciones">' +
             (o.destacada ? '<span class="badge badge-ambar">★ Destacada</span>' : '') +
             (autor.avisoBaneo ? '<span class="badge badge-rojo">⚠ En observación</span>' : '') +
-            '<span class="card-cta">Ver <span aria-hidden="true">→</span></span>' +
+            '<span class="card-cta">Ver y responder <span aria-hidden="true">→</span></span>' +
           '</span>' +
         '</div>' +
       '</a>';
@@ -216,13 +216,25 @@
       return;
     }
 
-    elLista.innerHTML = resultados.map(tarjeta).join('');
+    elLista.innerHTML = resultados.map(tarjeta).join('') +
+      '<a class="sugerencia-publicar" href="publicar.html">' +
+        '¿No está lo que buscas? Publícalo →' +
+      '</a>';
     elInfo.textContent = resultados.length + (resultados.length === 1 ? ' petición' : ' peticiones') +
       (filtro.categoria || filtro.area || filtro.carrera || filtro.curso ? ' · filtros activos' : '');
   }
 
   /* ---- arranque --------------------------------------------------------- */
   UI.montarNav('inicio');
+
+  /* saludo con el nombre de quien está mirando: suena a persona, no a app */
+  var yo = USWAP.usuario(USWAP.yo());
+  var elSub = document.getElementById('hero-sub');
+  if (yo && elSub) {
+    elSub.textContent = 'Buenas, ' + yo.nombre.split(' ')[0] +
+      '. Esto es lo que piden otros estudiantes de la USC.';
+  }
+
   pintarFiltros();
   pintarLista();
 
