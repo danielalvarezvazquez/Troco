@@ -180,13 +180,13 @@
               'gap:11px;padding:13px 0;text-decoration:none;color:inherit' +
               (i < ofertas.length - 1 ? ';border-bottom:1px solid #eef1f7' : '') + '">' +
             '<span style="flex:0 0 auto;width:6px;height:6px;border-radius:99px;background:' +
-              (o.estado === 'cerrada' ? '#cbd5e1' : '#16a34a') + '"></span>' +
+              (o.estado === 'cerrada' ? '#cbd5e1' : (o.estado === 'acordada' ? '#d97706' : '#16a34a')) + '"></span>' +
             '<span style="flex:1;min-width:0">' +
               '<span style="display:block;font-size:13.5px;font-weight:650;line-height:1.35;letter-spacing:-.1px">' +
                 UI.esc(o.titulo) + '</span>' +
               '<span style="display:block;margin-top:3px;font-size:11px;color:var(--muted)">' +
                 UI.esc(o.categoria) + ' · ' + UI.tiempo(o.creadaEn) +
-                (o.estado === 'cerrada' ? ' · Cerrada' : '') + '</span>' +
+                (o.estado === 'cerrada' ? ' · Cerrada' : (o.estado === 'acordada' ? ' · Acuerdo pendiente' : '')) + '</span>' +
             '</span>' +
             '<span style="flex:0 0 auto;color:#c3cbdb;font-size:18px;line-height:1">›</span>' +
           '</a>';
