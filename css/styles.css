@@ -394,6 +394,23 @@ body {
 
 .oculto { display: none !important; }
 
+/* aviso de error de JavaScript: nunca dejar la página en blanco */
+.error-js {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  background: #7f1d1d;
+  color: #fff;
+  padding: 12px 16px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  box-shadow: 0 10px 30px -12px rgba(0, 0, 0, .6);
+}
+.error-js b { display: block; font-size: 13.5px; margin-bottom: 2px; }
+.error-js span { display: block; color: rgba(255, 255, 255, .88); }
+.error-js code { display: block; margin-top: 6px; font-size: 11px; color: rgba(255, 255, 255, .7); word-break: break-word; }
+
 /* ------------------------------------------------------------------ detalles */
 .detalle-cabecera { display: flex; gap: 12px; align-items: flex-start; }
 .detalle-titulo { margin: 0 0 6px; font-size: 20px; line-height: 1.25; letter-spacing: -.5px; }

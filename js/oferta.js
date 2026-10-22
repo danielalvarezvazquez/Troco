@@ -27,11 +27,20 @@
   var autor = USWAP.usuario(oferta.autorId) || { nombre: 'Anónimo', carrera: '', curso: '', color: '#94a3b8' };
   var media = USWAP.mediaDe(autor.id);
   var numVal = USWAP.valoracionesDe(autor.id).length;
+
+  /* Si el navegador tiene una versión antigua de data.js en caché, la página
+     debe seguir viéndose: se avisa en el bloque de trato en vez de romperse. */
+  var apiAcuerdo = typeof USWAP.proponerAcuerdo === 'function' &&
+                   typeof USWAP.confirmarAcuerdo === 'function' &&
+                   typeof USWAP.participantes === 'function' &&
+                   typeof USWAP.otraParteDe === 'function';
+
   var estado = oferta.estado || 'abierta';
   var confirmados = (oferta.acuerdo && oferta.acuerdo.confirmadoPor) || [];
   var yoConfirme = confirmados.indexOf(yo) !== -1;
-  var otraParte = USWAP.otraParteDe(oferta.id);
-  var yaValorado = USWAP.yaValoro(oferta.id, yo);
+  var participantes = apiAcuerdo ? USWAP.participantes(oferta.id) : [oferta.autorId];
+  var otraParte = apiAcuerdo ? USWAP.otraParteDe(oferta.id) : null;
+  var yaValorado = (typeof USWAP.yaValoro === 'function') ? USWAP.yaValoro(oferta.id, yo) : false;
 
   var enlaceWa = 'https://wa.me/' + encodeURIComponent(autor.whatsapp || '') +
     '?text=' + encodeURIComponent('Hola ' + autor.nombre + ', he visto tu oferta "' + oferta.titulo +
@@ -60,13 +69,22 @@
   }
 
   function avataresParticipantes() {
-    return USWAP.participantes(oferta.id).map(function (uid) {
+    return participantes.map(function (uid) {
       var u = USWAP.usuario(uid);
       return u ? UI.avatar(u, 'pequeno') : '';
     }).join('');
   }
 
   function bloqueAcuerdo() {
+    if (!apiAcuerdo) {
+      return '<div class="bloque acuerdo">' +
+        '<div class="acuerdo-titulo">Hay una versión antigua en caché</div>' +
+        '<p class="acuerdo-texto">La página funciona, pero el cierre del trato no está disponible. ' +
+          'Pulsa <b>Ctrl + F5</b> para recargar sin caché; si sigue igual, arranca el servidor con ' +
+          '<code>abrir-app.bat</code>.</p>' +
+      '</div>';
+    }
+
     if (estado === 'abierta') {
       return '<div class="bloque acuerdo">' +
         '<div class="acuerdo-titulo">¿Habéis llegado a un acuerdo?</div>' +

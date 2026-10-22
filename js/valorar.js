@@ -38,7 +38,7 @@
     return;
   }
 
-  if (oferta && USWAP.yaValoro(oferta.id, USWAP.yo())) {
+  if (oferta && typeof USWAP.yaValoro === 'function' && USWAP.yaValoro(oferta.id, USWAP.yo())) {
     volver('Ya has valorado este trato',
       'Solo se puede valorar una vez por intercambio. Tu comentario ya aparece en el perfil de la otra persona.',
       'index.html', 'Volver al tablón');
@@ -46,7 +46,7 @@
   }
 
   var valorado = conId ? USWAP.usuario(conId) : null;
-  if (!valorado && oferta) valorado = USWAP.otraParteDe(oferta.id);
+  if (!valorado && oferta && typeof USWAP.otraParteDe === 'function') valorado = USWAP.otraParteDe(oferta.id);
   if (!valorado) {
     var candidatos = USWAP.usuarios().filter(function (u) { return u.id !== USWAP.yo(); });
     valorado = candidatos[0] || USWAP.usuario(USWAP.yo());
