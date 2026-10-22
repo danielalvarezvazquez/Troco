@@ -161,7 +161,7 @@
     if (!el || !yo) return;
 
     el.innerHTML =
-      '<div class="bloque" style="background:linear-gradient(135deg,#5b5bf6,#8b5cf6);color:#fff;border:none">' +
+      '<div class="bloque" style="position:relative;overflow:hidden;background:radial-gradient(420px 200px at 100% 0%,rgba(234,179,8,.18),rgba(234,179,8,0) 70%),linear-gradient(160deg,#1e293b 0%,#0f172a 72%);color:#fff;border:1px solid rgba(234,179,8,.30);box-shadow:0 22px 44px -30px rgba(15,23,42,.95)">' +
         '<div style="display:flex;align-items:center;gap:11px">' +
           avatarConMarco(yo, miNivel) +
           '<div class="usuario-linea" style="flex:1">' +

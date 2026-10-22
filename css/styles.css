@@ -661,3 +661,123 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* ==========================================================================
+   ESTILO CREDENCIAL (el del perfil) EN TODA LA APP
+   --------------------------------------------------------------------------
+   Azul noche + filo y detalles en oro, como la credencial del perfil. Los
+   paneles oscuros llevan el mismo degradado y el mismo brillo; el contenido
+   sigue en tarjetas blancas para que se lea igual de bien.
+   ========================================================================== */
+
+:root {
+  --noche: #0f172a;
+  --noche-2: #1e293b;
+  --oro: #eab308;
+  --oro-oscuro: #a16207;
+  --oro-texto: #facc15;
+}
+
+/* barra superior oscura, con filo de oro */
+.topbar {
+  background: rgba(15, 23, 42, .94);
+  border-bottom: 1px solid rgba(234, 179, 8, .26);
+  box-shadow: 0 10px 30px -24px rgba(0, 0, 0, .9);
+}
+.marca { color: #f8fafc; }
+.marca-punto {
+  background: linear-gradient(135deg, #facc15, #a16207);
+  color: #231a00;
+  box-shadow: 0 0 22px -6px rgba(234, 179, 8, .85);
+}
+.selector-yo {
+  background-color: rgba(30, 41, 59, .95);
+  border-color: rgba(255, 255, 255, .16);
+  color: #e2e8f0;
+  background-repeat: no-repeat;
+  background-position: right 11px center;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M1 3l4 4 4-4' stroke='%23cbd5e1' stroke-width='1.6' fill='none' stroke-linecap='round'/></svg>");
+}
+.selector-yo:hover { border-color: rgba(234, 179, 8, .55); }
+
+/* el hero pasa a ser una mini credencial */
+.hero {
+  background:
+    radial-gradient(420px 200px at 100% 0%, rgba(234, 179, 8, .16), rgba(234, 179, 8, 0) 70%),
+    linear-gradient(160deg, #1e293b 0%, #0f172a 72%);
+  border: 1px solid rgba(234, 179, 8, .28);
+  border-radius: 20px;
+  padding: 16px 16px 15px;
+  margin-bottom: 14px;
+  box-shadow: 0 20px 44px -30px rgba(15, 23, 42, .95), inset 0 1px 0 rgba(255, 255, 255, .07);
+}
+.hero h1 {
+  background: linear-gradient(115deg, #ffffff 8%, #fde68a 62%, #eab308 96%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -.7px;
+}
+.hero p { color: rgba(255, 255, 255, .68); }
+.hero .usuario-detalle,
+.hero > div:first-child { color: rgba(255, 255, 255, .5) !important; }
+
+/* filete de oro en los títulos de sección */
+.seccion-titulo h2 { letter-spacing: -.2px; }
+.seccion-titulo a { color: var(--oro-oscuro); }
+
+/* controles: foco y selección en oro */
+.input:focus, .textarea:focus, .select:focus {
+  border-color: var(--oro);
+  box-shadow: 0 0 0 4px rgba(234, 179, 8, .18);
+}
+.chip.activo {
+  background: linear-gradient(135deg, #facc15, #a16207);
+  color: #231a00;
+  border-color: transparent;
+  box-shadow: 0 8px 20px -12px rgba(234, 179, 8, .95);
+}
+.chip:hover { border-color: rgba(234, 179, 8, .5); color: var(--tinta); }
+
+/* botón principal: oro con texto oscuro, como el rango */
+.btn-primario {
+  background: linear-gradient(135deg, #fde047, #a16207);
+  color: #2a1f00;
+  box-shadow: 0 14px 28px -16px rgba(234, 179, 8, .95);
+}
+.btn-primario:hover { filter: brightness(1.04); }
+
+/* tarjetas de contenido: blancas, con el mismo aire de la credencial */
+.bloque {
+  border-radius: 18px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, .04), 0 18px 36px -28px rgba(15, 23, 42, .45);
+}
+
+/* llamada a la acción de las peticiones en tono oro */
+.card-cta { color: var(--oro-oscuro); }
+.card:hover .card-titulo { color: var(--oro-oscuro); }
+
+/* botón flotante de subir, en oro */
+.arriba {
+  background: linear-gradient(135deg, #fde047, #a16207);
+  color: #2a1f00;
+  box-shadow: 0 16px 32px -14px rgba(234, 179, 8, .95);
+}
+
+/* foco accesible en oro */
+:focus-visible { outline-color: var(--oro); }
+
+/* la credencial del login y del registro respiran igual que la del perfil */
+.auth-hero h1 {
+  background: linear-gradient(115deg, #0f172a 10%, #a16207 95%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.auth-hero .marca-punto {
+  width: 46px; height: 46px; border-radius: 14px; font-size: 20px;
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  color: #facc15;
+  border: 2px solid rgba(234, 179, 8, .55);
+  box-shadow: 0 0 26px -6px rgba(234, 179, 8, .6);
+}
