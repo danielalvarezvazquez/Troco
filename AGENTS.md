@@ -80,7 +80,7 @@ Definido en `js/data.js` (P1). Campos exactos, en español:
 ```js
 usuario  { id, nombre, carrera (texto libre), rama, curso, bio, habilidades[], color,
            instagram, whatsapp, email, passwordHash, nacimiento, telVerificado, igVerificado }
-oferta   { id, titulo, descripcion, tipo:'favor'|'objeto', categoria, area, autorId, pideACambio,
+oferta   { id, titulo, descripcion, categoria, area, autorId, pideACambio,
            estado:'abierta'|'acordada'|'cerrada', creadaEn, destacada,
            acuerdo:{ proponente, confirmadoPor:[uids], fecha } }
 valoración { id, ofertaId, deUsuarioId, aUsuarioId, estrellas:1..5, comentario, creadaEn }
@@ -89,6 +89,7 @@ estado global { version, yo, sesion (uid|null), usuarios[], ofertas[], valoracio
 
 **Vocabulario (no inventar valores; están en `js/data.js`):**
 - `area` vive en la **oferta** y describe **de qué va la petición**: Tecnología, Matemáticas, Ciencias, Salud, Ciencias jurídicas, Lenguaje, Habilidades, Ciencias sociales, Otros (`USWAP.AREAS`).
+- `categoria` vive en la **oferta** y es una sola lista plana: **Favores, Enseñanza, Apuntes, Objetos, Otros** (`USWAP.CATEGORIAS`). **No existe `tipo` favor/objeto**: prohibido reintroducirlo o separar "clases particulares".
 - `rama` vive en el **usuario**: Artes y Humanidades, Ciencias, Ciencias de la Salud, Ciencias Sociales y Jurídicas, Ingeniería y Arquitectura (`USWAP.RAMAS`).
 - `curso` es **texto**: `1º` … `6º`, `Máster`, `Doctorado` (`USWAP.CURSOS`). Para pintarlo usa `USWAP_UI.curso(valor)`; nunca concatenes `'º'`.
 - `carrera` es **texto libre** que escribe cada persona (ej. "Ingeniería Informática"). **No es filtro ni categoría**: no la uses como `area`.

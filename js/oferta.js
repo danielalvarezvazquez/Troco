@@ -144,7 +144,6 @@
       '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">' +
         '<span class="badge badge-azul">' + UI.esc(oferta.area) + '</span>' +
         '<span class="badge">' + UI.esc(oferta.categoria) + '</span>' +
-        '<span class="badge">' + (oferta.tipo === 'objeto' ? '📦 Objeto' : '🤝 Favor') + '</span>' +
         (estado === 'cerrada' ? '<span class="badge badge-verde">Trato cerrado</span>'
           : estado === 'acordada' ? '<span class="badge badge-ambar">Acuerdo pendiente</span>'
           : '<span class="badge">Abierta</span>') +
