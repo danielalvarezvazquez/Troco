@@ -94,8 +94,8 @@
   var miPos = 0;
   todos.forEach(function (f, i) { if (f.usuario.id === yoId) miPos = i + 1; });
 
-  var areaActiva = 'Todas';
-  var elChips = document.getElementById('filtro-area');
+  var ramaActiva = 'Todas';
+  var elChips = document.getElementById('filtro-rama');
 
   /* ---- tarjeta "tu posición": nunca se filtra ---------------------------- */
   function pintarMiPosicion() {
@@ -124,21 +124,21 @@
       '</div>';
   }
 
-  /* ---- chips de área ------------------------------------------------------ */
+  /* ---- chips de rama ------------------------------------------------------ */
   function pintarChips() {
     if (!elChips) return;
 
-    var opciones = ['Todas'].concat(USWAP.AREAS);
-    elChips.innerHTML = opciones.map(function (area) {
-      var activo = area === areaActiva;
+    var opciones = ['Todas'].concat(USWAP.RAMAS);
+    elChips.innerHTML = opciones.map(function (rama) {
+      var activo = rama === ramaActiva;
       return '<button type="button" class="chip' + (activo ? ' activo' : '') + '"' +
-        ' data-area="' + UI.esc(area) + '" aria-pressed="' + activo + '">' + UI.esc(area) + '</button>';
+        ' data-rama="' + UI.esc(rama) + '" aria-pressed="' + activo + '">' + UI.esc(rama) + '</button>';
     }).join('');
 
     elChips.addEventListener('click', function (evento) {
       var boton = evento.target.closest('.chip');
       if (!boton) return;
-      areaActiva = boton.getAttribute('data-area');
+      ramaActiva = boton.getAttribute('data-rama');
       elChips.querySelectorAll('.chip').forEach(function (chip) {
         var activo = chip === boton;
         chip.classList.toggle('activo', activo);
@@ -150,8 +150,8 @@
 
   /* ---- clasificación filtrada -------------------------------------------- */
   function visibles() {
-    if (areaActiva === 'Todas') return todos;
-    return todos.filter(function (f) { return f.usuario.area === areaActiva; });
+    if (ramaActiva === 'Todas') return todos;
+    return todos.filter(function (f) { return f.usuario.rama === ramaActiva; });
   }
 
   function pintarLista() {
@@ -159,25 +159,25 @@
     var total = document.getElementById('total-gente');
     if (total) {
       total.textContent = lista.length + (lista.length === 1 ? ' estudiante' : ' estudiantes') +
-        (areaActiva === 'Todas' ? '' : ' · ' + areaActiva);
+        (ramaActiva === 'Todas' ? '' : ' · ' + ramaActiva);
     }
 
     if (!lista.length) {
-      cont.innerHTML = UI.vacio('Nadie por aquí', 'No hay estudiantes en ' + areaActiva + '. Prueba con otra área.');
+      cont.innerHTML = UI.vacio('Nadie por aquí', 'No hay estudiantes en ' + ramaActiva + '. Prueba con otra rama.');
       return;
     }
 
     var medallas = ['🥇', '🥈', '🥉'];
     cont.innerHTML = lista.map(function (f, i) {
       var nivel = tier(f.puntos);
-      var puesto = areaActiva === 'Todas' && medallas[i] ? medallas[i] : (i + 1);
+      var puesto = ramaActiva === 'Todas' && medallas[i] ? medallas[i] : (i + 1);
       return '<div class="rank-item' + (f.usuario.id === yoId ? ' yo' : '') + '">' +
         '<div class="rank-pos' + (i < 3 ? ' top' : '') + '">' + puesto + '</div>' +
         UI.avatar(f.usuario, 'pequeno') +
         '<div class="usuario-linea" style="flex:1">' +
           '<span class="usuario-nombre">' + UI.esc(f.usuario.nombre) + '</span>' +
-          '<span class="usuario-detalle">' + UI.esc(f.usuario.carrera) + ' · ' + UI.esc(f.usuario.curso) + 'º · ' +
-            UI.esc(f.usuario.area) + '</span>' +
+          '<span class="usuario-detalle">' + UI.esc(f.usuario.carrera) + ' · ' + UI.curso(f.usuario.curso) + ' · ' +
+            UI.esc(f.usuario.rama) + '</span>' +
           '<span class="tier ' + nivel.clase + '" style="margin-top:2px">' + nivel.icono + ' ' + nivel.nombre +
             (f.num ? ' · ' + UI.estrellas(f.media, '') : '') + '</span>' +
         '</div>' +

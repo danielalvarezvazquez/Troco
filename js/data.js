@@ -12,46 +12,62 @@
 (function () {
   'use strict';
 
-  var VERSION = 4;                 // subir si cambia la forma de los datos
+  var VERSION = 5;                 // subir si cambia la forma de los datos
   var KEY = 'uswap.v1';            // clave de localStorage
 
-  var AREAS = ['Tecnología', 'Ciencias', 'Salud', 'Diseño', 'Humanidades', 'Economía'];
-  var CURSOS = [1, 2, 3, 4, 5];
-  var CATEGORIAS = ['Apuntes', 'Clases', 'Transporte', 'Comida', 'Tecnología', 'Creatividad', 'Idiomas', 'Favores'];
+  /* Área = de qué va la PETICIÓN (vive en la oferta, no en la persona) */
+  var AREAS = ['Tecnología', 'Matemáticas', 'Ciencias', 'Salud', 'Ciencias jurídicas',
+               'Lenguaje', 'Habilidades', 'Ciencias sociales', 'Otros'];
+
+  /* Rama = gran bloque de estudios (vive en la persona) */
+  var RAMAS = ['Artes y Humanidades', 'Ciencias', 'Ciencias de la Salud',
+               'Ciencias Sociales y Jurídicas', 'Ingeniería y Arquitectura'];
+
+  /* Curso: 1º a 6º de grado + posgrados. Se guarda como texto. */
+  var CURSOS = ['1º', '2º', '3º', '4º', '5º', '6º', 'Máster', 'Doctorado'];
+
+  var CATEGORIAS = ['Apuntes', 'Clases', 'Transporte', 'Comida', 'Objetos', 'Creatividad', 'Idiomas', 'Favores'];
 
   /* ---------------------------------------------------------------- usuarios
-     id, nombre, carrera, curso, area, habilidades[], bio, color, instagram, whatsapp
+     id, nombre, carrera (texto libre), rama, curso, habilidades[], bio, color,
+     instagram, whatsapp
   */
   var USUARIOS = [
-    { id: 'u1', nombre: 'Ana Ferrer', carrera: 'Ingeniería Informática', curso: 3, area: 'Tecnología',
+    { id: 'u1', nombre: 'Ana Ferrer', carrera: 'Ingeniería Informática', rama: 'Ingeniería y Arquitectura', curso: '3º',
       habilidades: ['Python', 'Diseño UI', 'Estadística'], bio: 'Tercero de Informática. Monto prototipos y doy clases de Python.',
       color: '#6366f1', instagram: 'ana.ferrer', whatsapp: '34600111222' },
-    { id: 'u2', nombre: 'Marc Puig', carrera: 'Matemáticas', curso: 2, area: 'Ciencias',
+    { id: 'u2', nombre: 'Marc Puig', carrera: 'Matemáticas', rama: 'Ciencias', curso: '2º',
       habilidades: ['Cálculo', 'LaTeX', 'Guitarra'], bio: 'Apuntes ordenados y clases de repaso de Cálculo.',
       color: '#0ea5e9', instagram: 'marc.puig', whatsapp: '34600222333' },
-    { id: 'u3', nombre: 'Lucía Romero', carrera: 'Medicina', curso: 4, area: 'Salud',
+    { id: 'u3', nombre: 'Lucía Romero', carrera: 'Medicina', rama: 'Ciencias de la Salud', curso: '4º',
       habilidades: ['Anatomía', 'Primeros auxilios', 'Dibujo'], bio: 'Cuarto de Medicina. Mis apuntes llevan dibujos a mano.',
       color: '#ec4899', instagram: 'lucia.romero', whatsapp: '34600333444' },
-    { id: 'u4', nombre: 'Javier Barcala', carrera: 'ADE', curso: 3, area: 'Economía',
+    { id: 'u4', nombre: 'Javier Barcala', carrera: 'ADE', rama: 'Ciencias Sociales y Jurídicas', curso: '3º',
       habilidades: ['Excel', 'Contabilidad', 'Inglés'], bio: 'Tengo coche y voy a la estación todos los viernes.',
       color: '#f59e0b', instagram: 'javier.barcala', whatsapp: '34600444555' },
-    { id: 'u5', nombre: 'Sergio León', carrera: 'Bellas Artes', curso: 2, area: 'Diseño',
+    { id: 'u5', nombre: 'Sergio León', carrera: 'Bellas Artes', rama: 'Artes y Humanidades', curso: '2º',
       habilidades: ['Ilustración', 'Photoshop', 'Serigrafía'], bio: 'Hago ilustración editorial y carteles para TFGs.',
       color: '#10b981', instagram: 'sergio.leon', whatsapp: '34600555666' },
-    { id: 'u6', nombre: 'Núria Costa', carrera: 'Derecho', curso: 5, area: 'Humanidades',
+    { id: 'u6', nombre: 'Núria Costa', carrera: 'Derecho', rama: 'Ciencias Sociales y Jurídicas', curso: '5º',
       habilidades: ['Redacción', 'Debate', 'Inglés C1'], bio: 'Corrijo textos académicos y preparo defensas orales.',
       color: '#8b5cf6', instagram: 'nuria.costa', whatsapp: '34600666777' },
-    { id: 'u7', nombre: 'Tomás Vidal', carrera: 'Arquitectura', curso: 3, area: 'Diseño',
+    { id: 'u7', nombre: 'Tomás Vidal', carrera: 'Arquitectura', rama: 'Ingeniería y Arquitectura', curso: '3º',
       habilidades: ['AutoCAD', 'Maquetas', 'Fotografía'], bio: 'Maquetas y planos a cambio de ayuda con estructuras.',
       color: '#ef4444', instagram: 'tomas.vidal', whatsapp: '34600777888' },
-    { id: 'u8', nombre: 'Elena Sanz', carrera: 'Biología', curso: 1, area: 'Ciencias',
+    { id: 'u8', nombre: 'Elena Sanz', carrera: 'Biología', rama: 'Ciencias', curso: '1º',
       habilidades: ['Laboratorio', 'Francés', 'Cocina'], bio: 'Primero de Biología. Llevo tupper vegano los martes.',
-      color: '#14b8a6', instagram: 'elena.sanz', whatsapp: '34600888999' }
+      color: '#14b8a6', instagram: 'elena.sanz', whatsapp: '34600888999' },
+    { id: 'u9', nombre: 'Irene Bosch', carrera: 'Máster en Ciencia de Datos', rama: 'Ingeniería y Arquitectura', curso: 'Máster',
+      habilidades: ['R', 'Visualización de datos', 'SQL'], bio: 'Máster de Ciencia de Datos. Busco encuestas para el TFM.',
+      color: '#0f766e', instagram: 'irene.bosch', whatsapp: '34600999000' },
+    { id: 'u10', nombre: 'Pau Mir', carrera: 'Doctorado en Física', rama: 'Ciencias', curso: 'Doctorado',
+      habilidades: ['Física', 'Python', 'Divulgación'], bio: 'Investigando en física de materiales y dando prácticas.',
+      color: '#7c3aed', instagram: 'pau.mir', whatsapp: '34600123123' }
   ];
 
   /* ----------------------------------------------------------------- ofertas
-     id, titulo, descripcion, tipo ('objeto'|'favor'), categoria, autorId,
-     pideACambio, estado ('abierta'|'acordada'|'cerrada'), creadaEn (ISO), destacada
+     id, titulo, descripcion, tipo ('objeto'|'favor'), categoria, area (de la petición),
+     autorId, pideACambio, estado ('abierta'|'acordada'|'cerrada'), creadaEn (ISO), destacada
      acuerdo: { proponente, confirmadoPor:[uids], fecha }
        - abierta   → nadie ha propuesto cerrar
        - acordada  → una parte ha propuesto/confirmado; falta la otra
@@ -61,36 +77,45 @@
 
   function ofertasBase() {
     var base = [
-      { id: 'o1', titulo: 'Apuntes completos de Estadística II', tipo: 'objeto', categoria: 'Apuntes', autorId: 'u2',
+      { id: 'o1', titulo: 'Apuntes completos de Estadística II', tipo: 'objeto', categoria: 'Apuntes', area: 'Matemáticas', autorId: 'u2',
         descripcion: 'Temario entero, problemas resueltos y los 3 exámenes de años anteriores con soluciones. En PDF y fotocopia.',
         pideACambio: 'Clases de Python o apuntes de Cálculo II', estado: 'abierta', creadaEn: haceHoras(2), destacada: true },
-      { id: 'o2', titulo: 'Clases de Python para principiantes', tipo: 'favor', categoria: 'Clases', autorId: 'u1',
+      { id: 'o2', titulo: 'Clases de Python para principiantes', tipo: 'favor', categoria: 'Clases', area: 'Tecnología', autorId: 'u1',
         descripcion: 'Dos sesiones de una hora: variables, listas, bucles y funciones. Trae tu portátil. Nivel cero absoluto.',
         pideACambio: 'Apuntes de Estadística o un café de la máquina', estado: 'abierta', creadaEn: haceHoras(5), destacada: true },
-      { id: 'o3', titulo: 'Te llevo en coche a la estación los viernes', tipo: 'favor', categoria: 'Transporte', autorId: 'u4',
+      { id: 'o3', titulo: 'Te llevo en coche a la estación los viernes', tipo: 'favor', categoria: 'Transporte', area: 'Otros', autorId: 'u4',
         descripcion: 'Salgo a las 18:30 del parking de la ETSE dirección estación de tren. Quedan 3 plazas por viernes.',
         pideACambio: 'Ayuda con una hoja de Excel o apuntes de Contabilidad', estado: 'abierta', creadaEn: haceHoras(9) },
-      { id: 'o4', titulo: 'Corrección de textos en inglés (nivel C1)', tipo: 'favor', categoria: 'Idiomas', autorId: 'u6',
+      { id: 'o4', titulo: 'Corrección de textos en inglés (nivel C1)', tipo: 'favor', categoria: 'Idiomas', area: 'Lenguaje', autorId: 'u6',
         descripcion: 'Reviso tu TFG, abstract o carta de motivación. Devuelvo comentarios y versión limpia en 48 h.',
         pideACambio: 'Ilustración para la portada o maqueta de una sección', estado: 'abierta', creadaEn: haceHoras(14) },
-      { id: 'o5', titulo: 'Ilustración personalizada para tu TFG', tipo: 'favor', categoria: 'Creatividad', autorId: 'u5',
+      { id: 'o5', titulo: 'Ilustración personalizada para tu TFG', tipo: 'favor', categoria: 'Creatividad', area: 'Habilidades', autorId: 'u5',
         descripcion: 'Portada ilustrada o infografía a mano digital. Dos rondas de cambios incluidas.',
         pideACambio: 'Corrección de inglés o ayuda con Estadística', estado: 'abierta', creadaEn: haceHoras(20) },
-      { id: 'o6', titulo: 'Tupper vegano casero los martes', tipo: 'favor', categoria: 'Comida', autorId: 'u8',
+      { id: 'o6', titulo: 'Tupper vegano casero los martes', tipo: 'favor', categoria: 'Comida', area: 'Otros', autorId: 'u8',
         descripcion: 'Menú semanal casero: lentejas, curry de garbanzos o pasta de verduras. Llevo el tupper a la ETSE.',
         pideACambio: 'Apuntes de primero de Biología o compañía para comer', estado: 'abierta', creadaEn: haceHoras(28) },
-      { id: 'o7', titulo: 'Arreglo tu portátil o te instalo el software', tipo: 'favor', categoria: 'Tecnología', autorId: 'u1',
+      { id: 'o7', titulo: 'Arreglo tu portátil o te instalo el software', tipo: 'favor', categoria: 'Favores', area: 'Tecnología', autorId: 'u1',
         descripcion: 'Limpieza, formateo, instalación de Python/Java/Office y configuración de Git. Sin coste de mano de obra.',
         pideACambio: 'Apuntes de Anatomía o transporte a la estación', estado: 'abierta', creadaEn: haceHoras(33) },
-      { id: 'o8', titulo: 'Apuntes de Anatomía con dibujos a mano', tipo: 'objeto', categoria: 'Apuntes', autorId: 'u3',
+      { id: 'o8', titulo: 'Apuntes de Anatomía con dibujos a mano', tipo: 'objeto', categoria: 'Apuntes', area: 'Salud', autorId: 'u3',
         descripcion: 'Dos tomos encuadernados con esquemas dibujados a mano. Muy visuales para primer y segundo curso.',
         pideACambio: 'Clases de dibujo o ilustración para el TFG', estado: 'abierta', creadaEn: haceHoras(41) },
       /* Oferta ya cerrada: sirve para demostrar el acuerdo a dos bandas y la valoración.
          Ana (u1) propuso el acuerdo y Marc (u2, autor) lo confirmó. */
-      { id: 'o9', titulo: 'Apuntes de Cálculo I con ejercicios resueltos', tipo: 'objeto', categoria: 'Apuntes', autorId: 'u2',
+      { id: 'o9', titulo: 'Apuntes de Cálculo I con ejercicios resueltos', tipo: 'objeto', categoria: 'Apuntes', area: 'Matemáticas', autorId: 'u2',
         descripcion: 'Temario completo, 40 ejercicios resueltos a mano y dos exámenes corregidos. Incluye formulario resumen.',
         pideACambio: 'Clases de Python o un café de la máquina', estado: 'cerrada', creadaEn: haceHoras(80),
-        acuerdo: { proponente: 'u1', confirmadoPor: ['u1', 'u2'], fecha: haceHoras(20) } }
+        acuerdo: { proponente: 'u1', confirmadoPor: ['u1', 'u2'], fecha: haceHoras(20) } },
+      { id: 'o10', titulo: 'Repaso de Derecho Civil para el examen', tipo: 'favor', categoria: 'Clases', area: 'Ciencias jurídicas', autorId: 'u6',
+        descripcion: 'Dos sesiones de repaso de obligaciones y contratos, con casos prácticos y esquemas de respuesta.',
+        pideACambio: 'Ayuda con Excel o una ilustración para apuntes', estado: 'abierta', creadaEn: haceHoras(12) },
+      { id: 'o11', titulo: 'Necesito 40 respuestas para mi encuesta del TFM', tipo: 'favor', categoria: 'Favores', area: 'Ciencias sociales', autorId: 'u9',
+        descripcion: 'Encuesta anónima de 5 minutos sobre hábitos de consumo en el campus. Comparto los resultados con quien la haga.',
+        pideACambio: 'Que la respondas y la pases a un par de personas', estado: 'abierta', creadaEn: haceHoras(7), destacada: true },
+      { id: 'o12', titulo: 'Prácticas de laboratorio de Física', tipo: 'favor', categoria: 'Clases', area: 'Ciencias', autorId: 'u10',
+        descripcion: 'Preparo el guion de prácticas y te ayudo con la toma de datos y el tratamiento de errores.',
+        pideACambio: 'Apuntes de Matemáticas o ayuda con LaTeX', estado: 'abierta', creadaEn: haceHoras(30) }
     ];
 
     /* toda oferta necesita el campo acuerdo, aunque esté vacío */
@@ -171,6 +196,7 @@
   /* -------------------------------------------------------------------- API */
   window.USWAP = {
     AREAS: AREAS,
+    RAMAS: RAMAS,
     CURSOS: CURSOS,
     CATEGORIAS: CATEGORIAS,
 
@@ -213,9 +239,10 @@
     addOferta: function (datos) {
       var o = {
         id: id('o'), titulo: datos.titulo, descripcion: datos.descripcion, tipo: datos.tipo || 'favor',
-        categoria: datos.categoria || 'Favores', autorId: estado().yo,
+        categoria: datos.categoria || 'Favores', area: datos.area || 'Otros', autorId: estado().yo,
         pideACambio: datos.pideACambio || '', estado: 'abierta',
-        creadaEn: new Date().toISOString(), destacada: false
+        creadaEn: new Date().toISOString(), destacada: false,
+        acuerdo: { proponente: null, confirmadoPor: [], fecha: null }
       };
       estado().ofertas.unshift(o);
       persistir();
@@ -298,7 +325,7 @@
     actualizarPerfil: function (datos) {
       var u = window.USWAP.usuario(estado().yo);
       if (!u) return null;
-      ['nombre', 'carrera', 'curso', 'area', 'bio', 'instagram', 'whatsapp'].forEach(function (k) {
+      ['nombre', 'carrera', 'rama', 'curso', 'bio', 'instagram', 'whatsapp'].forEach(function (k) {
         if (datos[k] !== undefined && datos[k] !== '') u[k] = datos[k];
       });
       if (datos.habilidades) u.habilidades = datos.habilidades;

@@ -105,7 +105,7 @@
           '<div style="margin-top:5px;font-size:12px;line-height:1.35;color:rgba(255,255,255,.72)">' +
             UI.esc(u.carrera) + '</div>' +
           '<div style="margin-top:2px;font-size:11px;color:rgba(255,255,255,.48)">' +
-            UI.esc(u.curso) + 'º curso · ' + UI.esc(u.area) + '</div>' +
+            UI.curso(u.curso) + ' · ' + UI.esc(u.rama) + '</div>' +
         '</div>' +
       '</div>' +
 

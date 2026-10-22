@@ -9,8 +9,8 @@ Actualízala solo cuando cambie una decisión (stack, archivos, reglas), no por 
 
 App **móvil** (prototipo web) de intercambio de **favores y objetos** entre estudiantes de carreras y áreas distintas.
 
-- **Tablón** con filtros por área, carrera y curso, y buscador.
-- **Perfil**: carrera, curso, área, habilidades, reputación y puntos.
+- **Tablón** con buscador y filtros por **área de la petición**, **rama** y **curso**.
+- **Perfil**: carrera escrita libremente, rama, curso, habilidades, reputación y puntos.
 - **Publicar**: el estudiante dice qué ofrece y qué pide a cambio.
 - **Contacto**: el chat es **externo** (WhatsApp/Instagram). La app solo genera enlaces `wa.me` e `instagram.com`.
 - **Cierre**: el trato se cierra a dos bandas. Una parte pulsa "Hemos llegado a un acuerdo" y la otra lo confirma; hasta entonces queda "acuerdo pendiente".
@@ -76,12 +76,18 @@ Si alguien necesita un campo nuevo en los datos, un componente nuevo o un estilo
 Definido en `js/data.js` (P1). Campos exactos, en español:
 
 ```js
-usuario  { id, nombre, carrera, curso, area, bio, habilidades[], color, instagram, whatsapp }
-oferta   { id, titulo, descripcion, tipo:'favor'|'objeto', categoria, autorId, pideACambio,
+usuario  { id, nombre, carrera (texto libre), rama, curso, bio, habilidades[], color, instagram, whatsapp }
+oferta   { id, titulo, descripcion, tipo:'favor'|'objeto', categoria, area, autorId, pideACambio,
            estado:'abierta'|'acordada'|'cerrada', creadaEn, destacada,
            acuerdo:{ proponente, confirmadoPor:[uids], fecha } }
 valoración { id, ofertaId, deUsuarioId, aUsuarioId, estrellas:1..5, comentario, creadaEn }
 ```
+
+**Vocabulario (no inventar valores; están en `js/data.js`):**
+- `area` vive en la **oferta** y describe **de qué va la petición**: Tecnología, Matemáticas, Ciencias, Salud, Ciencias jurídicas, Lenguaje, Habilidades, Ciencias sociales, Otros (`USWAP.AREAS`).
+- `rama` vive en el **usuario**: Artes y Humanidades, Ciencias, Ciencias de la Salud, Ciencias Sociales y Jurídicas, Ingeniería y Arquitectura (`USWAP.RAMAS`).
+- `curso` es **texto**: `1º` … `6º`, `Máster`, `Doctorado` (`USWAP.CURSOS`). Para pintarlo usa `USWAP_UI.curso(valor)`; nunca concatenes `'º'`.
+- `carrera` es **texto libre** que escribe cada persona (ej. "Ingeniería Informática"). **No es filtro ni categoría**: no la uses como `area`.
 
 **Flujo del trato (no cambiarlo sin hablar con P1):**
 `abierta` → alguien pulsa "Hemos llegado a un acuerdo" → `acordada` con esa persona en `confirmadoPor` →

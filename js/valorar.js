@@ -71,7 +71,7 @@
           UI.avatar(valorado, 'grande') +
           '<div style="text-align:center">' +
             '<div style="font-weight:700">' + UI.esc(valorado.nombre) + '</div>' +
-            '<div class="usuario-detalle">' + UI.esc(valorado.carrera) + ' · ' + UI.esc(valorado.curso) + 'º</div>' +
+            '<div class="usuario-detalle">' + UI.esc(valorado.carrera) + ' · ' + UI.curso(valorado.curso) + '</div>' +
           '</div>' +
           '<div class="usuario-detalle">' + (media ? UI.estrellas(media) + ' ' + media : 'Sin valoraciones todavía') +
             ' · ' + puntosAntes + ' pts</div>' +

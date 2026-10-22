@@ -140,7 +140,8 @@
   cont.innerHTML = '' +
     '<div class="bloque">' +
       '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">' +
-        '<span class="badge badge-azul">' + UI.esc(oferta.categoria) + '</span>' +
+        '<span class="badge badge-azul">' + UI.esc(oferta.area) + '</span>' +
+        '<span class="badge">' + UI.esc(oferta.categoria) + '</span>' +
         '<span class="badge">' + (oferta.tipo === 'objeto' ? '📦 Objeto' : '🤝 Favor') + '</span>' +
         (estado === 'cerrada' ? '<span class="badge badge-verde">Trato cerrado</span>'
           : estado === 'acordada' ? '<span class="badge badge-ambar">Acuerdo pendiente</span>'
@@ -163,7 +164,7 @@
         UI.avatar(autor, 'grande') +
         '<div class="usuario-linea">' +
           '<span class="usuario-nombre" style="font-size:15px">' + UI.esc(autor.nombre) + '</span>' +
-          '<span class="usuario-detalle">' + UI.esc(autor.carrera) + ' · ' + UI.esc(autor.curso) + 'º · ' + UI.esc(autor.area) + '</span>' +
+          '<span class="usuario-detalle">' + UI.esc(autor.carrera) + ' · ' + UI.curso(autor.curso) + ' · ' + UI.esc(autor.rama) + '</span>' +
           '<span style="margin-top:3px">' + UI.estrellas(media) +
             ' <span class="usuario-detalle">' + (numVal ? media + ' (' + numVal + ')' : 'sin valoraciones') + '</span></span>' +
         '</div>' +

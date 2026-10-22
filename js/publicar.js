@@ -25,6 +25,12 @@
 
   var yo = USWAP.usuario(USWAP.yo());
 
+  var area = document.getElementById('area');
+
+  area.innerHTML = USWAP.AREAS.map(function (a) {
+    return '<option value="' + UI.esc(a) + '">' + UI.esc(a) + '</option>';
+  }).join('');
+
   categoria.innerHTML = USWAP.CATEGORIAS.map(function (c) {
     return '<option value="' + UI.esc(c) + '">' + UI.esc(c) + '</option>';
   }).join('');
@@ -59,15 +65,15 @@
           UI.avatar(yo) +
           '<div class="usuario-linea">' +
             '<span class="usuario-nombre">' + UI.esc(yo.nombre) + ' · tú</span>' +
-            '<span class="usuario-detalle">' + UI.esc(yo.carrera) + ' · ' + UI.esc(yo.curso) + 'º</span>' +
+            '<span class="usuario-detalle">' + UI.esc(yo.carrera) + ' · ' + UI.curso(yo.curso) + '</span>' +
           '</div>' +
-          '<span class="badge badge-azul" style="margin-left:auto">' + UI.esc(valorCategoria) + '</span>' +
+          '<span class="badge badge-azul" style="margin-left:auto">' + UI.esc(area.value || 'Otros') + '</span>' +
         '</div>' +
         '<h3 class="card-titulo">' + UI.esc(valorTitulo) + '</h3>' +
         '<p class="card-texto">' + UI.esc(valorDescripcion) + '</p>' +
         '<div class="cambio"><span>⇄</span><span><b>Pide a cambio:</b> ' + UI.esc(valorPide) + '</span></div>' +
         '<div class="card-pie">' +
-          '<span>' + (esObjeto ? '📦 Objeto' : '🤝 Favor') + ' · ahora mismo</span>' +
+          '<span>' + (esObjeto ? '📦 Objeto' : '🤝 Favor') + ' · ' + UI.esc(valorCategoria) + ' · ahora mismo</span>' +
           '<span class="badge badge-verde">Nueva</span>' +
         '</div>' +
       '</div>';
@@ -105,6 +111,8 @@
       descripcion: descripcion.value.trim(),
       tipo: tipo.value,
       categoria: categoria.value,
+      categoria: categoria.value,
+      area: area.value,
       pideACambio: valorPide
     });
 

@@ -43,6 +43,14 @@
     return d === 1 ? 'ayer' : 'hace ' + d + ' días';
   }
 
+  /* Curso: acepta 3, '3º', 'Máster' o 'Doctorado' y devuelve texto seguro */
+  function curso(valor) {
+    if (valor === undefined || valor === null || valor === '') return '';
+    var v = String(valor);
+    if (v.indexOf('º') !== -1 || v === 'Máster' || v === 'Doctorado') return v;
+    return v + 'º';
+  }
+
   function param(nombre) {
     var m = new RegExp('[?&]' + nombre + '=([^&#]*)').exec(window.location.search);
     return m ? decodeURIComponent(m[1].replace(/\+/g, ' ')) : '';
@@ -122,6 +130,7 @@
     avatar: avatar,
     estrellas: estrellas,
     tiempo: tiempo,
+    curso: curso,
     param: param,
     toast: toast,
     vacio: vacio,

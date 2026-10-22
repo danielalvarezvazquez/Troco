@@ -20,7 +20,7 @@
     nombre: document.getElementById('nombre'),
     carrera: document.getElementById('carrera'),
     curso: document.getElementById('curso'),
-    area: document.getElementById('area'),
+    rama: document.getElementById('rama'),
     habilidades: document.getElementById('habilidades'),
     bio: document.getElementById('bio'),
     instagram: document.getElementById('instagram'),
@@ -52,17 +52,17 @@
 
   /* --------------------------------------------------------------- selects */
   campos.curso.innerHTML = USWAP.CURSOS.map(function (c) {
-    return '<option value="' + c + '">' + c + 'º</option>';
+    return '<option value="' + UI.esc(c) + '">' + UI.esc(c) + '</option>';
   }).join('');
-  campos.area.innerHTML = USWAP.AREAS.map(function (a) {
-    return '<option value="' + UI.esc(a) + '">' + UI.esc(a) + '</option>';
+  campos.rama.innerHTML = USWAP.RAMAS.map(function (r) {
+    return '<option value="' + UI.esc(r) + '">' + UI.esc(r) + '</option>';
   }).join('');
 
   /* ------------------------------------------------------------- precarga */
   campos.nombre.value = yo.nombre || '';
   campos.carrera.value = yo.carrera || '';
-  campos.curso.value = String(yo.curso || 1);
-  campos.area.value = yo.area || USWAP.AREAS[0];
+  campos.curso.value = yo.curso || USWAP.CURSOS[0];
+  campos.rama.value = yo.rama || USWAP.RAMAS[0];
   campos.bio.value = yo.bio || '';
   campos.instagram.value = yo.instagram || '';
   campos.whatsapp.value = yo.whatsapp || '';
@@ -247,8 +247,8 @@
     USWAP.actualizarPerfil({
       nombre: nombre,
       carrera: campos.carrera.value.trim(),
-      curso: Number(campos.curso.value),
-      area: campos.area.value,
+      curso: campos.curso.value,
+      rama: campos.rama.value,
       habilidades: seleccion,
       bio: campos.bio.value.trim(),
       instagram: instagram,
