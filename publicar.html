@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>USwap · Publicar</title>
+  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- =====================================================================
+       PANTALLA: PUBLICAR OFERTA               Propietario: P3 (tome123456)
+       Solo se editan este archivo y js/publicar.js.
+       ===================================================================== -->
+  <div class="app">
+    <header id="topbar"></header>
+
+    <main class="contenido">
+      <section class="hero">
+        <h1>Publica lo que ofreces</h1>
+        <p>Di qué das y qué pides a cambio. Cuanto más concreto, mejor.</p>
+      </section>
+
+      <form id="form-oferta" class="bloque" novalidate>
+        <label class="label" for="titulo">Título</label>
+        <input class="input" id="titulo" maxlength="70" required
+               placeholder="Ej. Apuntes de Estadística II">
+
+        <label class="label" for="descripcion">Descripción</label>
+        <textarea class="textarea" id="descripcion" maxlength="280"
+                  placeholder="Qué incluye, en qué estado está, cuándo puedes entregarlo…"></textarea>
+
+        <div class="fila" style="margin-top:16px">
+          <div style="flex:1">
+            <label class="label" for="tipo">Tipo</label>
+            <select class="select" id="tipo">
+              <option value="favor">Favor / servicio</option>
+              <option value="objeto">Objeto</option>
+            </select>
+          </div>
+          <div style="flex:1">
+            <label class="label" for="categoria">Categoría</label>
+            <select class="select" id="categoria"></select>
+          </div>
+        </div>
+
+        <label class="label" for="pideACambio">Qué pides a cambio</label>
+        <input class="input" id="pideACambio" maxlength="90"
+               placeholder="Ej. Clases de Python o un café">
+
+        <button class="btn btn-primario btn-bloque" type="submit">Publicar en el tablón</button>
+        <a class="btn btn-secundario" style="margin-top:8px" href="index.html">Cancelar</a>
+      </form>
+
+      <p class="usuario-detalle" style="text-align:center;margin-top:14px;line-height:1.5">
+        Al publicar aparecerás con tu carrera y curso para que te encuentren.</p>
+    </main>
+
+    <nav id="bottomnav"></nav>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/publicar.js"></script>
+</body>
+</html>

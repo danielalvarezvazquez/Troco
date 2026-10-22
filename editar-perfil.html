@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>USwap · Editar perfil</title>
+  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- =====================================================================
+       PANTALLA: EDITAR PERFIL               Propietario: P4 (sergiooleeonn)
+       Solo se editan este archivo, perfil.html y js/perfil.js / editar-perfil.js.
+       ===================================================================== -->
+  <div class="app">
+    <header id="topbar"></header>
+
+    <main class="contenido">
+      <section class="hero">
+        <h1>Tu perfil</h1>
+        <p>Cuanto mejor te describas, más fácil será que te encuentren.</p>
+      </section>
+
+      <form id="form-perfil" class="bloque" novalidate>
+        <label class="label" for="nombre">Nombre</label>
+        <input class="input" id="nombre" required maxlength="40">
+
+        <label class="label" for="carrera">Carrera</label>
+        <input class="input" id="carrera" maxlength="60" placeholder="Ej. Ingeniería Informática">
+
+        <div class="fila" style="margin-top:16px">
+          <div style="flex:1">
+            <label class="label" for="curso">Curso</label>
+            <select class="select" id="curso"></select>
+          </div>
+          <div style="flex:1">
+            <label class="label" for="area">Área</label>
+            <select class="select" id="area"></select>
+          </div>
+        </div>
+
+        <label class="label" for="habilidades">Habilidades (separadas por comas)</label>
+        <input class="input" id="habilidades" placeholder="Python, Diseño UI, Inglés">
+
+        <label class="label" for="bio">Sobre ti</label>
+        <textarea class="textarea" id="bio" maxlength="180" placeholder="Qué estudias, qué se te da bien, qué ofreces…"></textarea>
+
+        <label class="label" for="instagram">Instagram (sin @)</label>
+        <input class="input" id="instagram" placeholder="tu.usuario">
+
+        <label class="label" for="whatsapp">WhatsApp (con prefijo, sin +)</label>
+        <input class="input" id="whatsapp" placeholder="34600111222">
+
+        <button class="btn btn-primario btn-bloque" type="submit">Guardar cambios</button>
+        <a class="btn btn-secundario" style="margin-top:8px" href="perfil.html">Cancelar</a>
+      </form>
+    </main>
+
+    <nav id="bottomnav"></nav>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/editar-perfil.js"></script>
+</body>
+</html>

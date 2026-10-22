@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>USwap · Tablón</title>
+  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- =====================================================================
+       PANTALLA: TABLÓN                        Propietario: P2 (Javierbarcala)
+       Solo se editan este archivo y js/board.js.
+       ===================================================================== -->
+  <div class="app">
+    <header id="topbar"></header>
+
+    <main class="contenido">
+      <section class="hero">
+        <h1>¿Qué necesitas hoy?</h1>
+        <p>Intercambia favores y objetos con estudiantes de otras carreras.</p>
+      </section>
+
+      <input id="buscador" class="input" type="search"
+             placeholder="Buscar apuntes, clases, transporte…" autocomplete="off">
+
+      <div id="filtro-areas" class="chips" style="margin-top:10px"></div>
+      <div id="filtro-carreras" class="chips"></div>
+      <div id="filtro-cursos" class="chips"></div>
+
+      <div id="resultado-info" class="resultado-info"></div>
+      <div id="lista" class="lista"></div>
+    </main>
+
+    <nav id="bottomnav"></nav>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/board.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>USwap · Ranking y recompensas</title>
+  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- =====================================================================
+       PANTALLA: RANKING + RECOMPENSAS         Propietario: P3 (tome123456)
+       Solo se editan este archivo y js/ranking.js.
+       Regla de puntos: ★4-5 = +1 · ★3 = 0 · ★1-2 = -1
+       ===================================================================== -->
+  <div class="app">
+    <header id="topbar"></header>
+
+    <main class="contenido">
+      <section class="hero">
+        <h1>Ranking y recompensas</h1>
+        <p>Cada trato bien valorado suma. Los malos tratos restan.</p>
+      </section>
+
+      <div id="mi-posicion"></div>
+
+      <div class="seccion-titulo"><h2>Clasificación</h2><span class="usuario-detalle" id="total-gente"></span></div>
+      <div id="ranking" class="lista"></div>
+
+      <div class="seccion-titulo"><h2>Recompensas por nivel</h2></div>
+      <div id="recompensas" class="bloque"></div>
+    </main>
+
+    <nav id="bottomnav"></nav>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/ranking.js"></script>
+</body>
+</html>
