@@ -162,7 +162,7 @@
 
       '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;' +
         'font-size:11.5px;color:rgba(255,255,255,.55)">' +
-        '<span>Perfil USwap</span>' +
+        '<span>Perfil Troco</span>' +
         (posicion
           ? (posicion === 1
               ? '<span style="background:rgba(250,204,21,.16);border:1px solid rgba(250,204,21,.38);' +
@@ -372,7 +372,7 @@
       '</div>' +
     '</div>' +
       '<div class="usuario-detalle" style="margin:9px 4px 0;line-height:1.5">' +
-        'Ganas puntos con cada reseña (★3 +20, ★4 +40, ★5 +80). Se canjean enseñando tu credencial USwap en el comercio.' +
+        'Ganas puntos con cada reseña (★3 +20, ★4 +40, ★5 +80). Se canjean enseñando tu credencial Troco en el comercio.' +
       '</div>'
       : '');
 

@@ -176,7 +176,7 @@
     if (resultado.error === 'edad') { UI.toast('Debes tener al menos 16 años'); return; }
     if (resultado.error === 'contacto') { UI.toast('Verifica al menos un contacto'); return; }
 
-    UI.toast('Cuenta creada. ¡Bienvenido a USwap!');
+    UI.toast('Cuenta creada. ¡Bienvenido a Troco!');
     setTimeout(function () { window.location.href = 'index.html'; }, 800);
   });
 })();

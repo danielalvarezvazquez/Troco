@@ -1,5 +1,5 @@
 /* ==========================================================================
-   USwap — COMPONENTES COMUNES         Propietario: P1 (Daniel)
+   Troco — COMPONENTES COMUNES         Propietario: P1 (Daniel)
    --------------------------------------------------------------------------
    Cabecera, navegación inferior, avatares, estrellas, avisos.
    Si necesitas un componente nuevo, pídeselo a P1. No edites este archivo.
@@ -94,7 +94,7 @@
       }).join('');
       topbar.className = 'topbar';
       topbar.innerHTML =
-        '<a class="marca" href="index.html"><span class="marca-punto">U</span>USwap</a>' +
+        '<a class="marca" href="index.html"><span class="marca-punto">T</span>Troco</a>' +
         '<div class="topbar-derecha">' +
           '<select class="selector-yo" id="selector-yo" title="Cambiar de usuario (modo demo)">' + opciones + '</select>' +
           '<button class="chip chip-mini" id="btn-reset" title="Reiniciar los datos de la demo">↺</button>' +

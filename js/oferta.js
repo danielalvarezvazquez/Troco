@@ -43,7 +43,7 @@
   var yaValorado = (typeof USWAP.yaValoro === 'function') ? USWAP.yaValoro(oferta.id, yo) : false;
 
   var mensajeWa = 'Hola ' + autor.nombre + ', he visto tu petición "' + oferta.titulo +
-    '" en USwap. ¿Sigue disponible? Te propongo: ';
+    '" en Troco. ¿Sigue disponible? Te propongo: ';
   var enlaceWa = 'https://wa.me/' + encodeURIComponent(autor.whatsapp || '') +
     '?text=' + encodeURIComponent(mensajeWa);
   var enlaceIg = 'https://instagram.com/' + encodeURIComponent(autor.instagram || '');

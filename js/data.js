@@ -1,5 +1,5 @@
 /* ==========================================================================
-   USwap — CONTRATO DE DATOS            Propietario: P1 (Daniel)
+   Troco — CONTRATO DE DATOS            Propietario: P1 (Daniel)
    --------------------------------------------------------------------------
    Este archivo es la "base de datos" de la app y el contrato compartido.
    Si necesitas un campo nuevo, PÍDESELO A P1. No lo edites por tu cuenta.
