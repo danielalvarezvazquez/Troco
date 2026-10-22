@@ -2,7 +2,7 @@
 
 ## 1. Abrir la app (2 min)
 
-Doble clic en **`abrir-app.bat`** (o `py -m http.server 8000` y abrir <http://localhost:8000>).
+Doble clic en **`abrir-app.bat`** (o `py serve.py 8000` y abrir <http://localhost:8000>).
 Debe verse el tablón con 8 ofertas, filtros y una barra abajo con Tablón / Publicar / Ranking / Perfil.
 
 Si sale en blanco: pulsa **F12 → Console** y lee el error rojo. Es lo primero que hay que mirar siempre.

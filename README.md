@@ -11,7 +11,7 @@ Publicas lo que necesitas, filtras por carrera o área, contactas por WhatsApp/I
 **Manual:**
 
 ```powershell
-py -m http.server 8000
+py serve.py 8000
 ```
 
 Y abre <http://localhost:8000>.

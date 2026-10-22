@@ -44,7 +44,7 @@ Es la más fácil: instala Git, gestiona el login de GitHub y sube los cambios c
 ```powershell
 git clone https://github.com/danielalvarezvazquez/USwap.git C:\Hackaton\USwap
 cd C:\Hackaton\USwap
-py -m http.server 8000
+py serve.py 8000
 ```
 
 Si Windows dice **"git no se reconoce como comando"**, no está instalado o no está en el PATH: usa la Opción A y no pierdas tiempo.
@@ -57,16 +57,17 @@ Si Windows dice **"git no se reconoce como comando"**, no está instalado o no e
 
 ```powershell
 cd C:\Hackaton\USwap
-py -m http.server 8000
+py serve.py 8000
 ```
 
 Abre <http://localhost:8000>. Para parar el servidor: `Ctrl + C`.
+`serve.py` es un servidor mínimo que **desactiva la caché**: sin él, el navegador puede seguir usando un `.js` antiguo y parecer que tus cambios no se guardan.
 
 **Sin Python:** doble clic en `index.html`. Funciona, pero el navegador guarda los datos de forma menos fiable; para la demo final se usa el servidor.
 
-✅ **Comprobado si** ves el tablón con 8 ofertas, los filtros y la barra inferior (Tablón / Publicar / Ranking / Perfil).
+✅ **Comprobado si** ves el tablón con 9 ofertas, los filtros y la barra inferior (Tablón / Publicar / Ranking / Perfil).
 
-Prueba el flujo entero una vez: abrir una oferta → "He cerrado el trato" → 5 estrellas → enviar → ver ranking. Y pulsa el botón **↺** de arriba a la derecha para reiniciar los datos.
+Prueba el flujo entero una vez con la oferta **"Apuntes de Cálculo I"** (ya está cerrada): abrirla → "Valorar a Marc Puig" → 5 estrellas → enviar. Y pulsa el botón **↺** de arriba a la derecha para reiniciar los datos.
 
 ---
 

@@ -12,7 +12,7 @@
 (function () {
   'use strict';
 
-  var VERSION = 3;                 // subir si cambia la forma de los datos
+  var VERSION = 4;                 // subir si cambia la forma de los datos
   var KEY = 'uswap.v1';            // clave de localStorage
 
   var AREAS = ['Tecnología', 'Ciencias', 'Salud', 'Diseño', 'Humanidades', 'Economía'];
@@ -51,12 +51,16 @@
 
   /* ----------------------------------------------------------------- ofertas
      id, titulo, descripcion, tipo ('objeto'|'favor'), categoria, autorId,
-     pideACambio, estado ('abierta'|'cerrada'), creadaEn (ISO), destacada
+     pideACambio, estado ('abierta'|'acordada'|'cerrada'), creadaEn (ISO), destacada
+     acuerdo: { proponente, confirmadoPor:[uids], fecha }
+       - abierta   → nadie ha propuesto cerrar
+       - acordada  → una parte ha propuesto/confirmado; falta la otra
+       - cerrada   → las dos partes han confirmado; se puede valorar
   */
   function haceHoras(h) { return new Date(Date.now() - h * 3600 * 1000).toISOString(); }
 
   function ofertasBase() {
-    return [
+    var base = [
       { id: 'o1', titulo: 'Apuntes completos de Estadística II', tipo: 'objeto', categoria: 'Apuntes', autorId: 'u2',
         descripcion: 'Temario entero, problemas resueltos y los 3 exámenes de años anteriores con soluciones. En PDF y fotocopia.',
         pideACambio: 'Clases de Python o apuntes de Cálculo II', estado: 'abierta', creadaEn: haceHoras(2), destacada: true },
@@ -80,8 +84,20 @@
         pideACambio: 'Apuntes de Anatomía o transporte a la estación', estado: 'abierta', creadaEn: haceHoras(33) },
       { id: 'o8', titulo: 'Apuntes de Anatomía con dibujos a mano', tipo: 'objeto', categoria: 'Apuntes', autorId: 'u3',
         descripcion: 'Dos tomos encuadernados con esquemas dibujados a mano. Muy visuales para primer y segundo curso.',
-        pideACambio: 'Clases de dibujo o ilustración para el TFG', estado: 'abierta', creadaEn: haceHoras(41) }
+        pideACambio: 'Clases de dibujo o ilustración para el TFG', estado: 'abierta', creadaEn: haceHoras(41) },
+      /* Oferta ya cerrada: sirve para demostrar el acuerdo a dos bandas y la valoración.
+         Ana (u1) propuso el acuerdo y Marc (u2, autor) lo confirmó. */
+      { id: 'o9', titulo: 'Apuntes de Cálculo I con ejercicios resueltos', tipo: 'objeto', categoria: 'Apuntes', autorId: 'u2',
+        descripcion: 'Temario completo, 40 ejercicios resueltos a mano y dos exámenes corregidos. Incluye formulario resumen.',
+        pideACambio: 'Clases de Python o un café de la máquina', estado: 'cerrada', creadaEn: haceHoras(80),
+        acuerdo: { proponente: 'u1', confirmadoPor: ['u1', 'u2'], fecha: haceHoras(20) } }
     ];
+
+    /* toda oferta necesita el campo acuerdo, aunque esté vacío */
+    return base.map(function (o) {
+      if (!o.acuerdo) o.acuerdo = { proponente: null, confirmadoPor: [], fecha: null };
+      return o;
+    });
   }
 
   /* ------------------------------------------------------------- valoraciones
@@ -206,15 +222,74 @@
       return o;
     },
     addValoracion: function (datos) {
+      /* una valoración por persona y trato */
+      if (datos.ofertaId && datos.ofertaId !== 'manual' &&
+          window.USWAP.yaValoro(datos.ofertaId, estado().yo)) return null;
+
+      var estrellas = Math.max(1, Math.min(5, Number(datos.estrellas) || 0));
       var v = {
         id: id('v'), ofertaId: datos.ofertaId || 'manual', deUsuarioId: estado().yo,
-        aUsuarioId: datos.aUsuarioId, estrellas: datos.estrellas,
+        aUsuarioId: datos.aUsuarioId, estrellas: estrellas,
         comentario: datos.comentario || '', creadaEn: new Date().toISOString()
       };
       estado().valoraciones.unshift(v);
       persistir();
       return v;
     },
+    /* --- acuerdo a dos bandas ---
+       Cualquiera de las dos partes propone; la otra confirma.
+       Solo se cierra cuando confirman el autor y otra persona distinta. */
+    proponerAcuerdo: function (oid) {
+      var o = window.USWAP.oferta(oid);
+      if (!o || o.estado === 'cerrada') return o;
+      var yo = estado().yo;
+      if (!o.acuerdo) o.acuerdo = { proponente: null, confirmadoPor: [], fecha: null };
+      if (o.acuerdo.confirmadoPor.indexOf(yo) === -1) o.acuerdo.confirmadoPor.push(yo);
+      o.acuerdo.proponente = yo;
+      o.estado = 'acordada';
+      persistir();
+      return o;
+    },
+    confirmarAcuerdo: function (oid) {
+      var o = window.USWAP.oferta(oid);
+      if (!o || o.estado === 'cerrada') return o;
+      var yo = estado().yo;
+      if (!o.acuerdo) o.acuerdo = { proponente: null, confirmadoPor: [], fecha: null };
+      if (o.acuerdo.confirmadoPor.indexOf(yo) === -1) o.acuerdo.confirmadoPor.push(yo);
+
+      var confirmaAutor = o.acuerdo.confirmadoPor.indexOf(o.autorId) !== -1;
+      if (confirmaAutor && o.acuerdo.confirmadoPor.length >= 2) {
+        o.estado = 'cerrada';
+        o.acuerdo.fecha = new Date().toISOString();
+      } else {
+        o.estado = 'acordada';
+      }
+      persistir();
+      return o;
+    },
+    /* uids de las personas implicadas en el trato (autor + quien confirmó) */
+    participantes: function (oid) {
+      var o = window.USWAP.oferta(oid);
+      if (!o) return [];
+      var ids = [o.autorId];
+      var conf = (o.acuerdo && o.acuerdo.confirmadoPor) || [];
+      conf.forEach(function (uid) { if (ids.indexOf(uid) === -1) ids.push(uid); });
+      return ids;
+    },
+    /* la persona a la que le toca valorar/valorar yo, relativa al usuario actual */
+    otraParteDe: function (oid) {
+      var yo = estado().yo;
+      var otros = window.USWAP.participantes(oid).filter(function (uid) { return uid !== yo; });
+      return otros.length ? window.USWAP.usuario(otros[0]) : null;
+    },
+    /* ¿el usuario ya valoró esta oferta? evita valoraciones duplicadas */
+    yaValoro: function (oid, deUid) {
+      var de = deUid || estado().yo;
+      return estado().valoraciones.some(function (v) {
+        return v.ofertaId === oid && v.deUsuarioId === de;
+      });
+    },
+
     cerrarTrato: function (oid) {
       var o = window.USWAP.oferta(oid);
       if (o) { o.estado = 'cerrada'; persistir(); }

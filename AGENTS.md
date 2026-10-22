@@ -13,8 +13,9 @@ App **móvil** (prototipo web) de intercambio de **favores y objetos** entre est
 - **Perfil**: carrera, curso, área, habilidades, reputación y puntos.
 - **Publicar**: el estudiante dice qué ofrece y qué pide a cambio.
 - **Contacto**: el chat es **externo** (WhatsApp/Instagram). La app solo genera enlaces `wa.me` e `instagram.com`.
-- **Cierre**: al terminar el trato se marca como cerrado.
-- **Valoración**: ★1-5 con comentario.
+- **Cierre**: el trato se cierra a dos bandas. Una parte pulsa "Hemos llegado a un acuerdo" y la otra lo confirma; hasta entonces queda "acuerdo pendiente".
+- **Valoración**: solo cuando el trato está cerrado, cada parte valora a la otra **una vez**: ★1-5 + comentario opcional.
+- **Perfil**: muestra las valoraciones recibidas con su comentario y la puntuación.
 - **Ranking + recompensas**: ★4-5 suma 1 punto, ★3 no puntúa, ★1-2 resta 1 punto. Niveles: En observación → Bronce → Plata → Oro → Élite, cada uno con su recompensa.
 
 Proyecto de hackathon de la ETSE. Quedan ~3 h 30 min y hay que **exponer una demo de 5 minutos**.
@@ -41,7 +42,7 @@ Restricciones que esto impone — **los agentes las incumplen por defecto**, as�
 
 ```powershell
 # En la raíz del repo
-py -m http.server 8000     # luego abrir http://localhost:8000
+py serve.py 8000           # luego abrir http://localhost:8000
 # o doble clic en abrir-app.bat
 ```
 
@@ -75,11 +76,18 @@ Definido en `js/data.js` (P1). Campos exactos, en español:
 
 ```js
 usuario  { id, nombre, carrera, curso, area, bio, habilidades[], color, instagram, whatsapp }
-oferta   { id, titulo, descripcion, tipo:'favor'|'objeto', categoria, autorId, pideACambio, estado:'abierta'|'cerrada', creadaEn, destacada }
+oferta   { id, titulo, descripcion, tipo:'favor'|'objeto', categoria, autorId, pideACambio,
+           estado:'abierta'|'acordada'|'cerrada', creadaEn, destacada,
+           acuerdo:{ proponente, confirmadoPor:[uids], fecha } }
 valoración { id, ofertaId, deUsuarioId, aUsuarioId, estrellas:1..5, comentario, creadaEn }
 ```
 
-API disponible (`window.USWAP`): `yo()`, `setYo(id)`, `usuarios()`, `usuario(id)`, `ofertas()`, `oferta(id)`, `ofertasDe(uid)`, `valoracionesDe(uid)`, `addOferta(datos)`, `addValoracion(datos)`, `cerrarTrato(id)`, `actualizarPerfil(datos)`, `puntosDe(uid)`, `mediaDe(uid)`, `reset()`.
+**Flujo del trato (no cambiarlo sin hablar con P1):**
+`abierta` → alguien pulsa "Hemos llegado a un acuerdo" → `acordada` con esa persona en `confirmadoPor` →
+la otra parte confirma → `cerrada` cuando `confirmadoPor` incluye al autor y hay 2 personas distintas.
+Solo en `cerrada` se puede valorar, y **una sola vez por persona y trato**.
+
+API disponible (`window.USWAP`): `yo()`, `setYo(id)`, `usuarios()`, `usuario(id)`, `ofertas()`, `oferta(id)`, `ofertasDe(uid)`, `valoracionesDe(uid)`, `addOferta(datos)`, `addValoracion(datos)`, `proponerAcuerdo(oid)`, `confirmarAcuerdo(oid)`, `participantes(oid)`, `otraParteDe(oid)`, `yaValoro(oid, uid)`, `actualizarPerfil(datos)`, `puntosDe(uid)`, `mediaDe(uid)`, `reset()`.
 
 Componentes (`window.USWAP_UI`): `montarNav('inicio'|'publicar'|'ranking'|'perfil')`, `avatar(usuario, clase)`, `estrellas(media)`, `tiempo(fechaIso)`, `param('id')`, `toast(texto)`, `vacio(titulo, texto)`, `esc(texto)`.
 
@@ -140,6 +148,6 @@ $env:PATH = "C:\Program Files\Git\cmd;C:\Program Files\GitHub CLI;" + $env:PATH
 
 ## 10. Demo (5 min)
 
-`Problema (P2)` → `tablón con filtros (P2)` → `abrir oferta + contacto (P3)` → `cerrar trato y valorar (P1)` → `ranking y recompensas (P3)` → `perfil (P4)` → `cómo se hizo con IA (P1)` → `roadmap`.
+`Problema (P2)` → `tablón con filtros (P2)` → `oferta, acuerdo a dos bandas y valoración (P1)` → `ranking y recompensas (P3)` → `perfil con las valoraciones (P4)` → `cómo se hizo con IA (P1)` → `roadmap`.
 
 Reglas de demo: usuario cambiado desde la cabecera para enseñar los dos lados, datos semilla ya cargados, **nunca** crear contenido en vivo, y **↺** antes de empezar.
