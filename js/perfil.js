@@ -55,11 +55,11 @@
   /* --- descuentos en comercios de Compostela (se desbloquean con puntos) --- */
   var TIENDAS = [
     { nombre: 'CopyCampus', detalle: '10% en fotocopias y encuadernación', desde: 0 },
-    { nombre: 'Take', detalle: 'Menú + bebida por 6,50 €', desde: 2 },
-    { nombre: 'Papelería Campus', detalle: '15% en material de oficina', desde: 4 },
-    { nombre: 'Cafetería ETSE', detalle: 'Café gratis por la mañana', desde: 6 },
-    { nombre: 'Librería Universitaria', detalle: '10% en manuales y lectura', desde: 9 },
-    { nombre: 'Gimnasio Compostela', detalle: 'Matrícula gratis este curso', desde: 12 }
+    { nombre: 'Take', detalle: 'Menú + bebida por 6,50 €', desde: 100 },
+    { nombre: 'Papelería Campus', detalle: '15% en material de oficina', desde: 150 },
+    { nombre: 'Cafetería ETSE', detalle: 'Café gratis por la mañana', desde: 200 },
+    { nombre: 'Librería Universitaria', detalle: '10% en manuales y lectura', desde: 250 },
+    { nombre: 'Gimnasio Compostela', detalle: 'Matrícula gratis este curso', desde: 300 }
   ];
   var desbloqueados = TIENDAS.filter(function (t) { return puntos >= t.desde; }).length;
 
