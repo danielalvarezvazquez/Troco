@@ -157,12 +157,15 @@
         (oferta.destacada ? '<span class="badge badge-ambar">★ Destacada</span>' : '') + '</div>' +
     '</div>' +
 
-    '<div class="seccion-titulo"><h2>Quién lo ofrece</h2>' +
-      '<a href="perfil.html?u=' + encodeURIComponent(autor.id) + '">Ver perfil y valoraciones</a></div>' +
+    '<div class="seccion-titulo"><h2>Quién lo ofrece</h2></div>' +
 
     '<div class="bloque">' +
       '<div class="card-fila">' +
-        UI.avatar(autor, 'grande') +
+        '<a class="avatar-enlace" href="perfil.html?u=' + encodeURIComponent(autor.id) + '"' +
+          ' title="Ver perfil y valoraciones de ' + UI.esc(autor.nombre) + '"' +
+          ' aria-label="Ver perfil y valoraciones de ' + UI.esc(autor.nombre) + '">' +
+          UI.avatar(autor, 'grande') +
+        '</a>' +
         '<div class="usuario-linea">' +
           '<span class="usuario-nombre" style="font-size:15px">' + UI.esc(autor.nombre) + '</span>' +
           '<span class="usuario-detalle">' + UI.esc(autor.carrera) + ' · ' + UI.curso(autor.curso) + ' · ' + UI.esc(autor.rama) + '</span>' +

@@ -12,7 +12,7 @@
 (function () {
   'use strict';
 
-  var VERSION = 8;                 // subir si cambia la forma de los datos
+  var VERSION = 9;                 // subir si cambia la forma de los datos
   var KEY = 'uswap.v1';            // clave de localStorage
 
   /* Hash djb2: suficiente para una demo sin backend (NO es seguridad real) */
