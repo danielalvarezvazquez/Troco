@@ -15,6 +15,12 @@
   var VERSION = 12;                // subir si cambia la forma de los datos
   var KEY = 'uswap.v1';            // clave de localStorage
 
+  /* Puntos por reseña según las estrellas.
+     ★1 = −20 · ★2 = 0 · ★3 = +20 · ★4 = +40 · ★5 = +80 */
+  var PUNTOS_ESTRELLA = { 1: -20, 2: 0, 3: 20, 4: 40, 5: 80 };
+
+  function puntosPorEstrellas(n) { return PUNTOS_ESTRELLA[Number(n)] || 0; }
+
   /* Hash djb2: suficiente para una demo sin backend (NO es seguridad real) */
   function hashPass(texto) {
     var h = 5381, s = String(texto || '');
@@ -267,7 +273,7 @@
 
   /* ------------------------------------------------------------- valoraciones
      id, ofertaId, deUsuarioId, aUsuarioId, estrellas (1-5), comentario, creadaEn
-     Puntos: 10 por estrella (★1 = 10 … ★5 = 50). Sin reseñas, 0 puntos.
+     Puntos: ★1 −20 · ★2 0 · ★3 +20 · ★4 +40 · ★5 +80. Sin reseñas, 0 puntos.
   */
   var COMENTARIOS = [
     'Muy puntual y todo clarísimo.',
@@ -563,11 +569,11 @@
       return u;
     },
 
-    /* --- reputación: 10 puntos por estrella (0★ = 0, 5★ = 50) --- */
+    /* --- reputación: puntos por reseña (★1 −20 · ★2 0 · ★3 +20 · ★4 +40 · ★5 +80) --- */
     puntosDe: function (uid) {
       return estado().valoraciones.reduce(function (total, v) {
         if (v.aUsuarioId !== uid) return total;
-        return total + (Number(v.estrellas) || 0) * 10;
+        return total + puntosPorEstrellas(v.estrellas);
       }, 0);
     },
     mediaDe: function (uid) {

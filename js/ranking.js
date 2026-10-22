@@ -54,25 +54,25 @@
     return '';
   }
 
-  /* ---- rangos: 10 puntos por estrella; umbrales acumulados ---------------- */
+  /* ---- rangos: puntos por reseña; cada umbral duplica el anterior desde 40 -- */
   var NIVELES = [
     { id: 'hierro', nombre: 'Hierro', min: 0, color: '#475569', marco: '#94a3b8', icono: '🩶', clase: 'tier-hierro',
       premio: 'Marco de hierro y nombre en gris. El punto de partida.' },
-    { id: 'bronce', nombre: 'Bronce', min: 50, color: '#b45309', marco: '#b45309', icono: '🥉', clase: 'tier-bronce',
+    { id: 'bronce', nombre: 'Bronce', min: 40, color: '#b45309', marco: '#b45309', icono: '🥉', clase: 'tier-bronce',
       premio: 'Marco de bronce y nombre en cobre. Acceso completo al tablón.' },
-    { id: 'plata', nombre: 'Plata', min: 100, color: '#64748b', marco: '#cbd5e1', icono: '🥈', clase: 'tier-plata',
+    { id: 'plata', nombre: 'Plata', min: 80, color: '#64748b', marco: '#cbd5e1', icono: '🥈', clase: 'tier-plata',
       premio: 'Marco de plata y nombre en gris claro. Tu oferta se destaca 24 h.' },
-    { id: 'oro', nombre: 'Oro', min: 150, color: '#a16207', marco: '#eab308', icono: '🥇', clase: 'tier-oro',
+    { id: 'oro', nombre: 'Oro', min: 160, color: '#a16207', marco: '#eab308', icono: '🥇', clase: 'tier-oro',
       premio: 'Marco dorado y nombre en oro. Sello verificado y prioridad en el tablón.' },
-    { id: 'platino', nombre: 'Platino', min: 200, color: '#0e7490', marco: '#22d3ee', icono: '🛡️', clase: 'tier-platino',
+    { id: 'platino', nombre: 'Platino', min: 320, color: '#0e7490', marco: '#22d3ee', icono: '🛡️', clase: 'tier-platino',
       premio: 'Marco de platino y nombre en cian. 1 destacado al mes.' },
-    { id: 'diamante', nombre: 'Diamante', min: 250, color: '#1d4ed8', marco: '#60a5fa', icono: '💎', clase: 'tier-diamante',
+    { id: 'diamante', nombre: 'Diamante', min: 640, color: '#1d4ed8', marco: '#60a5fa', icono: '💎', clase: 'tier-diamante',
       premio: 'Marco de diamante y nombre en azul. 2 destacados al mes.' },
-    { id: 'ascendente', nombre: 'Ascendente', min: 300, color: '#6d28d9', marco: '#a78bfa', icono: '🔺', clase: 'tier-ascendente',
+    { id: 'ascendente', nombre: 'Ascendente', min: 1280, color: '#6d28d9', marco: '#a78bfa', icono: '🔺', clase: 'tier-ascendente',
       premio: 'Marco ascendente y nombre en violeta. Perfil en portada una semana.' },
-    { id: 'inmortal', nombre: 'Inmortal', min: 400, color: '#b91c1c', marco: '#ef4444', icono: '👑', clase: 'tier-inmortal',
+    { id: 'inmortal', nombre: 'Inmortal', min: 2560, color: '#b91c1c', marco: '#ef4444', icono: '👑', clase: 'tier-inmortal',
       premio: 'Marco inmortal y nombre en rojo. Destacados ilimitados.' },
-    { id: 'radiante', nombre: 'Radiante', min: 500, color: '#a21caf', marco: '#e879f9', icono: '🌟', clase: 'tier-radiante',
+    { id: 'radiante', nombre: 'Radiante', min: 5120, color: '#a21caf', marco: '#e879f9', icono: '🌟', clase: 'tier-radiante',
       premio: 'Marco radiante con brillo y nombre en magenta. Referencia de la comunidad.' }
   ];
 
@@ -304,8 +304,8 @@
       '<p class="usuario-detalle" style="margin:0 0 6px">Llevas ' + desbloqueadas + ' de ' + NIVELES.length + ' recompensas desbloqueadas.</p>' +
       html +
       '<p class="usuario-detalle" style="margin:14px 0 0;line-height:1.5">' +
-        'Cómo se calcula: cada reseña suma 10 puntos por estrella (★1 = 10, ★2 = 20, ★3 = 30, ★4 = 40 y ★5 = 50). ' +
-        'Sin reseñas tienes 0 puntos. Los umbrales de cada rango son acumulados.</p>';
+        'Cómo se calcula: ★1 resta 20 puntos · ★2 no suma · ★3 suma 20 · ★4 suma 40 · ★5 suma 80. ' +
+        'El primer rango se consigue con 40 puntos y cada uno siguiente duplica el anterior (40, 80, 160, 320…).</p>';
   }
 
   pintarMiPosicion();

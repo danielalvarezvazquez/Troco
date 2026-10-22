@@ -95,7 +95,7 @@
       '</div>' +
 
       '<p class="usuario-detalle" style="text-align:center;margin-top:14px">' +
-        'Cada estrella suma 10 puntos (★1 = 10 · ★3 = 30 · ★5 = 50). Solo se puede valorar una vez.</p>';
+        '★1 resta 20 · ★2 no suma · ★3 suma 20 · ★4 suma 40 · ★5 suma 80. Solo se puede valorar una vez.</p>';
 
     document.querySelectorAll('.estrella-btn').forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -145,10 +145,8 @@
           '<div class="stat"><b>' + puntosDespues + '</b><span>total</span></div>' +
           '<div class="stat"><b>' + nivel + '</b><span>nivel</span></div>' +
         '</div>' +
-        (delta < 0
-          ? '<p class="usuario-detalle" style="margin-top:14px">Esta reseña resta puntos al ranking.</p>'
-          : '<p class="usuario-detalle" style="margin-top:14px">Cada estrella suma 10 puntos: esta reseña aporta ' +
-            delta + ' puntos al ranking.</p>') +
+        '<p class="usuario-detalle" style="margin-top:14px">Esta reseña ' +
+          (delta < 0 ? 'resta ' + Math.abs(delta) : 'suma ' + delta) + ' puntos al ranking.</p>' +
         '<p class="usuario-detalle" style="margin-top:14px">Tu comentario ya se ve en el perfil de ' +
           UI.esc(valorado.nombre) + '.</p>' +
         '<a class="btn btn-primario" style="margin-top:16px" href="perfil.html?u=' + encodeURIComponent(valorado.id) + '">' +
