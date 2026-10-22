@@ -569,12 +569,20 @@
       return u;
     },
 
-    /* --- reputación: puntos por reseña (★1 −20 · ★2 0 · ★3 +20 · ★4 +40 · ★5 +80) --- */
+    /* --- reputación: puntos por reseña (★1 −20 · ★2 0 · ★3 +20 · ★4 +40 · ★5 +80)
+       Al canjear un descuento se descuentan los puntos gastados, así que el
+       perfil, el rango y el ranking bajan en cuanto gastas. --- */
     puntosDe: function (uid) {
-      return estado().valoraciones.reduce(function (total, v) {
+      var ganados = estado().valoraciones.reduce(function (total, v) {
         if (v.aUsuarioId !== uid) return total;
         return total + puntosPorEstrellas(v.estrellas);
       }, 0);
+
+      var gastados = (estado().canjes || []).reduce(function (total, c) {
+        return c.uid === uid ? total + (c.precio || 0) : total;
+      }, 0);
+
+      return ganados - gastados;
     },
     mediaDe: function (uid) {
       var vs = window.USWAP.valoracionesDe(uid);

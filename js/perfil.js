@@ -87,7 +87,8 @@
     return est.canjes.filter(function (c) { return c.uid === uid; });
   }
   var gastados = canjesDe(u.id).reduce(function (acc, c) { return acc + (c.precio || 0); }, 0);
-  var saldo = Math.max(0, puntos - gastados);
+  /* puntosDe ya descuenta lo canjeado, así que el saldo es el propio saldo neto */
+  var saldo = Math.max(0, puntos);
 
   /* --- contacto: enlaces discretos sobre la credencial --- */
   var estiloEnlace = 'color:rgba(255,255,255,.66);text-decoration:none;font-weight:600;font-size:12px;' +
@@ -114,10 +115,11 @@
   }
 
   /* --- celda de la ficha inferior --- */
-  function celda(valor, etiqueta, primera) {
+  function celda(valor, etiqueta, primera, idValor) {
     return '<div class="stat" style="background:transparent;border:0;border-radius:0;text-align:left;' +
         'padding:0 0 0 14px' + (primera ? '' : ';border-left:1px solid #eef1f7') + '">' +
-        '<b style="font-size:17px;letter-spacing:-.5px;font-variant-numeric:tabular-nums">' + valor + '</b>' +
+        '<b' + (idValor ? ' id="' + idValor + '"' : '') +
+          ' style="font-size:17px;letter-spacing:-.5px;font-variant-numeric:tabular-nums">' + valor + '</b>' +
         '<span style="font-size:10.5px;text-transform:none;letter-spacing:0;font-weight:600">' + etiqueta + '</span>' +
       '</div>';
   }
@@ -224,7 +226,7 @@
           '<span style="display:block;font-size:11px;color:rgba(255,255,255,.45)">Rango</span>' +
           '<span class="tier ' + nivel.clase + '" style="display:block;margin-top:3px;font-size:16px;' +
             'font-weight:800;letter-spacing:-.2px">' + UI.esc(nivel.nombre) + '</span>' +
-          '<span style="display:block;margin-top:4px;font-size:11.5px;color:rgba(255,255,255,.6)">' +
+          '<span id="cred-puntos" style="display:block;margin-top:4px;font-size:11.5px;color:rgba(255,255,255,.6)">' +
             puntos + (Math.abs(puntos) === 1 ? ' pt' : ' pts') + ' ›</span>' +
         '</button>' +
       '</div>' +
@@ -269,7 +271,6 @@
             'color:rgba(255,255,255,.55)">' +
             '<span>Saldo para descuentos</span>' +
             '<b id="cred-saldo" style="font-size:13px;color:#fff">' + saldo + ' pts</b>' +
-            '<span>· ' + puntos + ' pts ganados</span>' +
           '</div>'
         : '') +
 
@@ -299,7 +300,7 @@
       celda(total, total === 1 ? 'reseña' : 'reseñas', true) +
       celda(ofertas.length, ofertas.length === 1 ? 'petición' : 'peticiones') +
       celda(cerradas, cerradas === 1 ? 'trato cerrado' : 'tratos cerrados') +
-      celda(puntos, Math.abs(puntos) === 1 ? 'punto' : 'puntos') +
+      celda(puntos, Math.abs(puntos) === 1 ? 'punto' : 'puntos', false, 'stat-puntos') +
     '</div>' +
 
     /* --- aviso de expulsión (cuentas en observación) --- */
@@ -432,8 +433,8 @@
   var descChevron = document.getElementById('desc-chevron');
 
   function saldoActual() {
-    var gastado = canjesDe(u.id).reduce(function (acc, c) { return acc + (c.precio || 0); }, 0);
-    return Math.max(0, puntos - gastado);
+    /* se calcula en vivo: al canjear, baja al momento */
+    return Math.max(0, USWAP.puntosDe(u.id));
   }
 
   function yaCanjeado(tiendaId) {
@@ -454,16 +455,24 @@
       disponibles + (disponibles === 1 ? ' descuento a tu alcance' : ' descuentos a tu alcance');
 
     var barra = document.getElementById('desc-barra');
+    var gastadoTotal = canjesDe(u.id).reduce(function (acc, c) { return acc + (c.precio || 0); }, 0);
+    var ganados = Math.max(0, saldoAhora + gastadoTotal);
     if (barra) {
-      var pct = puntos > 0 ? Math.round((saldoAhora / puntos) * 100) : 0;
+      var pct = ganados > 0 ? Math.round((saldoAhora / ganados) * 100) : 0;
       barra.style.width = Math.max(0, Math.min(100, pct)) + '%';
     }
     var cartera = document.getElementById('desc-cartera');
     if (cartera) {
-      cartera.textContent = saldoAhora + ' de ' + Math.max(0, puntos) + ' pts';
+      cartera.textContent = saldoAhora + ' de ' + ganados + ' pts';
     }
     var credSaldo = document.getElementById('cred-saldo');
     if (credSaldo) credSaldo.textContent = saldoAhora + ' pts';
+    var credPuntos = document.getElementById('cred-puntos');
+    if (credPuntos) {
+      credPuntos.textContent = saldoAhora + (Math.abs(saldoAhora) === 1 ? ' pt' : ' pts') + ' ›';
+    }
+    var statPuntos = document.getElementById('stat-puntos');
+    if (statPuntos) statPuntos.textContent = saldoAhora;
 
     document.getElementById('desc-filtros').innerHTML = TIPOS.map(function (tp) {
       return '<button type="button" class="chip chip-mini' + (filtroTipo === tp.id ? ' activo' : '') +
