@@ -49,6 +49,7 @@ py -m http.server 8000     # luego abrir http://localhost:8000
 - Un error de JavaScript deja la página **en blanco o a medias**: la única pista está en la consola del navegador (F12 → Console). Mírala siempre antes de inventar una causa.
 - Cada página se prueba con doble clic en el flujo real: tablón → oferta → valorar → ranking.
 - Botón **↺** de la cabecera = `USWAP.reset()`: borra lo añadido y vuelve a los datos semilla.
+- **Primera vez en un portátil** (clonar, GitHub Desktop, abrir OpenCode): `TAREAS/INSTALACION.md`.
 
 ---
 

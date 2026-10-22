@@ -25,6 +25,8 @@ Cada persona abre **solo** su archivo y lo deja al lado de la IA:
 - P3 Tomé → `TAREAS/P3.md`
 - P4 Sergio → `TAREAS/P4.md`
 
+Si alguien llega sin la carpeta en su portátil: `TAREAS/INSTALACION.md`.
+
 ## 4. Primera orden a la IA (5 min)
 
 Pega el **prompt de arranque** que está al principio de tu archivo y luego el paso 1.
