@@ -38,11 +38,10 @@
 
   var total = valoraciones.length;
   var mediaTxt = total ? media.toFixed(1) : '—';
-  var textoVal = total ? total + (total === 1 ? ' valoración' : ' valoraciones') : 'sin valoraciones';
 
-  /* --- contacto: enlaces discretos, solo los que existen --- */
-  var estiloEnlace = 'color:var(--tinta-suave);text-decoration:none;font-weight:650;font-size:12px;' +
-    'border-bottom:1px solid #dfe4ee;padding-bottom:1px';
+  /* --- contacto: enlaces discretos sobre la credencial --- */
+  var estiloEnlace = 'color:rgba(255,255,255,.62);text-decoration:none;font-weight:600;font-size:11.5px;' +
+    'border-bottom:1px solid rgba(255,255,255,.22);padding-bottom:1px';
   var micro = '';
   if (u.instagram) {
     micro += '<a style="' + estiloEnlace + '" target="_blank" rel="noopener" href="https://instagram.com/' +
@@ -53,78 +52,109 @@
       encodeURIComponent(u.whatsapp) + '">WhatsApp ↗</a>';
   }
 
+  /* --- celda de la ficha inferior --- */
   function celda(valor, etiqueta, primera) {
     return '<div class="stat" style="background:transparent;border:0;border-radius:0;text-align:left;' +
-        'padding:0 0 0 14px' + (primera ? '' : ';border-left:1px solid #eef1f7') + '">' +
-        '<b style="font-size:17px;letter-spacing:-.5px">' + valor + '</b>' +
-        '<span style="font-size:9.5px;letter-spacing:.1em">' + etiqueta + '</span>' +
+        'padding:0 0 0 13px' + (primera ? '' : ';border-left:1px solid #eef1f7') + '">' +
+        '<b style="font-size:16.5px;letter-spacing:-.5px;font-variant-numeric:tabular-nums">' + valor + '</b>' +
+        '<span style="font-size:9.5px;text-transform:none;letter-spacing:.01em;font-weight:600">' + etiqueta + '</span>' +
       '</div>';
   }
 
-  /* ------------------------------------------------------------ cabecera */
+  /* --------------------------------------------------- credencial superior */
   document.getElementById('perfil').innerHTML = '' +
-    '<div class="bloque" style="padding:20px 18px 16px">' +
-      '<div style="display:flex;align-items:center;gap:14px">' +
-        UI.avatar(u, 'grande') +
+    '<div style="position:relative;border-radius:22px;padding:18px 18px 42px;color:#fff;' +
+      'background:radial-gradient(120% 115% at 88% -18%, rgba(91,91,246,.62) 0%, rgba(91,91,246,0) 58%),' +
+      'linear-gradient(158deg,#16203a 0%,#0d1424 100%)">' +
+
+      '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;' +
+        'font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.48)">' +
+        '<span>Credencial USwap</span>' +
+        (posicion ? '<span>Puesto ' + posicion + '</span>' : '') +
+      '</div>' +
+
+      '<div style="display:flex;align-items:center;gap:14px;margin-top:16px">' +
+        '<div style="flex:0 0 auto;padding:3px;border-radius:23px;border:1px solid rgba(255,255,255,.22)">' +
+          UI.avatar(u, 'grande') +
+        '</div>' +
         '<div style="min-width:0">' +
-          '<h1 style="margin:0;font-size:23px;line-height:1.12;letter-spacing:-.8px">' + UI.esc(u.nombre) + '</h1>' +
-          '<div class="usuario-detalle" style="margin-top:4px;font-size:12px;line-height:1.35">' +
-            UI.esc(u.carrera) + ' · ' + UI.esc(u.curso) + 'º curso · ' + UI.esc(u.area) + '</div>' +
+          '<h1 style="margin:0;font-size:24px;line-height:1.1;letter-spacing:-.9px;color:#fff">' + UI.esc(u.nombre) + '</h1>' +
+          '<div style="margin-top:5px;font-size:12px;line-height:1.35;color:rgba(255,255,255,.72)">' +
+            UI.esc(u.carrera) + '</div>' +
+          '<div style="margin-top:2px;font-size:11px;color:rgba(255,255,255,.48)">' +
+            UI.esc(u.curso) + 'º curso · ' + UI.esc(u.area) + '</div>' +
         '</div>' +
       '</div>' +
 
-      '<div style="display:flex;align-items:center;gap:9px;margin-top:16px;padding-top:14px;border-top:1px solid #eef1f7">' +
-        '<b style="font-size:27px;line-height:1;letter-spacing:-1.2px">' + mediaTxt + '</b>' +
-        (total ? UI.estrellas(media, 'grande') : '') +
-        '<span class="usuario-detalle" style="margin-left:auto">' + textoVal + '</span>' +
-      '</div>' +
-
-      (total
-        ? '<div style="display:flex;gap:14px;margin-top:9px;font-size:11.5px;font-weight:650">' +
-            '<span style="color:var(--verde)">' + positivas + (positivas === 1 ? ' positiva' : ' positivas') + '</span>' +
-            '<span style="color:var(--muted)">' + neutras + (neutras === 1 ? ' neutra' : ' neutras') + '</span>' +
-            '<span style="color:var(--rojo)">' + negativas + (negativas === 1 ? ' negativa' : ' negativas') + '</span>' +
-          '</div>'
-        : '') +
-
-      '<div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-top:16px">' +
-        '<span class="tier ' + nivel.clase + '" style="font-size:12px">' + UI.esc(nivel.nombre) + ' · ' + puntos + ' pts</span>' +
-        (posicion ? '<span class="usuario-detalle">Puesto #' + posicion + '</span>' : '') +
+      '<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:14px;' +
+        'margin-top:18px;padding-top:15px;border-top:1px solid rgba(255,255,255,.12)">' +
+        '<div style="min-width:0">' +
+          '<div style="display:flex;align-items:baseline;gap:8px">' +
+            '<span style="font-size:30px;font-weight:800;letter-spacing:-1.6px;line-height:1">' + mediaTxt + '</span>' +
+            (total ? UI.estrellas(media, '') : '') +
+          '</div>' +
+          (total
+            ? '<div style="display:flex;gap:11px;margin-top:6px;font-size:10.5px;font-weight:650;flex-wrap:wrap">' +
+                '<span style="color:#6ee7b7">' + positivas + (positivas === 1 ? ' positiva' : ' positivas') + '</span>' +
+                '<span style="color:rgba(255,255,255,.5)">' + neutras + (neutras === 1 ? ' neutra' : ' neutras') + '</span>' +
+                '<span style="color:#fca5a5">' + negativas + (negativas === 1 ? ' negativa' : ' negativas') + '</span>' +
+              '</div>'
+            : '<div style="margin-top:6px;font-size:10.5px;color:rgba(255,255,255,.5)">Sin valoraciones todavía</div>') +
+        '</div>' +
+        '<div style="text-align:right;flex:0 0 auto">' +
+          '<div style="font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.48)">' +
+            UI.esc(nivel.nombre) + '</div>' +
+          '<div style="margin-top:3px;font-size:16px;font-weight:750;letter-spacing:-.3px">' + puntos +
+            '<span style="font-size:10px;font-weight:600;color:rgba(255,255,255,.55)">' +
+              (Math.abs(puntos) === 1 ? ' pt' : ' pts') + '</span></div>' +
+        '</div>' +
       '</div>' +
 
       (prog.siguiente
-        ? '<div class="barra-progreso" style="margin-top:10px"><div style="width:' + prog.pct + '%"></div></div>' +
-          '<div class="usuario-detalle" style="margin-top:7px">Te faltan ' + prog.faltan + ' puntos para ' + UI.esc(prog.siguiente.nombre) + '</div>'
+        ? '<div class="barra-progreso" style="margin-top:16px;background:rgba(255,255,255,.14)">' +
+            '<div style="width:' + prog.pct + '%;background:#fff"></div>' +
+          '</div>' +
+          '<div style="margin-top:7px;font-size:10.5px;color:rgba(255,255,255,.5)">' +
+            'Te faltan ' + prog.faltan + ' puntos para ' + UI.esc(prog.siguiente.nombre) + '</div>'
         : '') +
 
       (soyYo
-        ? '<a class="btn btn-secundario" style="margin-top:18px" href="editar-perfil.html">Editar perfil</a>'
+        ? '<a class="btn" style="margin-top:18px;background:#fff;color:#0f172a;box-shadow:none" href="editar-perfil.html">Editar perfil</a>'
         : '<div class="fila" style="margin-top:18px">' +
             (u.whatsapp
               ? '<a class="btn btn-whatsapp" target="_blank" rel="noopener" href="https://wa.me/' + encodeURIComponent(u.whatsapp) + '">WhatsApp</a>'
               : '') +
-            '<a class="btn btn-secundario" href="index.html">Ver ofertas</a>' +
+            '<a class="btn" style="background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.22);color:#fff" href="index.html">Ver ofertas</a>' +
           '</div>' +
-          '<div class="usuario-detalle" style="margin-top:9px;text-align:center">Contacta para negociar el intercambio</div>') +
+          '<div style="margin-top:9px;text-align:center;font-size:10.5px;color:rgba(255,255,255,.5)">' +
+            'Contacta para negociar el intercambio</div>') +
 
       (micro
-        ? '<div style="display:flex;justify-content:center;gap:18px;margin-top:15px;padding-top:13px;border-top:1px solid #eef1f7">' +
-            micro + '</div>'
+        ? '<div style="display:flex;justify-content:center;gap:18px;margin-top:15px;padding-top:13px;' +
+            'border-top:1px solid rgba(255,255,255,.12)">' + micro + '</div>'
         : '') +
     '</div>' +
 
-    '<div class="stats" style="margin-top:12px;grid-template-columns:repeat(4,1fr);gap:0;background:#fff;' +
-      'border:1px solid var(--borde);border-radius:var(--radio-sm);padding:13px 0">' +
+    /* --- ficha de cifras, montada sobre la credencial --- */
+    '<div class="stats" style="margin:-28px 12px 0;position:relative;grid-template-columns:repeat(4,1fr);gap:0;' +
+      'background:#fff;border:1px solid var(--borde);border-radius:14px;padding:13px 2px;' +
+      'box-shadow:0 18px 32px -26px rgba(15,23,42,.7)">' +
       celda(total, total === 1 ? 'valoración' : 'valoraciones', true) +
       celda(ofertas.length, ofertas.length === 1 ? 'oferta' : 'ofertas') +
       celda(cerradas, cerradas === 1 ? 'cerrada' : 'cerradas') +
       celda(puntos, Math.abs(puntos) === 1 ? 'punto' : 'puntos') +
     '</div>' +
 
-    (u.bio ? '<div class="bloque" style="margin-top:12px"><p class="detalle-texto" style="margin:0;line-height:1.55">' +
-      UI.esc(u.bio) + '</p></div>' : '') +
+    (u.bio
+      ? '<div class="bloque" style="margin-top:14px;padding:15px 16px;border-left:3px solid var(--primario);' +
+          'border-radius:4px 14px 14px 4px">' +
+          '<p class="detalle-texto" style="margin:0;font-size:13px;line-height:1.6">' + UI.esc(u.bio) + '</p>' +
+        '</div>'
+      : '') +
 
-    '<div class="seccion-titulo"><h2>Habilidades</h2></div>' +
+    '<div class="seccion-titulo"><h2>Habilidades</h2>' +
+      (u.habilidades && u.habilidades.length ? '<span class="usuario-detalle">' + u.habilidades.length + '</span>' : '') +
+    '</div>' +
     ((u.habilidades && u.habilidades.length)
       ? '<div class="chips" style="flex-wrap:wrap;overflow:visible">' +
         u.habilidades.map(function (h) {
@@ -144,16 +174,24 @@
 
   /* ------------------------------------------------------------- ofertas */
   document.getElementById('ofertas').innerHTML = ofertas.length
-    ? ofertas.map(function (o) {
-        return '<a class="card" href="oferta.html?id=' + encodeURIComponent(o.id) + '">' +
-          '<div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start">' +
-            '<h3 class="card-titulo" style="margin:0">' + UI.esc(o.titulo) + '</h3>' +
-            '<span class="badge ' + (o.estado === 'cerrada' ? 'badge-verde' : 'badge-azul') + '">' +
-              (o.estado === 'cerrada' ? 'Cerrada' : 'Abierta') + '</span>' +
-          '</div>' +
-          '<div class="card-pie"><span>' + UI.esc(o.categoria) + '</span><span>' + UI.tiempo(o.creadaEn) + '</span></div>' +
-        '</a>';
-      }).join('')
+    ? '<div class="bloque" style="padding:2px 15px">' +
+        ofertas.map(function (o, i) {
+          return '<a href="oferta.html?id=' + encodeURIComponent(o.id) + '" style="display:flex;align-items:center;' +
+              'gap:11px;padding:13px 0;text-decoration:none;color:inherit' +
+              (i < ofertas.length - 1 ? ';border-bottom:1px solid #eef1f7' : '') + '">' +
+            '<span style="flex:0 0 auto;width:6px;height:6px;border-radius:99px;background:' +
+              (o.estado === 'cerrada' ? '#cbd5e1' : '#16a34a') + '"></span>' +
+            '<span style="flex:1;min-width:0">' +
+              '<span style="display:block;font-size:13.5px;font-weight:650;line-height:1.35;letter-spacing:-.1px">' +
+                UI.esc(o.titulo) + '</span>' +
+              '<span style="display:block;margin-top:3px;font-size:11px;color:var(--muted)">' +
+                UI.esc(o.categoria) + ' · ' + UI.tiempo(o.creadaEn) +
+                (o.estado === 'cerrada' ? ' · Cerrada' : '') + '</span>' +
+            '</span>' +
+            '<span style="flex:0 0 auto;color:#c3cbdb;font-size:18px;line-height:1">›</span>' +
+          '</a>';
+        }).join('') +
+      '</div>'
     : UI.vacio(soyYo ? 'Todavía no has publicado nada' : 'Todavía no ha publicado nada',
         soyYo ? 'Pulsa en Publicar para crear tu primera oferta.' : '');
 
@@ -162,18 +200,19 @@
   document.getElementById('valoraciones').innerHTML = total
     ? valoraciones.map(function (v, i) {
         var de = USWAP.usuario(v.deUsuarioId) || { nombre: 'Alguien', color: '#94a3b8' };
-        return '<div style="display:flex;gap:10px;align-items:flex-start;padding:13px 2px' +
+        return '<div style="padding:15px 2px' +
             (i < total - 1 ? ';border-bottom:1px solid #eef1f7' : '') + '">' +
-          UI.avatar(de, 'pequeno') +
-          '<div style="flex:1;min-width:0">' +
-            '<div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px">' +
-              '<span class="usuario-nombre">' + UI.esc(de.nombre) + '</span>' +
-              '<span class="usuario-detalle">' + UI.tiempo(v.creadaEn) + '</span>' +
-            '</div>' +
-            '<div style="margin-top:3px">' + UI.estrellas(v.estrellas) + '</div>' +
-            (v.comentario
-              ? '<p class="detalle-texto" style="margin:6px 0 0;font-size:12.5px;line-height:1.5">“' + UI.esc(v.comentario) + '”</p>'
-              : '') +
+          '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px">' +
+            UI.estrellas(v.estrellas) +
+            '<span class="usuario-detalle">' + UI.tiempo(v.creadaEn) + '</span>' +
+          '</div>' +
+          (v.comentario
+            ? '<p style="margin:8px 0 0;font-size:13px;line-height:1.6;color:var(--tinta-suave)">“' +
+                UI.esc(v.comentario) + '”</p>'
+            : '') +
+          '<div style="display:flex;align-items:center;gap:7px;margin-top:10px">' +
+            UI.avatar(de, 'pequeno') +
+            '<span style="font-size:11.5px;font-weight:650">' + UI.esc(de.nombre) + '</span>' +
           '</div>' +
         '</div>';
       }).join('')
