@@ -25,6 +25,7 @@
         <label class="label" for="titulo">Título</label>
         <input class="input" id="titulo" maxlength="70" required
                placeholder="Ej. Apuntes de Estadística II">
+        <div class="usuario-detalle" id="contador-titulo" style="text-align:right;margin-top:5px">0/70</div>
 
         <label class="label" for="descripcion">Descripción</label>
         <textarea class="textarea" id="descripcion" maxlength="280"
@@ -48,9 +49,12 @@
         <input class="input" id="pideACambio" maxlength="90"
                placeholder="Ej. Clases de Python o un café">
 
-        <button class="btn btn-primario btn-bloque" type="submit">Publicar en el tablón</button>
+        <button class="btn btn-primario btn-bloque" id="btn-publicar" type="submit" disabled>Publicar en el tablón</button>
         <a class="btn btn-secundario" style="margin-top:8px" href="index.html">Cancelar</a>
       </form>
+
+      <div class="seccion-titulo"><h2>Vista previa</h2><span class="usuario-detalle">Así se verá en el tablón</span></div>
+      <div id="preview"></div>
 
       <p class="usuario-detalle" style="text-align:center;margin-top:14px;line-height:1.5">
         Al publicar aparecerás con tu carrera y curso para que te encuentren.</p>
