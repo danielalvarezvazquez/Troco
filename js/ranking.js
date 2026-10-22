@@ -129,7 +129,7 @@
     NIVELES.slice().reverse().map(function (n) {
       var actual = n.id === miNivel.id;
       return '<div class="recompensa">' +
-        '<div class="recompensa-icono"' + (actual ? ' style="background:#eeefff"' : '') + '>' + n.icono + '</div>' +
+        '<div class="recompensa-icono"' + (actual ? ' style="background:var(--primario-suave)"' : '') + '>' + n.icono + '</div>' +
         '<div class="recompensa-texto"><b>' + n.nombre +
           (actual ? ' <span class="badge badge-azul">tu nivel</span>' : '') +
           '<span class="usuario-detalle" style="font-weight:600"> · desde ' + (n.min <= 0 ? 0 : n.min) + ' pts</span></b>' +

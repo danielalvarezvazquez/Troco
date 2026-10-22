@@ -205,4 +205,30 @@
 
   if (elLimpiar) elLimpiar.addEventListener('click', limpiarFiltros);
   if (elOrden) elOrden.addEventListener('change', pintarLista);
+
+  /* ---- volver arriba ---------------------------------------------------- */
+  var elContenido = document.querySelector('.contenido');
+  var elArriba = document.getElementById('btn-arriba');
+
+  if (elContenido && elArriba) {
+    elContenido.addEventListener('scroll', function () {
+      elArriba.classList.toggle('visible', elContenido.scrollTop > 420);
+    });
+    elArriba.addEventListener('click', function () {
+      elContenido.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  /* ---- atajos de teclado: "/" busca y Esc limpia ------------------------ */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === '/' && document.activeElement !== elBuscador) {
+      e.preventDefault();
+      elBuscador.focus();
+      return;
+    }
+    if (e.key === 'Escape' && (document.activeElement === elBuscador || hayFiltros())) {
+      limpiarFiltros();
+      elBuscador.blur();
+    }
+  });
 })();
