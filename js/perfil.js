@@ -56,16 +56,38 @@
   var total = valoraciones.length;
   var mediaTxt = total ? media.toFixed(1) : '—';
 
-  /* --- descuentos en comercios de Compostela (se desbloquean con puntos) --- */
+  /* --- descuentos en comercios de Compostela (se pagan con puntos) --- */
   var TIENDAS = [
-    { nombre: 'CopyCampus', titulo: '10%', detalle: 'Fotocopias y encuadernación', desde: 0 },
-    { nombre: 'Take', titulo: '6,50 €', detalle: 'Menú + bebida', desde: 100 },
-    { nombre: 'Papelería Campus', titulo: '15%', detalle: 'Material de oficina', desde: 150 },
-    { nombre: 'Cafetería ETSE', titulo: 'Gratis', detalle: 'Café por la mañana', desde: 200 },
-    { nombre: 'Librería Universitaria', titulo: '10%', detalle: 'Manuales y lectura', desde: 250 },
-    { nombre: 'Gimnasio Compostela', titulo: 'Gratis', detalle: 'Matrícula del curso', desde: 300 }
+    { id: 'copy10', nombre: 'CopyCampus', tipo: 'copisteria', valor: '10%', detalle: 'Fotocopias y encuadernación', precio: 50 },
+    { id: 'campus15', nombre: 'Copistería Campus', tipo: 'copisteria', valor: '15%', detalle: 'Material de oficina y plastificados', precio: 80 },
+    { id: 'etse', nombre: 'Cafetería ETSE', tipo: 'comida', valor: 'Gratis', detalle: 'Café o infusión por la mañana', precio: 60 },
+    { id: 'take', nombre: 'Take', tipo: 'comida', valor: '6,50 €', detalle: 'Menú + bebida', precio: 100 },
+    { id: 'pizza', nombre: 'Pizzería Obradoiro', tipo: 'comida', valor: '2x1', detalle: 'Pizzas medianas de martes a jueves', precio: 150 },
+    { id: 'yoga', nombre: 'Yoga Compostela', tipo: 'gimnasio', valor: '1 clase', detalle: 'Clase suelta de iniciación', precio: 120 },
+    { id: 'gym', nombre: 'Gimnasio Compostela', tipo: 'gimnasio', valor: 'Gratis', detalle: 'Matrícula del curso completo', precio: 300 },
+    { id: 'libro', nombre: 'Librería Universitaria', tipo: 'libreria', valor: '10%', detalle: 'Manuales y lectura recomendada', precio: 200 },
+    { id: 'cine', nombre: 'Cine Compostela', tipo: 'ocio', valor: '5 €', detalle: 'Entrada de cualquier sesión', precio: 110 },
+    { id: 'sala', nombre: 'Sala Riquela', tipo: 'ocio', valor: '2x1', detalle: 'Conciertos entre semana', precio: 180 }
   ];
-  var desbloqueados = TIENDAS.filter(function (t) { return puntos >= t.desde; }).length;
+  var TIPOS = [
+    { id: '', texto: 'Todos' },
+    { id: 'copisteria', texto: 'Copistería' },
+    { id: 'comida', texto: 'Comida' },
+    { id: 'gimnasio', texto: 'Gimnasio' },
+    { id: 'libreria', texto: 'Librería' },
+    { id: 'ocio', texto: 'Ocio' }
+  ];
+  var NOMBRE_TIPO = {};
+  TIPOS.forEach(function (t) { if (t.id) NOMBRE_TIPO[t.id] = t.texto; });
+
+  /* puntos gastados = canjes guardados en el estado compartido */
+  function canjesDe(uid) {
+    var est = USWAP.estado();
+    if (!est.canjes) est.canjes = [];
+    return est.canjes.filter(function (c) { return c.uid === uid; });
+  }
+  var gastados = canjesDe(u.id).reduce(function (acc, c) { return acc + (c.precio || 0); }, 0);
+  var saldo = Math.max(0, puntos - gastados);
 
   /* --- contacto: enlaces discretos sobre la credencial --- */
   var estiloEnlace = 'color:rgba(255,255,255,.66);text-decoration:none;font-weight:600;font-size:12px;' +
@@ -290,34 +312,33 @@
           ? 'Añádelas en Editar perfil para que te encuentren.'
           : 'Todavía no ha añadido habilidades.')) +
 
-    '<div class="seccion-titulo"><h2 style="font-size:15px;letter-spacing:-.2px">' +
-      (soyYo ? 'Tus descuentos' : 'Descuentos desbloqueados') + '</h2>' +
-      '<span class="usuario-detalle">' + desbloqueados + ' de ' + TIENDAS.length + '</span></div>' +
-    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">' +
-      TIENDAS.map(function (t) {
-        var ok = puntos >= t.desde;
-        var faltan = Math.max(0, t.desde - puntos);
-        var ini = t.nombre.split(' ').map(function (w) { return w.charAt(0); }).slice(0, 2).join('');
-        return '<div class="tienda-card" style="background:#fff;border:1px solid ' + (ok ? '#dcf3e6' : '#e9edf5') + ';' +
-            'border-radius:16px;padding:12px 13px;' + (ok ? '' : 'opacity:.68;') + '">' +
-          '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px">' +
-            '<span style="width:27px;height:27px;border-radius:9px;display:grid;place-items:center;' +
-              'font-size:10px;font-weight:800;background:' + (ok ? '#e7f8ee' : '#f1f4fa') + ';' +
-              'color:' + (ok ? '#16a34a' : '#8592a6') + '">' + UI.esc(ini) + '</span>' +
-            '<span style="width:6px;height:6px;border-radius:99px;background:' +
-              (ok ? '#16a34a' : '#cbd5e1') + '"></span>' +
+    '<div class="seccion-titulo"><h2 style="font-size:15px;letter-spacing:-.2px">Descuentos</h2>' +
+      '<span class="usuario-detalle" id="desc-saldo-top">' + saldo + ' pts</span></div>' +
+    '<div class="bloque" style="padding:0;border-radius:16px;overflow:hidden">' +
+      '<button type="button" id="desc-toggle" aria-expanded="false" aria-controls="desc-cuerpo" ' +
+        'style="width:100%;display:flex;align-items:center;gap:12px;padding:14px 15px;background:none;' +
+        'border:0;font-family:inherit;cursor:pointer;text-align:left">' +
+        '<span style="flex:1;min-width:0">' +
+          '<span style="display:block;font-size:13px;font-weight:700;letter-spacing:-.1px">' +
+            (soyYo ? 'Canjea tus puntos' : 'Descuentos en Compostela') + '</span>' +
+          '<span id="desc-sub" style="display:block;margin-top:2px;font-size:11.5px;color:var(--muted)"></span>' +
+        '</span>' +
+        '<span id="desc-chevron" style="font-size:13px;color:var(--muted);transition:transform .22s">▾</span>' +
+      '</button>' +
+      '<div id="desc-cuerpo" style="display:none;padding:0 15px 15px">' +
+        '<div style="display:flex;align-items:center;gap:9px;margin-bottom:11px">' +
+          '<div style="flex:1;height:6px;border-radius:99px;background:#eef1f8;overflow:hidden">' +
+            '<div id="desc-barra" style="height:100%;width:100%;border-radius:99px;' +
+              'background:linear-gradient(90deg,#5b5bf6,#8b5cf6)"></div>' +
           '</div>' +
-          '<div style="margin-top:10px;font-size:20px;font-weight:800;letter-spacing:-.8px;line-height:1;' +
-            'color:' + (ok ? '#0f172a' : '#94a3b8') + '">' + UI.esc(t.titulo) + '</div>' +
-          '<div style="margin-top:4px;font-size:12px;font-weight:650;letter-spacing:-.1px">' + UI.esc(t.nombre) + '</div>' +
-          '<div style="margin-top:2px;font-size:11px;color:var(--muted);line-height:1.45">' + UI.esc(t.detalle) + '</div>' +
-          '<div style="margin-top:8px;font-size:10.5px;font-weight:650;color:' + (ok ? '#16a34a' : '#8592a6') + '">' +
-            (ok ? 'Disponible' : 'Faltan ' + faltan + (faltan === 1 ? ' punto' : ' puntos')) + '</div>' +
-        '</div>';
-      }).join('') +
+          '<span id="desc-cartera" style="font-size:11px;font-weight:600;color:var(--muted)"></span>' +
+        '</div>' +
+        '<div id="desc-filtros" style="display:flex;gap:6px;overflow-x:auto;padding:2px 0 11px"></div>' +
+        '<div id="desc-lista" style="display:grid;grid-template-columns:1fr 1fr;gap:9px"></div>' +
+      '</div>' +
     '</div>' +
     '<div class="usuario-detalle" style="margin:9px 4px 0;line-height:1.5">' +
-      'Se canjean enseñando tu credencial USwap en el comercio.' +
+      'Ganas 10 puntos por cada estrella. Se canjean enseñando tu credencial USwap en el comercio.' +
     '</div>';
 
   /* --- brillo del marco + entrada animada --- */
@@ -362,7 +383,133 @@
     });
   }
 
-  dinamizar('.tienda-card');
+  /* ------------------------------------------ desplegable de descuentos */
+  var filtroTipo = '';
+  var descCuerpo = document.getElementById('desc-cuerpo');
+  var descToggle = document.getElementById('desc-toggle');
+  var descChevron = document.getElementById('desc-chevron');
+
+  function saldoActual() {
+    var gastado = canjesDe(u.id).reduce(function (acc, c) { return acc + (c.precio || 0); }, 0);
+    return Math.max(0, puntos - gastado);
+  }
+
+  function yaCanjeado(tiendaId) {
+    return canjesDe(u.id).some(function (c) { return c.tiendaId === tiendaId; });
+  }
+
+  function pintarDescuentos() {
+    var saldoAhora = saldoActual();
+    var disponibles = TIENDAS.filter(function (t) {
+      return !yaCanjeado(t.id) && t.precio <= saldoAhora;
+    }).length;
+
+    document.getElementById('desc-saldo-top').textContent = saldoAhora + ' pts';
+    document.getElementById('desc-sub').textContent =
+      disponibles + (disponibles === 1 ? ' descuento a tu alcance' : ' descuentos a tu alcance');
+
+    var barra = document.getElementById('desc-barra');
+    if (barra) {
+      var pct = puntos > 0 ? Math.round((saldoAhora / puntos) * 100) : 0;
+      barra.style.width = Math.max(0, Math.min(100, pct)) + '%';
+    }
+    var cartera = document.getElementById('desc-cartera');
+    if (cartera) {
+      cartera.textContent = saldoAhora + ' de ' + Math.max(0, puntos) + ' pts';
+    }
+
+    document.getElementById('desc-filtros').innerHTML = TIPOS.map(function (tp) {
+      return '<button type="button" class="chip chip-mini' + (filtroTipo === tp.id ? ' activo' : '') +
+        '" data-tipo="' + tp.id + '">' + tp.texto + '</button>';
+    }).join('');
+
+    var lista = TIENDAS.filter(function (t) { return !filtroTipo || t.tipo === filtroTipo; });
+
+    document.getElementById('desc-lista').innerHTML = lista.map(function (t) {
+      var canjeado = yaCanjeado(t.id);
+      var alcanza = t.precio <= saldoAhora;
+      var boton;
+
+      if (canjeado) {
+        boton = '<span style="font-size:10.5px;font-weight:700;color:#16a34a">Canjeado ✓</span>';
+      } else if (!soyYo) {
+        boton = '';
+      } else if (alcanza) {
+        boton = '<button type="button" data-canje="' + t.id + '" style="border:0;border-radius:999px;' +
+          'padding:6px 10px;background:#0f172a;color:#fff;font-family:inherit;font-size:10.5px;' +
+          'font-weight:700;cursor:pointer">Canjear</button>';
+      } else {
+        boton = '<span style="font-size:10.5px;font-weight:650;color:#8592a6">Faltan ' +
+          (t.precio - saldoAhora) + '</span>';
+      }
+
+      return '<div class="tienda-card" style="background:' + (canjeado ? '#f6fdf9' : '#fff') + ';' +
+          'border:1px solid ' + (canjeado ? '#dcf3e6' : '#e9edf5') + ';border-radius:14px;padding:11px 12px;' +
+          'display:flex;flex-direction:column;' + (canjeado || alcanza ? '' : 'opacity:.72;') + '">' +
+        '<span style="align-self:flex-start;font-size:9.5px;font-weight:700;color:#4343d6;background:#eef0ff;' +
+          'border-radius:6px;padding:2px 6px">' + UI.esc(NOMBRE_TIPO[t.tipo] || 'Otros') + '</span>' +
+        '<div style="margin-top:8px;font-size:19px;font-weight:800;letter-spacing:-.7px;line-height:1;' +
+          'color:#0f172a">' + UI.esc(t.valor) + '</div>' +
+        '<div style="margin-top:3px;font-size:12px;font-weight:650;letter-spacing:-.1px">' + UI.esc(t.nombre) + '</div>' +
+        '<div style="margin-top:2px;font-size:10.5px;color:var(--muted);line-height:1.4;flex:1">' +
+          UI.esc(t.detalle) + '</div>' +
+        '<div style="display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:9px">' +
+          '<span style="font-size:11.5px;font-weight:800;color:#0f172a">' + t.precio +
+            '<span style="font-size:9.5px;font-weight:600;color:var(--muted)"> pts</span></span>' +
+          boton +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    dinamizar('.tienda-card');
+
+    Array.prototype.forEach.call(document.querySelectorAll('#desc-filtros [data-tipo]'), function (b) {
+      b.addEventListener('click', function () {
+        filtroTipo = b.getAttribute('data-tipo');
+        pintarDescuentos();
+      });
+    });
+
+    Array.prototype.forEach.call(document.querySelectorAll('#desc-lista [data-canje]'), function (b) {
+      b.addEventListener('click', function () { canjear(b.getAttribute('data-canje')); });
+    });
+  }
+
+  function canjear(tiendaId) {
+    var tienda = null;
+    TIENDAS.forEach(function (x) { if (x.id === tiendaId) tienda = x; });
+    if (!tienda) return;
+
+    var saldoAhora = saldoActual();
+    if (tienda.precio > saldoAhora) {
+      UI.toast('Te faltan ' + (tienda.precio - saldoAhora) + ' puntos');
+      return;
+    }
+
+    var est = USWAP.estado();
+    if (!est.canjes) est.canjes = [];
+    est.canjes.push({
+      id: 'c' + Date.now().toString(36),
+      uid: u.id,
+      tiendaId: tienda.id,
+      precio: tienda.precio,
+      fecha: new Date().toISOString()
+    });
+    USWAP.guardar();
+
+    pintarDescuentos();
+    UI.toast('Canjeado: ' + tienda.valor + ' en ' + tienda.nombre);
+  }
+
+  descToggle.addEventListener('click', function () {
+    var aberto = descCuerpo.style.display !== 'none';
+    descCuerpo.style.display = aberto ? 'none' : 'block';
+    descToggle.setAttribute('aria-expanded', aberto ? 'false' : 'true');
+    descChevron.style.transform = aberto ? '' : 'rotate(180deg)';
+    if (!aberto) pintarDescuentos();
+  });
+
+  pintarDescuentos();
 
   /* --------------------------------------------------- títulos que dependen de quién es */
   var tituloOfertas = document.getElementById('titulo-ofertas');
