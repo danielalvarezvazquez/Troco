@@ -732,10 +732,10 @@ body {
   box-shadow: 0 0 0 4px rgba(234, 179, 8, .18);
 }
 .chip.activo {
-  background: linear-gradient(135deg, #facc15, #a16207);
-  color: #231a00;
+  background: #0f172a;
+  color: #ffffff;
   border-color: transparent;
-  box-shadow: 0 8px 20px -12px rgba(234, 179, 8, .95);
+  box-shadow: 0 8px 18px -14px rgba(15, 23, 42, .95);
 }
 .chip:hover { border-color: rgba(234, 179, 8, .5); color: var(--tinta); }
 
