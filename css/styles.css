@@ -333,11 +333,15 @@ body {
 .rank-puntos small { display: block; font-size: 10px; font-weight: 600; color: var(--muted); letter-spacing: 0; }
 
 .tier { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; }
+.tier-hierro { color: #6b7280; }
 .tier-bronce { color: #b45309; }
 .tier-plata { color: #64748b; }
 .tier-oro { color: #ca8a04; }
-.tier-elite { color: #7c3aed; }
-.tier-observacion { color: var(--rojo); }
+.tier-platino { color: #0f766e; }
+.tier-diamante { color: #2563eb; }
+.tier-ascendente { color: #16a34a; }
+.tier-inmortal { color: #7c3aed; }
+.tier-radiante { color: #e11d48; }
 
 /* --------------------------------------------------------------------- nav */
 .bottomnav {
