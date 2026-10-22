@@ -12,8 +12,15 @@
 (function () {
   'use strict';
 
-  var VERSION = 6;                 // subir si cambia la forma de los datos
+  var VERSION = 7;                 // subir si cambia la forma de los datos
   var KEY = 'uswap.v1';            // clave de localStorage
+
+  /* Hash djb2: suficiente para una demo sin backend (NO es seguridad real) */
+  function hashPass(texto) {
+    var h = 5381, s = String(texto || '');
+    for (var i = 0; i < s.length; i++) h = (((h << 5) + h) ^ s.charCodeAt(i)) >>> 0;
+    return h.toString(16);
+  }
 
   /* Área = de qué va la PETICIÓN (vive en la oferta, no en la persona) */
   var AREAS = ['Tecnología', 'Matemáticas', 'Ciencias', 'Salud', 'Ciencias jurídicas',
@@ -64,6 +71,33 @@
       habilidades: ['Física', 'Python', 'Divulgación'], bio: 'Investigando en física de materiales y dando prácticas en la Facultad de Física.',
       color: '#7c3aed', instagram: 'pau.mir', whatsapp: '34600123123' }
   ];
+
+  /* ------------------------------------------------------- datos de acceso
+     Demo sin backend: email único, fecha de nacimiento y contraseña hasheada.
+     Todos los usuarios de ejemplo usan la contraseña "demo1234".
+  */
+  var ACCESO = {
+    u1: ['ana.ferrer@usc.es', '2003-05-14'],
+    u2: ['marc.puig@usc.es', '2004-11-02'],
+    u3: ['lucia.romero@usc.es', '2001-03-27'],
+    u4: ['javier.barcala@usc.es', '2003-09-09'],
+    u5: ['sergio.leon@usc.es', '2005-01-30'],
+    u6: ['nuria.costa@usc.es', '2000-07-19'],
+    u7: ['tomas.vidal@usc.es', '2002-12-05'],
+    u8: ['elena.sanz@usc.es', '2007-04-16'],
+    u9: ['irene.bosch@usc.es', '1999-06-21'],
+    u10: ['pau.mir@usc.es', '1996-02-08']
+  };
+
+  USUARIOS.forEach(function (u) {
+    var acceso = ACCESO[u.id] || [u.id + '@usc.es', '2000-01-01'];
+    u.email = acceso[0];
+    u.nacimiento = acceso[1];
+    u.passwordHash = hashPass('demo1234');
+    u.telVerificado = !!u.whatsapp;
+    u.igVerificado = !!u.instagram;
+    u.creadoEn = new Date().toISOString();
+  });
 
   /* ----------------------------------------------------------------- ofertas
      id, titulo, descripcion, tipo ('objeto'|'favor'), categoria, area (de la petición),
@@ -167,7 +201,7 @@
   function copia(o) { return JSON.parse(JSON.stringify(o)); }
 
   function semilla() {
-    return { version: VERSION, yo: 'u1', usuarios: copia(USUARIOS), ofertas: ofertasBase(), valoraciones: valoracionesBase() };
+    return { version: VERSION, yo: 'u1', sesion: null, usuarios: copia(USUARIOS), ofertas: ofertasBase(), valoraciones: valoracionesBase() };
   }
 
   var _estado = null;   // caché en memoria (funciona aunque localStorage falle)
@@ -204,15 +238,89 @@
     guardar: guardarCambios,
 
     reset: function () {
+      var anterior = (_estado && _estado.sesion) || null;
       _estado = semilla();
+      if (anterior && _estado.usuarios.some(function (u) { return u.id === anterior; })) {
+        _estado.sesion = anterior;
+        _estado.yo = anterior;
+      }
       _memoria = _estado;
       try { window.localStorage.setItem(KEY, JSON.stringify(_estado)); } catch (e) {}
       return _estado;
     },
 
     /* --- usuario actual (modo demo: se puede cambiar desde la cabecera) --- */
-    yo: function () { return estado().yo; },
-    setYo: function (uid) { estado().yo = uid; persistir(); },
+    yo: function () { var e = estado(); return e.sesion || e.yo; },
+    setYo: function (uid) { var e = estado(); e.yo = uid; e.sesion = uid; persistir(); },
+
+    /* --- sesión (demo sin backend: todo vive en localStorage) --- */
+    sesion: function () { return estado().sesion || null; },
+    sesionUsuario: function () {
+      var id = estado().sesion;
+      return id ? window.USWAP.usuario(id) : null;
+    },
+    salir: function () { estado().sesion = null; persistir(); },
+    entrar: function (email, password) {
+      var correo = String(email || '').trim().toLowerCase();
+      var usuarios = estado().usuarios;
+      for (var i = 0; i < usuarios.length; i++) {
+        var u = usuarios[i];
+        if (String(u.email || '').toLowerCase() === correo && u.passwordHash === hashPass(password)) {
+          estado().sesion = u.id;
+          estado().yo = u.id;
+          persistir();
+          return u;
+        }
+      }
+      return null;
+    },
+    emailOcupado: function (email) {
+      var correo = String(email || '').trim().toLowerCase();
+      return estado().usuarios.some(function (u) {
+        return String(u.email || '').toLowerCase() === correo;
+      });
+    },
+    edad: function (fechaISO) {
+      if (!fechaISO) return -1;
+      var n = new Date(fechaISO), h = new Date();
+      if (isNaN(n.getTime())) return -1;
+      var anios = h.getFullYear() - n.getFullYear();
+      var meses = h.getMonth() - n.getMonth();
+      if (meses < 0 || (meses === 0 && h.getDate() < n.getDate())) anios -= 1;
+      return anios;
+    },
+    registrar: function (datos) {
+      var correo = String(datos.email || '').trim().toLowerCase();
+      if (!correo) return { error: 'email' };
+      if (window.USWAP.emailOcupado(correo)) return { error: 'email' };
+      if (window.USWAP.edad(datos.nacimiento) < 16) return { error: 'edad' };
+      if (!datos.telVerificado && !datos.igVerificado) return { error: 'contacto' };
+
+      var colores = ['#6366f1', '#0ea5e9', '#ec4899', '#f59e0b', '#10b981', '#8b5cf6', '#ef4444', '#14b8a6'];
+      var u = {
+        id: id('u'),
+        nombre: String(datos.nombre || '').trim(),
+        carrera: String(datos.carrera || '').trim(),
+        rama: datos.rama || RAMAS[0],
+        curso: datos.curso || CURSOS[0],
+        habilidades: datos.habilidades || [],
+        bio: '',
+        color: colores[estado().usuarios.length % colores.length],
+        instagram: String(datos.instagram || '').replace(/^@+/, '').trim(),
+        whatsapp: String(datos.whatsapp || '').replace(/\D/g, ''),
+        email: correo,
+        passwordHash: hashPass(datos.password),
+        nacimiento: datos.nacimiento,
+        telVerificado: !!datos.telVerificado,
+        igVerificado: !!datos.igVerificado,
+        creadoEn: new Date().toISOString()
+      };
+      estado().usuarios.push(u);
+      estado().sesion = u.id;
+      estado().yo = u.id;
+      persistir();
+      return { usuario: u };
+    },
 
     /* --- lecturas --- */
     usuarios: function () { return estado().usuarios; },

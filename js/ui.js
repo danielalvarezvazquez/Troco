@@ -98,6 +98,7 @@
         '<div class="topbar-derecha">' +
           '<select class="selector-yo" id="selector-yo" title="Cambiar de usuario (modo demo)">' + opciones + '</select>' +
           '<button class="chip chip-mini" id="btn-reset" title="Reiniciar los datos de la demo">↺</button>' +
+          '<button class="chip chip-mini" id="btn-salir" title="Cerrar sesión">⏏</button>' +
         '</div>';
 
       document.getElementById('selector-yo').addEventListener('change', function (e) {
@@ -109,6 +110,10 @@
           USWAP.reset();
           window.location.href = 'index.html';
         }
+      });
+      document.getElementById('btn-salir').addEventListener('click', function () {
+        USWAP.salir();
+        window.location.href = 'login.html';
       });
     }
 
@@ -162,4 +167,15 @@
   window.addEventListener('unhandledrejection', function (e) {
     mostrarError((e && e.reason && (e.reason.message || e.reason)) || 'Promesa rechazada');
   });
+
+  /* --------------------------------------------------------------------------
+     Control de sesión: sin sesión no se ve nada salvo login y registro.
+     Se comprueba la versión de data.js para no romper con cachés antiguas.
+     -------------------------------------------------------------------------- */
+  (function proteger() {
+    var archivo = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
+    if (archivo === 'login.html' || archivo === 'registro.html') return;
+    if (!window.USWAP || typeof USWAP.sesion !== 'function') return;
+    if (!USWAP.sesion()) window.location.replace('login.html');
+  })();
 })();

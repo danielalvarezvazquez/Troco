@@ -10,6 +10,7 @@ Actualízala solo cuando cambie una decisión (stack, archivos, reglas), no por 
 App **móvil** (prototipo web) de intercambio de **favores y objetos** entre estudiantes de carreras y áreas distintas.
 
 - **Tablón** con buscador y filtros por **área de la petición**, **rama** y **curso**.
+- **Acceso**: registro con correo (obligatorio y único), contraseña (mín. 8), fecha de nacimiento (**+16 años**) y **al menos un contacto verificado** (teléfono o Instagram). Hay sesión persistente y cierre de sesión.
 - **Perfil**: carrera escrita libremente, rama, curso, habilidades, reputación y puntos.
 - **Publicar**: el estudiante dice qué ofrece y qué pide a cambio.
 - **Contacto**: el chat es **externo** (WhatsApp/Instagram). La app solo genera enlaces `wa.me` e `instagram.com`.
@@ -46,6 +47,7 @@ py serve.py 8000           # luego abrir http://localhost:8000
 # o doble clic en abrir-app.bat
 ```
 
+- **La app arranca en `login.html`**: sin sesión no se ve ninguna pantalla. Cuentas de demo: `ana.ferrer@usc.es` o `marc.puig@usc.es`, contraseña `demo1234` (los botones de la pantalla de login entran directos).
 - No hay tests ni linter. **La verificación es abrir la app y usarla.**
 - Un error de JavaScript deja la página **en blanco o a medias**: la única pista está en la consola del navegador (F12 → Console). Mírala siempre antes de inventar una causa.
 - Cada página se prueba con doble clic en el flujo real: tablón → oferta → valorar → ranking.
@@ -61,7 +63,7 @@ py serve.py 8000           # luego abrir http://localhost:8000
 
 | Persona | Usuario GitHub | Pantallas | Archivos que puede editar |
 |---|---|---|---|
-| **P1 · Daniel** (integrador) | `danielalvarezvazquez` | Detalle + valorar | `css/styles.css`, `js/data.js`, `js/ui.js`, `oferta.html`, `js/oferta.js`, `valorar.html`, `js/valorar.js`, `AGENTS.md`, `README.md` |
+| **P1 · Daniel** (integrador) | `danielalvarezvazquez` | Login, registro, detalle, valorar | `css/styles.css`, `js/data.js`, `js/ui.js`, `login.html`, `js/login.js`, `registro.html`, `js/registro.js`, `oferta.html`, `js/oferta.js`, `valorar.html`, `js/valorar.js`, `AGENTS.md`, `README.md` |
 | **P2 · Javier** | `Javierbarcala` | Tablón | `index.html`, `js/board.js` |
 | **P3 · Tomé** | `tome123456` | Ranking + publicar | `ranking.html`, `js/ranking.js`, `publicar.html`, `js/publicar.js` |
 | **P4 · Sergio** | `sergiooleeonn` | Perfil | `perfil.html`, `editar-perfil.html`, `js/perfil.js`, `js/editar-perfil.js` |
@@ -76,11 +78,13 @@ Si alguien necesita un campo nuevo en los datos, un componente nuevo o un estilo
 Definido en `js/data.js` (P1). Campos exactos, en español:
 
 ```js
-usuario  { id, nombre, carrera (texto libre), rama, curso, bio, habilidades[], color, instagram, whatsapp }
+usuario  { id, nombre, carrera (texto libre), rama, curso, bio, habilidades[], color,
+           instagram, whatsapp, email, passwordHash, nacimiento, telVerificado, igVerificado }
 oferta   { id, titulo, descripcion, tipo:'favor'|'objeto', categoria, area, autorId, pideACambio,
            estado:'abierta'|'acordada'|'cerrada', creadaEn, destacada,
            acuerdo:{ proponente, confirmadoPor:[uids], fecha } }
 valoración { id, ofertaId, deUsuarioId, aUsuarioId, estrellas:1..5, comentario, creadaEn }
+estado global { version, yo, sesion (uid|null), usuarios[], ofertas[], valoraciones[] }
 ```
 
 **Vocabulario (no inventar valores; están en `js/data.js`):**
@@ -94,7 +98,11 @@ valoración { id, ofertaId, deUsuarioId, aUsuarioId, estrellas:1..5, comentario,
 la otra parte confirma → `cerrada` cuando `confirmadoPor` incluye al autor y hay 2 personas distintas.
 Solo en `cerrada` se puede valorar, y **una sola vez por persona y trato**.
 
-API disponible (`window.USWAP`): `yo()`, `setYo(id)`, `usuarios()`, `usuario(id)`, `ofertas()`, `oferta(id)`, `ofertasDe(uid)`, `valoracionesDe(uid)`, `addOferta(datos)`, `addValoracion(datos)`, `proponerAcuerdo(oid)`, `confirmarAcuerdo(oid)`, `participantes(oid)`, `otraParteDe(oid)`, `yaValoro(oid, uid)`, `actualizarPerfil(datos)`, `puntosDe(uid)`, `mediaDe(uid)`, `reset()`.
+API disponible (`window.USWAP`): `yo()`, `setYo(id)`, `sesion()`, `sesionUsuario()`, `entrar(email, password)`, `salir()`, `registrar(datos)`, `emailOcupado(email)`, `edad(fechaISO)`, `usuarios()`, `usuario(id)`, `ofertas()`, `oferta(id)`, `ofertasDe(uid)`, `valoracionesDe(uid)`, `addOferta(datos)`, `addValoracion(datos)`, `proponerAcuerdo(oid)`, `confirmarAcuerdo(oid)`, `participantes(oid)`, `otraParteDe(oid)`, `yaValoro(oid, uid)`, `actualizarPerfil(datos)`, `puntosDe(uid)`, `mediaDe(uid)`, `reset()`.
+
+**Autenticación = demo, no seguridad real.** Todo vive en `localStorage`: el hash djb2 solo evita contraseñas en claro y el código de verificación se muestra en pantalla porque no hay backend. No la presentes como seguridad de producción.
+
+**Qué implica en las pantallas nuevas:** cualquier página (salvo `login.html` y `registro.html`) redirige sola si no hay `sesion`. No dupliques esa comprobación; está centralizada en `js/ui.js`.
 
 Componentes (`window.USWAP_UI`): `montarNav('inicio'|'publicar'|'ranking'|'perfil')`, `avatar(usuario, clase)`, `estrellas(media)`, `tiempo(fechaIso)`, `param('id')`, `toast(texto)`, `vacio(titulo, texto)`, `esc(texto)`.
 

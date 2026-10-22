@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>USwap · Entrar</title>
+  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- =====================================================================
+       PANTALLA: INICIAR SESIÓN              Propietario: P1 (Daniel)
+       Solo se editan este archivo y js/login.js.
+       ===================================================================== -->
+  <div class="app">
+    <main class="contenido" style="padding-top:34px">
+
+      <div class="auth-hero">
+        <div class="marca-punto">U</div>
+        <h1>Entra en USwap</h1>
+        <p>Intercambia favores y objetos en la USC</p>
+      </div>
+
+      <form id="form-login" class="bloque" novalidate>
+        <label class="label" for="email">Correo electrónico</label>
+        <input class="input" id="email" type="email" autocomplete="username" placeholder="tu@usc.es">
+
+        <label class="label" for="password">Contraseña</label>
+        <input class="input" id="password" type="password" autocomplete="current-password" placeholder="••••••••">
+
+        <button class="btn btn-primario btn-bloque" type="submit">Entrar</button>
+      </form>
+
+      <div class="seccion-titulo"><h2>Cuentas de demo</h2><span class="usuario-detalle">contraseña: demo1234</span></div>
+      <div class="bloque">
+        <div class="fila">
+          <button class="btn btn-secundario btn-sm" type="button" data-demo="ana.ferrer@usc.es">Entrar como Ana</button>
+          <button class="btn btn-secundario btn-sm" type="button" data-demo="marc.puig@usc.es">Entrar como Marc</button>
+        </div>
+      </div>
+
+      <div class="auth-pie">¿No tienes cuenta? <a href="registro.html">Crear una cuenta</a></div>
+    </main>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>

@@ -18,6 +18,15 @@ Y abre <http://localhost:8000>.
 
 También funciona abriendo `index.html` con doble clic, pero el almacenamiento del navegador es menos fiable: usa el servidor para la demo.
 
+## Acceso
+
+La app arranca en la pantalla de acceso. Cuentas de demo (contraseña `demo1234`):
+
+- `ana.ferrer@usc.es`
+- `marc.puig@usc.es`
+
+O crea una cuenta nueva: correo, contraseña, fecha de nacimiento (**+16 años**) y un teléfono o Instagram **verificado**. La verificación es simulada: el código se muestra en pantalla porque no hay backend.
+
 ## Guía para el equipo
 
 - `AGENTS.md` — contexto del proyecto, reparto de trabajo y reglas. **Léelo antes de tocar nada.**
@@ -26,6 +35,8 @@ También funciona abriendo `index.html` con doble clic, pero el almacenamiento d
 ## Estructura
 
 ```
+login.html      Iniciar sesión             (P1)
+registro.html   Crear cuenta               (P1)
 index.html      Tablón con filtros        (P2)
 oferta.html     Detalle de la oferta      (P1)
 valorar.html    Valoración tras el trato  (P1)

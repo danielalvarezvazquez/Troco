@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>USwap · Crear cuenta</title>
+  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- =====================================================================
+       PANTALLA: CREAR CUENTA                Propietario: P1 (Daniel)
+       Solo se editan este archivo y js/registro.js.
+       Requisitos: email único, contraseña, +16 años y un contacto verificado.
+       ===================================================================== -->
+  <div class="app">
+    <main class="contenido" style="padding-top:24px">
+
+      <div class="auth-hero">
+        <div class="marca-punto">U</div>
+        <h1>Crear cuenta</h1>
+        <p>Correo, contraseña y un contacto verificado</p>
+      </div>
+
+      <form id="form-registro" novalidate>
+
+        <div class="bloque">
+          <div class="seccion-titulo" style="margin-top:0"><h2>Datos de acceso</h2></div>
+
+          <label class="label" for="nombre">Nombre y apellidos</label>
+          <input class="input" id="nombre" maxlength="40" placeholder="Ana Ferrer">
+
+          <label class="label" for="email">Correo electrónico *</label>
+          <input class="input" id="email" type="email" autocomplete="email" placeholder="tu@usc.es">
+
+          <label class="label" for="password">Contraseña * · mínimo 8 caracteres</label>
+          <input class="input" id="password" type="password" autocomplete="new-password" placeholder="••••••••">
+
+          <label class="label" for="nacimiento">Fecha de nacimiento *</label>
+          <input class="input" id="nacimiento" type="date">
+          <div class="usuario-detalle" style="margin-top:5px">Debes tener al menos 16 años.</div>
+        </div>
+
+        <div class="bloque" style="margin-top:12px">
+          <div class="seccion-titulo" style="margin-top:0"><h2>Estudios</h2></div>
+
+          <label class="label" for="carrera">Carrera o programa</label>
+          <input class="input" id="carrera" maxlength="60" placeholder="Ej. Ingeniería Informática">
+
+          <div class="fila" style="margin-top:16px">
+            <div style="flex:1">
+              <label class="label" style="margin-top:0" for="rama">Rama</label>
+              <select class="select" id="rama"></select>
+            </div>
+            <div style="flex:1">
+              <label class="label" style="margin-top:0" for="curso">Curso</label>
+              <select class="select" id="curso"></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="bloque" style="margin-top:12px">
+          <div class="seccion-titulo" style="margin-top:0">
+            <h2>Contacto</h2><span class="usuario-detalle">uno de los dos, verificado</span>
+          </div>
+
+          <label class="label" for="whatsapp">Teléfono</label>
+          <div class="contacto-linea">
+            <input class="input" id="whatsapp" inputmode="tel" placeholder="600 111 222">
+            <button type="button" class="btn btn-secundario btn-sm" id="btn-codigo-tel">Enviar código</button>
+          </div>
+          <div id="aviso-tel"></div>
+          <div id="verif-tel" class="contacto-estado" hidden>
+            <input class="input" id="codigo-tel" inputmode="numeric" maxlength="4" placeholder="Código de 4 dígitos">
+            <button type="button" class="btn btn-primario btn-sm" id="btn-verif-tel">Verificar</button>
+          </div>
+          <div id="estado-tel" class="usuario-detalle" style="margin-top:6px"></div>
+
+          <label class="label" for="instagram">Instagram</label>
+          <div class="contacto-linea">
+            <input class="input" id="instagram" placeholder="tu.usuario">
+            <button type="button" class="btn btn-secundario btn-sm" id="btn-codigo-ig">Enviar código</button>
+          </div>
+          <div id="aviso-ig"></div>
+          <div id="verif-ig" class="contacto-estado" hidden>
+            <input class="input" id="codigo-ig" inputmode="numeric" maxlength="4" placeholder="Código de 4 dígitos">
+            <button type="button" class="btn btn-primario btn-sm" id="btn-verif-ig">Verificar</button>
+          </div>
+          <div id="estado-ig" class="usuario-detalle" style="margin-top:6px"></div>
+
+          <p class="usuario-detalle" style="margin:12px 0 0;line-height:1.5">
+            Demo sin backend: el código se muestra aquí. En producción llegaría por SMS o email.
+          </p>
+        </div>
+
+        <button class="btn btn-primario btn-bloque" type="submit">Crear cuenta</button>
+        <div class="auth-pie">¿Ya tienes cuenta? <a href="login.html">Entrar</a></div>
+      </form>
+    </main>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/registro.js"></script>
+</body>
+</html>
