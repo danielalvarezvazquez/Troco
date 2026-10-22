@@ -134,9 +134,9 @@
         '</div>' +
         '<h3 class="card-titulo">' + UI.esc(o.titulo) + '</h3>' +
         '<p class="card-texto">' + UI.esc(o.descripcion) + '</p>' +
-        '<div class="cambio"><span>⇄</span><span><b>Pide a cambio:</b> ' + UI.esc(o.pideACambio) + '</span></div>' +
+        '<div class="cambio"><span>⇄</span><span><b>A cambio ofrezco:</b> ' + UI.esc(o.pideACambio) + '</span></div>' +
         '<div class="card-pie">' +
-          '<span>' + (o.tipo === 'objeto' ? '📦 Objeto' : '🤝 Favor') + ' · ' + UI.tiempo(o.creadaEn) + '</span>' +
+          '<span>' + (o.tipo === 'objeto' ? '📦 Busco un objeto' : '🤝 Busco un favor') + ' · ' + UI.tiempo(o.creadaEn) + '</span>' +
           '<span>' + (o.destacada ? '<span class="badge badge-ambar">★ Destacada</span>' : '') + '</span>' +
         '</div>' +
       '</a>';
@@ -185,12 +185,12 @@
       });
       document.getElementById('btn-ver-todo').addEventListener('click', limpiarFiltros);
 
-      elInfo.textContent = '0 ofertas';
+      elInfo.textContent = '0 peticiones';
       return;
     }
 
     elLista.innerHTML = resultados.map(tarjeta).join('');
-    elInfo.textContent = resultados.length + (resultados.length === 1 ? ' oferta' : ' ofertas') +
+    elInfo.textContent = resultados.length + (resultados.length === 1 ? ' petición' : ' peticiones') +
       (filtro.area || filtro.carrera || filtro.curso ? ' · filtros activos' : '');
   }
 
