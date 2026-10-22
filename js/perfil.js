@@ -162,8 +162,12 @@
         'font-size:11.5px;color:rgba(255,255,255,.55)">' +
         '<span>Perfil USwap</span>' +
         (posicion
-          ? '<span style="background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.14);' +
-              'padding:3px 9px;border-radius:999px;font-size:11px">Nº ' + posicion + ' del ranking</span>'
+          ? (posicion === 1
+              ? '<span style="background:rgba(250,204,21,.16);border:1px solid rgba(250,204,21,.38);' +
+                  'color:#fde68a;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:700">' +
+                  '👑 Nº 1 del ranking</span>'
+              : '<span style="background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.14);' +
+                  'padding:3px 9px;border-radius:999px;font-size:11px">Nº ' + posicion + ' del ranking</span>')
           : '') +
       '</div>' +
 
@@ -176,6 +180,11 @@
           avatarPerfil(u, 'grande') +
           '<span class="usr-badge usr-badge--lg' + (nivelAlto ? ' usr-badge--glow' : '') +
             '" aria-hidden="true">' + (nivel.icono || '') + '</span>' +
+          (posicion === 1
+            ? '<span class="corona-top" aria-label="Número 1 del ranking" ' +
+                'style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);z-index:3;' +
+                'font-size:20px;line-height:1;filter:drop-shadow(0 3px 6px rgba(0,0,0,.55))">👑</span>'
+            : '') +
         '</div>' +
         '<div style="min-width:0">' +
           (nivelArcoiris
@@ -358,6 +367,14 @@
       { opacity: .85, offset: 0.2 },
       { left: '135%', opacity: 0 }
     ], { duration: 5200, iterations: Infinity, easing: 'ease-in-out', delay: 900 });
+  }
+
+  var coroa = document.querySelector('.corona-top');
+  if (coroa && coroa.animate && !senMovemento) {
+    coroa.animate([
+      { transform: 'translateX(-50%) translateY(0) rotate(-2deg)' },
+      { transform: 'translateX(-50%) translateY(-3px) rotate(2deg)' }
+    ], { duration: 1800, iterations: Infinity, direction: 'alternate', easing: 'ease-in-out' });
   }
 
   if (!senMovemento) {
