@@ -15,6 +15,23 @@
   var elBuscador = document.getElementById('buscador');
   var elLista = document.getElementById('lista');
   var elInfo = document.getElementById('resultado-info');
+  var elLimpiar = document.getElementById('btn-limpiar');
+
+  /* ---- ¿hay algún filtro puesto? ---------------------------------------- */
+  function hayFiltros() {
+    return !!(filtro.texto.trim() || filtro.area || filtro.carrera || filtro.curso);
+  }
+
+  /* ---- dejar el tablón como al entrar ----------------------------------- */
+  function limpiarFiltros() {
+    filtro.texto = '';
+    filtro.area = '';
+    filtro.carrera = '';
+    filtro.curso = '';
+    elBuscador.value = '';
+    pintarFiltros();
+    pintarLista();
+  }
 
   /* ---- carreras disponibles, sacadas de los usuarios -------------------- */
   function carreras() {
@@ -120,6 +137,8 @@
   function pintarLista() {
     var resultados = filtrar();
 
+    if (elLimpiar) elLimpiar.classList.toggle('oculto', !hayFiltros());
+
     if (!resultados.length) {
       elLista.innerHTML = UI.vacio('Nada por aquí', 'Prueba a quitar algún filtro o busca otra cosa.');
       elInfo.textContent = '0 ofertas';
@@ -140,4 +159,6 @@
     filtro.texto = elBuscador.value;
     pintarLista();
   });
+
+  if (elLimpiar) elLimpiar.addEventListener('click', limpiarFiltros);
 })();
