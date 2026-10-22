@@ -42,9 +42,10 @@
   var otraParte = apiAcuerdo ? USWAP.otraParteDe(oferta.id) : null;
   var yaValorado = (typeof USWAP.yaValoro === 'function') ? USWAP.yaValoro(oferta.id, yo) : false;
 
+  var mensajeWa = 'Hola ' + autor.nombre + ', he visto tu oferta "' + oferta.titulo +
+    '" en USwap. ¿Sigue disponible? Te propongo: ';
   var enlaceWa = 'https://wa.me/' + encodeURIComponent(autor.whatsapp || '') +
-    '?text=' + encodeURIComponent('Hola ' + autor.nombre + ', he visto tu oferta "' + oferta.titulo +
-      '" en USwap. ¿Sigue disponible? Te propongo: ');
+    '?text=' + encodeURIComponent(mensajeWa);
   var enlaceIg = 'https://instagram.com/' + encodeURIComponent(autor.instagram || '');
 
   /* --------------------------------------------------------------- bloques */
@@ -62,6 +63,7 @@
     return '<div class="bloque">' +
       '<p class="detalle-texto" style="font-size:12.5px;margin-bottom:12px">' +
         'USwap no tiene chat propio: se negocia por WhatsApp o Instagram y se vuelve aquí para cerrar el trato.</p>' +
+      '<button type="button" class="btn btn-secundario" id="btn-copiar" style="margin-bottom:8px">Copiar mensaje</button>' +
       '<div class="fila">' +
         '<a class="btn btn-whatsapp" href="' + enlaceWa + '" target="_blank" rel="noopener">WhatsApp</a>' +
         '<a class="btn btn-instagram" href="' + enlaceIg + '" target="_blank" rel="noopener">Instagram</a>' +
@@ -193,6 +195,34 @@
       }).join('') + '</div>' : '');
 
   /* --------------------------------------------------------------- acciones */
+
+  var btnCopiar = document.getElementById('btn-copiar');
+  if (btnCopiar) {
+    /* Respaldo: si el navegador no permite el portapapeles (p. ej. file://),
+       se muestra el texto para copiarlo a mano. Nunca debe lanzar un error. */
+    var copiarAMano = function () {
+      try {
+        window.prompt('Copia el mensaje:', mensajeWa);
+      } catch (e) {
+        UI.toast('No se pudo copiar: copia el mensaje manualmente');
+      }
+    };
+
+    btnCopiar.addEventListener('click', function () {
+      var intentado = false;
+      try {
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+          intentado = true;
+          navigator.clipboard.writeText(mensajeWa).then(function () {
+            UI.toast('Mensaje copiado');
+          }).catch(copiarAMano);
+        }
+      } catch (e) {
+        intentado = false;
+      }
+      if (!intentado) copiarAMano();
+    });
+  }
 
   var btnAcuerdo = document.getElementById('btn-acuerdo');
   if (btnAcuerdo) {
