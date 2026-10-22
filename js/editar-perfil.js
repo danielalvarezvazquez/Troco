@@ -42,12 +42,37 @@
   campos.instagram.value = yo.instagram || '';
   campos.whatsapp.value = yo.whatsapp || '';
 
+  /* --- contador de caracteres de "Sobre ti" (máx. 180) --- */
+  var contadorBio = document.getElementById('contador-bio');
+  function pintarContador() {
+    if (!contadorBio) return;
+    var n = campos.bio.value.length;
+    contadorBio.textContent = n + ' / 180';
+    contadorBio.style.color = n >= 170 ? 'var(--rojo)' : (n >= 150 ? 'var(--ambar)' : '');
+  }
+  pintarContador();
+  campos.bio.addEventListener('input', pintarContador);
+
   /* --- guardar --- */
   document.getElementById('form-perfil').addEventListener('submit', function (e) {
     e.preventDefault();
 
     var nombre = campos.nombre.value.trim();
     if (!nombre) { UI.toast('El nombre no puede estar vacío'); campos.nombre.focus(); return; }
+
+    var whatsapp = campos.whatsapp.value.replace(/[^\d]/g, '');
+    if (whatsapp && (whatsapp.length < 9 || whatsapp.length > 15)) {
+      UI.toast('El WhatsApp debe tener entre 9 y 15 dígitos');
+      campos.whatsapp.focus();
+      return;
+    }
+
+    var instagram = campos.instagram.value.trim();
+    if (instagram.indexOf('@') !== -1) {
+      UI.toast('El Instagram va sin @, por ejemplo: sergio.leon');
+      campos.instagram.focus();
+      return;
+    }
 
     USWAP.actualizarPerfil({
       nombre: nombre,
@@ -58,8 +83,8 @@
         .map(function (h) { return h.trim(); })
         .filter(function (h) { return h.length > 0; }),
       bio: campos.bio.value.trim(),
-      instagram: campos.instagram.value.trim().replace(/^@/, ''),
-      whatsapp: campos.whatsapp.value.trim().replace(/[^\d]/g, '')
+      instagram: instagram,
+      whatsapp: whatsapp
     });
 
     UI.toast('Perfil guardado');

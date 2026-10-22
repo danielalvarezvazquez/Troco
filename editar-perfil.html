@@ -16,12 +16,14 @@
     <header id="topbar"></header>
 
     <main class="contenido">
-      <section class="hero">
-        <h1>Tu perfil</h1>
-        <p>Cuanto mejor te describas, más fácil será que te encuentren.</p>
+      <section class="hero" style="padding:4px 2px 16px">
+        <h1 style="font-size:24px;letter-spacing:-.7px">Tu perfil</h1>
+        <p>Lo que escribas aquí es lo que verán los demás al abrir tu perfil.</p>
       </section>
 
-      <form id="form-perfil" class="bloque" novalidate>
+      <form id="form-perfil" class="bloque" novalidate style="padding:18px 18px 16px">
+        <div style="font-size:9.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">Identidad</div>
+
         <label class="label" for="nombre">Nombre</label>
         <input class="input" id="nombre" required maxlength="40">
 
@@ -30,28 +32,35 @@
 
         <div class="fila" style="margin-top:16px">
           <div style="flex:1">
-            <label class="label" for="curso">Curso</label>
+            <label class="label" style="margin-top:0" for="curso">Curso</label>
             <select class="select" id="curso"></select>
           </div>
           <div style="flex:1">
-            <label class="label" for="area">Área</label>
+            <label class="label" style="margin-top:0" for="area">Área</label>
             <select class="select" id="area"></select>
           </div>
         </div>
 
-        <label class="label" for="habilidades">Habilidades (separadas por comas)</label>
+        <label class="label" for="habilidades">Habilidades</label>
         <input class="input" id="habilidades" placeholder="Python, Diseño UI, Inglés">
+        <div class="usuario-detalle" style="margin-top:5px">Sepáralas con comas. Son las que verá la gente en tu perfil.</div>
 
         <label class="label" for="bio">Sobre ti</label>
         <textarea class="textarea" id="bio" maxlength="180" placeholder="Qué estudias, qué se te da bien, qué ofreces…"></textarea>
+        <div class="usuario-detalle" id="contador-bio" style="margin-top:6px;text-align:right;font-variant-numeric:tabular-nums">0 / 180</div>
 
-        <label class="label" for="instagram">Instagram (sin @)</label>
-        <input class="input" id="instagram" placeholder="tu.usuario">
+        <div style="height:1px;background:#eef1f7;margin:22px 0 18px"></div>
+        <div style="font-size:9.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">Contacto</div>
 
-        <label class="label" for="whatsapp">WhatsApp (con prefijo, sin +)</label>
+        <label class="label" for="instagram">Instagram</label>
+        <input class="input" id="instagram" placeholder="sergio.leon">
+        <div class="usuario-detalle" style="margin-top:5px">Solo el nombre de usuario, sin la arroba.</div>
+
+        <label class="label" for="whatsapp">WhatsApp</label>
         <input class="input" id="whatsapp" placeholder="34600111222">
+        <div class="usuario-detalle" style="margin-top:5px">Con prefijo del país y sin el signo +.</div>
 
-        <button class="btn btn-primario btn-bloque" type="submit">Guardar cambios</button>
+        <button class="btn btn-primario btn-bloque" style="margin-top:22px" type="submit">Guardar cambios</button>
         <a class="btn btn-secundario" style="margin-top:8px" href="perfil.html">Cancelar</a>
       </form>
     </main>
