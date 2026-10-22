@@ -12,11 +12,11 @@
 (function () {
   'use strict';
 
-  var VERSION = 3;                 // subir si cambia la forma de los datos
+  var VERSION = 4;                 // subir si cambia la forma de los datos
   var KEY = 'uswap.v1';            // clave de localStorage
 
   var AREAS = ['Tecnología', 'Ciencias', 'Salud', 'Diseño', 'Humanidades', 'Economía'];
-  var CURSOS = [1, 2, 3, 4, 5];
+  var CURSOS = [1, 2, 3, 4, 5, 6];
   var CATEGORIAS = ['Apuntes', 'Clases', 'Transporte', 'Comida', 'Tecnología', 'Creatividad', 'Idiomas', 'Favores'];
 
   /* ---------------------------------------------------------------- usuarios
@@ -46,7 +46,16 @@
       color: '#ef4444', instagram: 'tomas.vidal', whatsapp: '34600777888' },
     { id: 'u8', nombre: 'Elena Sanz', carrera: 'Biología', curso: 1, area: 'Ciencias',
       habilidades: ['Laboratorio', 'Francés', 'Cocina'], bio: 'Primero de Biología. Llevo tupper vegano los martes.',
-      color: '#14b8a6', instagram: 'elena.sanz', whatsapp: '34600888999' }
+      color: '#14b8a6', instagram: 'elena.sanz', whatsapp: '34600888999' },
+    { id: 'u9', nombre: 'Nerea Ibáñez', carrera: 'Doble Grado en ADE y Derecho', curso: 5, area: 'Economía',
+      habilidades: ['Contabilidad', 'Derecho mercantil', 'Excel'], bio: 'Quinto del doble grado. Resumo temarios y preparo casos prácticos.',
+      color: '#0284c7', instagram: 'nerea.ibanez', whatsapp: '34600999000' },
+    { id: 'u10', nombre: 'Pau Ferrán', carrera: 'Doble Grado en Informática y Matemáticas', curso: 6, area: 'Tecnología',
+      habilidades: ['Python', 'Álgebra', 'Cálculo'], bio: 'Sexto del doble grado. Doy repaso de mates a gente de primero.',
+      color: '#7c3aed', instagram: 'pau.ferran', whatsapp: '34600123123' },
+    { id: 'u11', nombre: 'Iván Prats', carrera: 'Doble Grado en Física e Informática', curso: 4, area: 'Ciencias',
+      habilidades: ['Física', 'Python', 'Análisis de datos'], bio: 'Cuarto del doble grado. Laboratorio, simulaciones y prácticas.',
+      color: '#0d9488', instagram: 'ivan.prats', whatsapp: '34600777444' }
   ];
 
   /* ----------------------------------------------------------------- ofertas
@@ -80,7 +89,16 @@
         pideACambio: 'Apuntes de Anatomía o transporte a la estación', estado: 'abierta', creadaEn: haceHoras(33) },
       { id: 'o8', titulo: 'Apuntes de Anatomía con dibujos a mano', tipo: 'objeto', categoria: 'Apuntes', autorId: 'u3',
         descripcion: 'Dos tomos encuadernados con esquemas dibujados a mano. Muy visuales para primer y segundo curso.',
-        pideACambio: 'Clases de dibujo o ilustración para el TFG', estado: 'abierta', creadaEn: haceHoras(41) }
+        pideACambio: 'Clases de dibujo o ilustración para el TFG', estado: 'abierta', creadaEn: haceHoras(41) },
+      { id: 'o9', titulo: 'Repaso de Cálculo para primero', tipo: 'favor', categoria: 'Clases', autorId: 'u10',
+        descripcion: 'Dos tardes de repaso antes del parcial: límites, derivadas e integrales. Trae tus ejercicios.',
+        pideACambio: 'Apuntes de Estadística o ayuda con un TFG', estado: 'abierta', creadaEn: haceHoras(7) },
+      { id: 'o10', titulo: 'Resúmenes de Derecho mercantil', tipo: 'objeto', categoria: 'Apuntes', autorId: 'u9',
+        descripcion: 'Temario resumido en esquemas, con casos prácticos resueltos del último curso.',
+        pideACambio: 'Clases de Excel o apuntes de Contabilidad', estado: 'abierta', creadaEn: haceHoras(12) },
+      { id: 'o11', titulo: 'Simulaciones de Física resueltas en Python', tipo: 'objeto', categoria: 'Tecnología', autorId: 'u11',
+        descripcion: 'Cuadernos de simulación (péndulo, muelles, óptica) con el código comentado y las gráficas.',
+        pideACambio: 'Clases de Física o un tupper casero', estado: 'abierta', creadaEn: haceHoras(16) }
     ];
   }
 
