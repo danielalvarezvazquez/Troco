@@ -52,7 +52,8 @@
     }
 
     var esObjeto = tipo.value === 'objeto';
-    var valorCategoria = categoria.value || 'Favores';
+    var esClase = tipo.value === 'clase';
+    var valorCategoria = esClase ? 'Clases' : (categoria.value || 'Favores');
     var valorDescripcion = texto(
       descripcion.value,
       'Añade una descripción para explicar mejor lo que ofreces.'
@@ -73,7 +74,8 @@
         '<p class="card-texto">' + UI.esc(valorDescripcion) + '</p>' +
         '<div class="cambio"><span>⇄</span><span><b>Pide a cambio:</b> ' + UI.esc(valorPide) + '</span></div>' +
         '<div class="card-pie">' +
-          '<span>' + (esObjeto ? '📦 Objeto' : '🤝 Favor') + ' · ' + UI.esc(valorCategoria) + ' · ahora mismo</span>' +
+          '<span>' + (esClase ? '🎓 Clase particular' : (esObjeto ? '📦 Objeto' : '🤝 Favor')) +
+            ' · ' + UI.esc(valorCategoria) + ' · ahora mismo</span>' +
           '<span class="badge badge-verde">Nueva</span>' +
         '</div>' +
       '</div>';
@@ -86,7 +88,10 @@
   }
 
   form.addEventListener('input', actualizar);
-  form.addEventListener('change', actualizar);
+  form.addEventListener('change', function () {
+    if (tipo.value === 'clase') categoria.value = 'Clases';
+    actualizar();
+  });
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -109,9 +114,8 @@
     USWAP.addOferta({
       titulo: valorTitulo,
       descripcion: descripcion.value.trim(),
-      tipo: tipo.value,
-      categoria: categoria.value,
-      categoria: categoria.value,
+      tipo: tipo.value === 'clase' ? 'favor' : tipo.value,
+      categoria: tipo.value === 'clase' ? 'Clases' : categoria.value,
       area: area.value,
       pideACambio: valorPide
     });

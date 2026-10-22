@@ -52,6 +52,17 @@
   var total = valoraciones.length;
   var mediaTxt = total ? media.toFixed(1) : '—';
 
+  /* --- descuentos en comercios de Compostela (se desbloquean con puntos) --- */
+  var TIENDAS = [
+    { nombre: 'CopyCampus', detalle: '10% en fotocopias y encuadernación', desde: 0 },
+    { nombre: 'Take', detalle: 'Menú + bebida por 6,50 €', desde: 2 },
+    { nombre: 'Papelería Campus', detalle: '15% en material de oficina', desde: 4 },
+    { nombre: 'Cafetería ETSE', detalle: 'Café gratis por la mañana', desde: 6 },
+    { nombre: 'Librería Universitaria', detalle: '10% en manuales y lectura', desde: 9 },
+    { nombre: 'Gimnasio Compostela', detalle: 'Matrícula gratis este curso', desde: 12 }
+  ];
+  var desbloqueados = TIENDAS.filter(function (t) { return puntos >= t.desde; }).length;
+
   /* --- contacto: enlaces discretos sobre la credencial --- */
   var estiloEnlace = 'color:rgba(255,255,255,.62);text-decoration:none;font-weight:600;font-size:11.5px;' +
     'border-bottom:1px solid rgba(255,255,255,.22);padding-bottom:1px';
@@ -219,7 +230,37 @@
         '</div>'
       : UI.vacio('Sin habilidades', soyYo
           ? 'Añádelas en Editar perfil para que te encuentren.'
-          : 'Todavía no ha añadido habilidades.'));
+          : 'Todavía no ha añadido habilidades.')) +
+
+    '<div class="seccion-titulo"><h2>' + (soyYo ? 'Tus descuentos' : 'Descuentos desbloqueados') + '</h2>' +
+      '<span class="usuario-detalle">' + desbloqueados + ' de ' + TIENDAS.length + '</span></div>' +
+    '<div class="bloque" style="padding:4px 16px">' +
+      TIENDAS.map(function (t, i) {
+        var ok = puntos >= t.desde;
+        var faltan = Math.max(0, t.desde - puntos);
+        var ini = t.nombre.split(' ').map(function (w) { return w.charAt(0); }).slice(0, 2).join('');
+        return '<div style="display:flex;align-items:center;gap:12px;padding:13px 0;' +
+            (i < TIENDAS.length - 1 ? 'border-bottom:1px solid #eef1f7;' : '') +
+            (ok ? '' : 'opacity:.72') + '">' +
+          '<span style="flex:0 0 auto;width:34px;height:34px;border-radius:11px;display:grid;place-items:center;' +
+            'font-size:11px;font-weight:800;background:' + (ok ? '#e7f8ee' : '#f1f4fa') + ';' +
+            'color:' + (ok ? '#16a34a' : '#8592a6') + '">' + UI.esc(ini) + '</span>' +
+          '<span style="flex:1;min-width:0">' +
+            '<span style="display:block;font-size:13px;font-weight:700;letter-spacing:-.1px">' +
+              UI.esc(t.nombre) + '</span>' +
+            '<span style="display:block;margin-top:2px;font-size:11px;color:var(--muted)">' +
+              UI.esc(t.detalle) + '</span>' +
+          '</span>' +
+          (ok
+            ? '<span class="badge badge-verde">Disponible</span>'
+            : '<span style="flex:0 0 auto;text-align:right;font-size:10px;font-weight:650;color:var(--muted)">' +
+                'Faltan<br>' + faltan + (faltan === 1 ? ' punto' : ' puntos') + '</span>') +
+        '</div>';
+      }).join('') +
+    '</div>' +
+    '<div class="usuario-detalle" style="margin:8px 4px 0;line-height:1.5">' +
+      'Se canjean enseñando tu credencial USwap en el comercio.' +
+    '</div>';
 
   /* --------------------------------------------------- títulos que dependen de quién es */
   var tituloOfertas = document.getElementById('titulo-ofertas');
