@@ -10,26 +10,26 @@
 
   var UI = window.USWAP_UI;
 
-  /* ---- niveles: se aplica el de mayor "min" que no supere los puntos ----- */
+  /* ---- rangos: 10 puntos por estrella; umbrales acumulados ---------------- */
   var NIVELES = [
-    { id: 'hierro', nombre: 'Hierro', min: -9999, icono: '🩶', clase: 'tier-hierro',
-      premio: 'Sin recompensas hasta recuperar puntos positivos. Dos valoraciones negativas seguidas y la cuenta revisa sus ofertas.' },
-    { id: 'bronce', nombre: 'Bronce', min: 0, icono: '🥉', clase: 'tier-bronce',
-      premio: 'Insignia de bienvenida en el perfil y acceso al tablón completo.' },
-    { id: 'plata', nombre: 'Plata', min: 2, icono: '🥈', clase: 'tier-plata',
-      premio: 'Tu oferta aparece destacada en el tablón durante 24 h.' },
-    { id: 'oro', nombre: 'Oro', min: 4, icono: '🥇', clase: 'tier-oro',
-      premio: 'Sello verificado y prioridad en el tablón.' },
-    { id: 'platino', nombre: 'Platino', min: 6, icono: '🛡️', clase: 'tier-platino',
-      premio: '1 destacado al mes y acceso anticipado a las ofertas nuevas.' },
-    { id: 'diamante', nombre: 'Diamante', min: 9, icono: '💎', clase: 'tier-diamante',
-      premio: '2 destacados al mes e insignia Diamante.' },
-    { id: 'ascendente', nombre: 'Ascendente', min: 12, icono: '🔺', clase: 'tier-ascendente',
-      premio: 'Perfil en la portada del tablón durante una semana.' },
-    { id: 'inmortal', nombre: 'Inmortal', min: 16, icono: '👑', clase: 'tier-inmortal',
-      premio: 'Destacados ilimitados y sello Inmortal.' },
-    { id: 'radiante', nombre: 'Radiante', min: 20, icono: '🌟', clase: 'tier-radiante',
-      premio: 'Máximo rango: tu perfil se muestra como referencia de la comunidad.' }
+    { id: 'hierro', nombre: 'Hierro', min: 0, color: '#475569', marco: '#94a3b8', icono: '🩶', clase: 'tier-hierro',
+      premio: 'Marco de hierro y nombre en gris. El punto de partida.' },
+    { id: 'bronce', nombre: 'Bronce', min: 50, color: '#b45309', marco: '#b45309', icono: '🥉', clase: 'tier-bronce',
+      premio: 'Marco de bronce y nombre en cobre. Acceso completo al tablón.' },
+    { id: 'plata', nombre: 'Plata', min: 100, color: '#64748b', marco: '#cbd5e1', icono: '🥈', clase: 'tier-plata',
+      premio: 'Marco de plata y nombre en gris claro. Tu oferta se destaca 24 h.' },
+    { id: 'oro', nombre: 'Oro', min: 150, color: '#a16207', marco: '#eab308', icono: '🥇', clase: 'tier-oro',
+      premio: 'Marco dorado y nombre en oro. Sello verificado y prioridad en el tablón.' },
+    { id: 'platino', nombre: 'Platino', min: 200, color: '#0e7490', marco: '#22d3ee', icono: '🛡️', clase: 'tier-platino',
+      premio: 'Marco de platino y nombre en cian. 1 destacado al mes.' },
+    { id: 'diamante', nombre: 'Diamante', min: 250, color: '#1d4ed8', marco: '#60a5fa', icono: '💎', clase: 'tier-diamante',
+      premio: 'Marco de diamante y nombre en azul. 2 destacados al mes.' },
+    { id: 'ascendente', nombre: 'Ascendente', min: 300, color: '#6d28d9', marco: '#a78bfa', icono: '🔺', clase: 'tier-ascendente',
+      premio: 'Marco ascendente y nombre en violeta. Perfil en portada una semana.' },
+    { id: 'inmortal', nombre: 'Inmortal', min: 400, color: '#b91c1c', marco: '#ef4444', icono: '👑', clase: 'tier-inmortal',
+      premio: 'Marco inmortal y nombre en rojo. Destacados ilimitados.' },
+    { id: 'radiante', nombre: 'Radiante', min: 500, color: '#a21caf', marco: '#e879f9', icono: '🌟', clase: 'tier-radiante',
+      premio: 'Marco radiante con brillo y nombre en magenta. Referencia de la comunidad.' }
   ];
 
   function tier(puntos) {
@@ -79,6 +79,14 @@
     clasificacion: clasificacion
   };
 
+  /* Marco de avatar + color de nombre: la recompensa visible del rango. */
+  function avatarConMarco(usuario, nivel) {
+    var color = nivel.marco || '#94a3b8';
+    var sombra = '0 0 0 2px ' + color + (nivel.id === 'radiante' ? ', 0 0 12px ' + color : '');
+    return '<span style="display:inline-flex;flex:0 0 auto;border-radius:11px;box-shadow:' + sombra + '">' +
+      UI.avatar(usuario, 'pequeno') + '</span>';
+  }
+
   /* ------------------------------------------------------ solo en ranking.html */
   var cont = document.getElementById('ranking');
   if (!cont) return;
@@ -105,7 +113,7 @@
     el.innerHTML =
       '<div class="bloque" style="background:linear-gradient(135deg,#5b5bf6,#8b5cf6);color:#fff;border:none">' +
         '<div style="display:flex;align-items:center;gap:11px">' +
-          UI.avatar(yo, 'pequeno') +
+          avatarConMarco(yo, miNivel) +
           '<div class="usuario-linea" style="flex:1">' +
             '<span class="usuario-nombre" style="color:#fff">Tu posición: #' + miPos + '</span>' +
             '<span class="usuario-detalle" style="color:rgba(255,255,255,.8)">' +
@@ -173,9 +181,9 @@
       var puesto = ramaActiva === 'Todas' && medallas[i] ? medallas[i] : (i + 1);
       return '<div class="rank-item' + (f.usuario.id === yoId ? ' yo' : '') + '">' +
         '<div class="rank-pos' + (i < 3 ? ' top' : '') + '">' + puesto + '</div>' +
-        UI.avatar(f.usuario, 'pequeno') +
+        avatarConMarco(f.usuario, nivel) +
         '<div class="usuario-linea" style="flex:1">' +
-          '<span class="usuario-nombre">' + UI.esc(f.usuario.nombre) + '</span>' +
+          '<span class="usuario-nombre" style="color:' + nivel.color + '">' + UI.esc(f.usuario.nombre) + '</span>' +
           '<span class="usuario-detalle">' + UI.esc(f.usuario.carrera) + ' · ' + UI.curso(f.usuario.curso) + ' · ' +
             UI.esc(f.usuario.rama) + '</span>' +
           '<span class="tier ' + nivel.clase + '" style="margin-top:2px">' + nivel.icono + ' ' + nivel.nombre +
@@ -188,32 +196,27 @@
 
   /* ---- recompensas: desbloqueadas / pendientes --------------------------- */
   function filaNivel(nivel, desbloqueado, esActual) {
-    var esPiso = nivel.min < 0;
-    var estado = esPiso
-      ? '<span class="badge badge-rojo">Estado actual</span>'
-      : desbloqueado
-        ? '<span class="badge badge-verde">✔ Desbloqueado</span>'
-        : '<span class="badge" style="background:#f1f5f9;color:#64748b">🔒 Bloqueado</span>';
+    var estado = desbloqueado
+      ? '<span class="badge badge-verde">✔ Desbloqueado</span>'
+      : '<span class="badge" style="background:#f1f5f9;color:#64748b">🔒 Bloqueado</span>';
 
-    var estilo = esPiso
-      ? 'background:#fff5f5;border:1px solid #fecaca;border-radius:12px;padding:11px;margin-bottom:8px'
-      : desbloqueado
-        ? 'background:#f2fbf5;border-bottom:none;border-radius:12px;padding:11px;margin-bottom:8px'
-        : 'opacity:.62;padding:11px 0';
+    var estilo = desbloqueado
+      ? 'background:#f2fbf5;border-bottom:none;border-radius:12px;padding:11px;margin-bottom:8px'
+      : 'opacity:.62;padding:11px 0';
 
     return '<div class="recompensa" style="' + estilo + '">' +
-      '<div class="recompensa-icono" style="' +
-        (esPiso ? 'background:#fee2e2' : desbloqueado ? 'background:#e4f7ea' : '') + '">' + nivel.icono + '</div>' +
+      '<div class="recompensa-icono" style="' + (desbloqueado ? 'background:#e4f7ea' : '') + '">' + nivel.icono + '</div>' +
       '<div class="recompensa-texto">' +
         '<b>' + nivel.nombre +
-          (esActual
-            ? ' <span class="badge ' + (esPiso ? 'badge-rojo' : 'badge-azul') + '">Tu nivel</span>'
-            : '') +
-          (esPiso
-            ? ''
-            : '<span class="usuario-detalle" style="font-weight:600"> · desde ' + nivel.min + ' pts</span>') +
+          (esActual ? ' <span class="badge badge-azul">Tu nivel</span>' : '') +
+          '<span class="usuario-detalle" style="font-weight:600"> · desde ' + nivel.min + ' pts</span>' +
         '</b>' +
         UI.esc(nivel.premio) +
+        '<div style="display:flex;align-items:center;gap:8px;margin-top:8px">' +
+          avatarConMarco(yo, nivel) +
+          '<span style="color:' + nivel.color + ';font-weight:700;font-size:12px">' + UI.esc(yo.nombre) + '</span>' +
+          '<span class="usuario-detalle">marco + color</span>' +
+        '</div>' +
         '<div style="margin-top:4px">' + estado + '</div>' +
       '</div>' +
     '</div>';
@@ -221,29 +224,15 @@
 
   function pintarRecompensas() {
     var el = document.getElementById('recompensas');
-    if (!el) return;
+    if (!el || !yo) return;
 
-    /* Los niveles con min >= 0 son recompensas; el de min negativo es el
-       suelo (Hierro / En observación) y solo se muestra si estás ahí. */
-    var nivelesRecompensa = NIVELES.filter(function (n) { return n.min >= 0; });
-    var piso = NIVELES.filter(function (n) { return n.min < 0; })[0];
-
-    var filas = [];
-    if (miPuntos < 0 && piso) {
-      filas.push({ nivel: piso, desbloqueado: false, actual: true });
-    }
-    nivelesRecompensa.forEach(function (n) {
-      filas.push({ nivel: n, desbloqueado: miPuntos >= n.min, actual: n.id === miNivel.id });
-    });
-
-    var desbloqueadas = nivelesRecompensa.filter(function (n) { return miPuntos >= n.min; }).length;
-    var resumen = miPuntos < 0
-      ? 'Estás en ' + miNivel.nombre + ': vuelve a 0 puntos para empezar a desbloquear recompensas.'
-      : 'Llevas ' + desbloqueadas + ' de ' + nivelesRecompensa.length + ' recompensas desbloqueadas.';
-
-    var html = filas.map(function (f) {
-      var bloque = filaNivel(f.nivel, f.desbloqueado, f.actual);
-      if (f.actual) {
+    var desbloqueadas = 0;
+    var html = NIVELES.map(function (nivel) {
+      var desbloqueado = miPuntos >= nivel.min;
+      if (desbloqueado) desbloqueadas += 1;
+      var esActual = nivel.id === miNivel.id;
+      var bloque = filaNivel(nivel, desbloqueado, esActual);
+      if (esActual) {
         bloque += '<div style="padding:0 4px 14px">' +
           '<div class="barra-progreso"><div style="width:' + miProg.pct + '%"></div></div>' +
           '<div class="usuario-detalle" style="margin-top:6px">' +
@@ -257,11 +246,11 @@
     }).join('');
 
     el.innerHTML =
-      '<p class="usuario-detalle" style="margin:0 0 6px">' + resumen + '</p>' +
+      '<p class="usuario-detalle" style="margin:0 0 6px">Llevas ' + desbloqueadas + ' de ' + NIVELES.length + ' recompensas desbloqueadas.</p>' +
       html +
       '<p class="usuario-detalle" style="margin:14px 0 0;line-height:1.5">' +
-        'Cómo se calcula: cada valoración de ★4 o ★5 suma 1 punto, ★3 no puntúa y ★1 o ★2 resta 1 punto. ' +
-        'El total sale de todas las valoraciones recibidas.</p>';
+        'Cómo se calcula: cada reseña suma 10 puntos por estrella (★1 = 10, ★2 = 20, ★3 = 30, ★4 = 40 y ★5 = 50). ' +
+        'Sin reseñas tienes 0 puntos. Los umbrales de cada rango son acumulados.</p>';
   }
 
   pintarMiPosicion();

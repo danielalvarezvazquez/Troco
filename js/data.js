@@ -127,7 +127,7 @@
 
   /* ------------------------------------------------------------- valoraciones
      id, ofertaId, deUsuarioId, aUsuarioId, estrellas (1-5), comentario, creadaEn
-     Puntos: estrellas >= 4 suma +1 | estrellas <= 2 resta -1 | 3 no cuenta.
+     Puntos: 10 por estrella (★1 = 10 … ★5 = 50). Sin reseñas, 0 puntos.
   */
   var COMENTARIOS = [
     'Muy puntual y todo clarísimo.',
@@ -333,13 +333,11 @@
       return u;
     },
 
-    /* --- reputación: +1 por valoración >= 4, -1 por <= 2, 0 si es 3 --- */
+    /* --- reputación: 10 puntos por estrella (0★ = 0, 5★ = 50) --- */
     puntosDe: function (uid) {
       return estado().valoraciones.reduce(function (total, v) {
         if (v.aUsuarioId !== uid) return total;
-        if (v.estrellas >= 4) return total + 1;
-        if (v.estrellas <= 2) return total - 1;
-        return total;
+        return total + (Number(v.estrellas) || 0) * 10;
       }, 0);
     },
     mediaDe: function (uid) {
