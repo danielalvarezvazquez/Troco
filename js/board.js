@@ -134,7 +134,7 @@
         '</div>' +
         '<h3 class="card-titulo">' + UI.esc(o.titulo) + '</h3>' +
         '<p class="card-texto">' + UI.esc(o.descripcion) + '</p>' +
-        '<div class="cambio"><span>⇄</span><span><b>A cambio ofrezco:</b> ' + UI.esc(o.pideACambio) + '</span></div>' +
+        '<div class="cambio"><span>⇄</span><span><b>A cambio ofrezco:</b> ' + UI.esc(o.ofreceACambio) + '</span></div>' +
         '<div class="card-pie">' +
           '<span>' + (o.tipo === 'objeto' ? '📦 Busco un objeto' : '🤝 Busco un favor') + ' · ' + UI.tiempo(o.creadaEn) + '</span>' +
           '<span>' + (o.destacada ? '<span class="badge badge-ambar">★ Destacada</span>' : '') + '</span>' +

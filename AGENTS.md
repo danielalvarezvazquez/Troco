@@ -75,7 +75,7 @@ Definido en `js/data.js` (P1). Campos exactos, en español:
 
 ```js
 usuario  { id, nombre, carrera, curso, area, bio, habilidades[], color, instagram, whatsapp }
-oferta   { id, titulo, descripcion, tipo:'favor'|'objeto', categoria, autorId, pideACambio, estado:'abierta'|'cerrada', creadaEn, destacada }
+oferta   { id, titulo, descripcion, tipo:'favor'|'objeto', categoria, autorId, ofreceACambio, estado:'abierta'|'cerrada', creadaEn, destacada }
 valoración { id, ofertaId, deUsuarioId, aUsuarioId, estrellas:1..5, comentario, creadaEn }
 ```
 
