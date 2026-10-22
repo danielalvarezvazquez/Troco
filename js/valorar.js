@@ -133,7 +133,7 @@
 
     cont.innerHTML = '' +
       '<div class="bloque" style="text-align:center;padding:30px 20px">' +
-        '<div style="font-size:44px;line-height:1">🎉</div>' +
+        '<div style="font-size:44px;line-height:1">' + (delta >= 0 ? '🎉' : '📉') + '</div>' +
         '<h2 style="margin:12px 0 6px;font-size:20px;letter-spacing:-.4px">Valoración enviada</h2>' +
         '<p class="detalle-texto">Has puntuado a <b>' + UI.esc(valorado.nombre) + '</b> con ' +
           UI.estrellas(estrellas) + '.</p>' +
@@ -145,8 +145,10 @@
           '<div class="stat"><b>' + puntosDespues + '</b><span>total</span></div>' +
           '<div class="stat"><b>' + nivel + '</b><span>nivel</span></div>' +
         '</div>' +
-        '<p class="usuario-detalle" style="margin-top:14px">Cada estrella suma 10 puntos: esta reseña aporta ' +
-          delta + ' puntos al ranking.</p>' +
+        (delta < 0
+          ? '<p class="usuario-detalle" style="margin-top:14px">Esta reseña resta puntos al ranking.</p>'
+          : '<p class="usuario-detalle" style="margin-top:14px">Cada estrella suma 10 puntos: esta reseña aporta ' +
+            delta + ' puntos al ranking.</p>') +
         '<p class="usuario-detalle" style="margin-top:14px">Tu comentario ya se ve en el perfil de ' +
           UI.esc(valorado.nombre) + '.</p>' +
         '<a class="btn btn-primario" style="margin-top:16px" href="perfil.html?u=' + encodeURIComponent(valorado.id) + '">' +

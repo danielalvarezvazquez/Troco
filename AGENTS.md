@@ -16,7 +16,7 @@ App **móvil** (prototipo web) de intercambio de **favores y objetos** entre est
 - **Cierre**: el trato se cierra a dos bandas. Una parte pulsa "Hemos llegado a un acuerdo" y la otra lo confirma; hasta entonces queda "acuerdo pendiente".
 - **Valoración**: solo cuando el trato está cerrado, cada parte valora a la otra **una vez**: ★1-5 + comentario opcional.
 - **Perfil**: muestra las valoraciones recibidas con su comentario y la puntuación.
-- **Ranking + recompensas**: ★4-5 suma 1 punto, ★3 no puntúa, ★1-2 resta 1 punto. Niveles: En observación → Bronce → Plata → Oro → Élite, cada uno con su recompensa.
+- **Ranking + recompensas**: cada estrella suma **10 puntos** (★1 = 10 … ★5 = 50); sin reseñas, 0 puntos. 9 rangos: Hierro → Bronce → Plata → Oro → Platino → Diamante → Ascendente → Inmortal → Radiante.
 
 Proyecto de hackathon de la ETSE. Quedan ~3 h 30 min y hay que **exponer una demo de 5 minutos**.
 
